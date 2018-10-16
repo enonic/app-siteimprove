@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget>
+  <display-name>Siteimprove</display-name>
+  <interfaces>
+    <interface>com.enonic.xp.content-manager.context-widget</interface>
+  </interfaces>
+  <config>
+    <property name="render-on-resize" value="true" />
+  </config>
+</widget>
