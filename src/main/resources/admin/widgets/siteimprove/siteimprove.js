@@ -13,14 +13,11 @@ function handleGet(req) {
     var content = contentLib.get({key: contentId});
     var site = contentLib.getSite({key: contentId});
     var siteConfig = contentLib.getSiteConfig({key: contentId, applicationKey: app.name});
-    var pageId = "";
-
-    if (content.type.indexOf(":site") == -1 && !!site) {
-        pageId = content._path.replace(site._path, "");
-    }
+    var pageId = (content.type.indexOf(":site") === -1 && site) ? content._path.replace(site._path, "") : '';
 
     var view = resolve('siteimprove.html');
     var params = {
+        uid: uid,
         pageId: siteConfig ? pageId : -1
     };
 
