@@ -51,4 +51,3 @@ class HrefJson
         this.href = href;
     }
 }
-

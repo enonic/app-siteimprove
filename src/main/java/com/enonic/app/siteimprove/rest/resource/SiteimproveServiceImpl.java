@@ -16,7 +16,9 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -83,31 +85,6 @@ public class SiteimproveServiceImpl
             return false;
         }
         return true;
-    }
-
-    public boolean checkAuthentification()
-        throws IOException
-    {
-        if ( !isConfigOk() )
-        {
-            return false;
-        }
-
-        final HttpRequestBase httpRequest = makePingAccountSiteimproveApiRequest();
-
-        CloseableHttpResponse response = null;
-        try
-        {
-            response = HttpClients.custom().setDefaultCredentialsProvider( this.provider ).build().execute( httpRequest );
-
-            final int statusCode = response.getStatusLine().getStatusCode();
-
-            return statusCode == 200 || statusCode == 201;
-        }
-        finally
-        {
-            response.close();
-        }
     }
 
     @POST
@@ -195,10 +172,31 @@ public class SiteimproveServiceImpl
         return result;
     }
 
+    private HttpGet makeGetRequest( final String path )
+    {
+        final String uri = SITEIMPROVE_API_URL + path;
+
+        final HttpGet httpGet = new HttpGet( uri );
+        httpGet.setHeader( "Accept", "application/json" );
+
+        return httpGet;
+    }
+
+    private HttpPost makePostRequest( final String path, final StringEntity input )
+    {
+        final String uri = SITEIMPROVE_API_URL + path;
+
+        final HttpPost httpPost = new HttpPost( uri );
+
+        input.setContentType( "application/json" );
+        httpPost.setEntity( input );
+
+        return httpPost;
+    }
+
     private HttpGet makePingAccountSiteimproveApiRequest()
     {
-        final String uri = SITEIMPROVE_API_URL + "/ping/account";
-        return new HttpGet( uri );
+        return makeGetRequest( "/ping/account" );
     }
 
     private String translateBadStatusCode( int code )

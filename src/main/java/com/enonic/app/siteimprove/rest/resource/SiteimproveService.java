@@ -14,9 +14,6 @@ public interface SiteimproveService
 {
     void activate( final Map<String, String> map );
 
-    boolean checkAuthentification()
-        throws IOException;
-
     Response pingAccount( final SiteimproveServiceGeneralRequestJson json )
         throws IOException;
 }
