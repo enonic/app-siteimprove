@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'maven-publish'
+    id 'com.enonic.defaults' version '2.0.0'
     id 'com.enonic.xp.app' version '1.1.0'
     id "com.moowork.node" version '1.1.1'
 }
@@ -10,13 +12,23 @@ app {
     vendorName = 'Enonic AS'
     vendorUrl = 'http://enonic.com'
     systemVersion = "${xpVersion}"
+    devSourcePaths += file("$rootDir/../lib-admin-ui/src/main/resources")
 }
 
 dependencies {
+    compile "com.enonic.xp:core-api:${xpVersion}"
+    compile "com.enonic.xp:jaxrs-api:${xpVersion}"
     compile "com.enonic.xp:portal-api:${xpVersion}"
     include "com.enonic.xp:lib-content:${xpVersion}"
     include "com.enonic.xp:lib-portal:${xpVersion}"
     include "com.enonic.xp:lib-thymeleaf:${xpVersion}"
+//    include "com.enonic.xp:lib-xslt:${xpVersion}"
+    include "com.enonic.xp:lib-mustache:${xpVersion}"
+    include "com.enonic.xp:lib-i18n:${xpVersion}"
+//    include "${group}:lib-admin:${xpVersion}"
+    include "com.enonic.lib:lib-admin-ui:${libAdminUiVersion}"
+    include 'org.codehaus.jackson:jackson-mapper-asl:1.8.5'
+    include 'org.apache.httpcomponents:httpclient:4.5.2'
 }
 
 repositories {
@@ -65,6 +77,34 @@ jar {
     exclude 'assets/**/*.less'
 
     dependsOn += webpack
+}
+
+processResources.dependsOn += unpackDevResources
+
+if ( hasProperty( 'env' ) )
+{
+    addBuildDependency()
+    applyExcludedTasks()
+}
+def applyExcludedTasks() {
+    def libAdminUi = gradle.includedBuild( 'lib-admin-ui' )
+    Closure permittedTasks = { it == 'lint' || it == 'test' }
+    def excludedTasks = gradle.startParameter.getExcludedTaskNames().findAll( permittedTasks )
+    libAdminUi.getLoadedSettings().getStartParameter().setExcludedTaskNames( excludedTasks )
+}
+
+def addBuildDependency() {
+    def buildTask = gradle.includedBuild( 'lib-admin-ui' ).task( ':build' )
+
+    build.dependsOn += buildTask
+    clean.dependsOn += gradle.includedBuild( 'lib-admin-ui' ).task( ':clean' )
+    flush.dependsOn += gradle.includedBuild( 'lib-admin-ui' ).task( ':flush' )
+
+    def webpackTask = tasks.findByPath( ':webpack' )
+    def unpackDevResources = tasks.findByPath( ':unpackDevResources' )
+
+    if ( webpackTask != null ) webpackTask.dependsOn += unpackDevResources
+    unpackDevResources.dependsOn += buildTask
 }
 
 def nodeEnvironment() {

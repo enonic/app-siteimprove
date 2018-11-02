@@ -69,6 +69,6 @@ module.exports = {
             })
         ] : [])
     ],
-    mode: isProd ? 'production' : 'development',
+    // mode: isProd ? 'production' : 'development',
     devtool: isProd ? false : 'source-map'
 };
