@@ -1,8 +1,8 @@
 import ResourceRequest = api.rest.ResourceRequest;
 import Path = api.rest.Path;
 
-export abstract class SiteimproveRequest
-    extends ResourceRequest<any, any> {
+export abstract class SiteimproveRequest<RAW_JSON_TYPE, PARSED_TYPE>
+    extends ResourceRequest<RAW_JSON_TYPE, PARSED_TYPE> {
 
     private apiPath: Path;
 

@@ -4,6 +4,7 @@ import ContentId = api.content.ContentId;
 
 type ConfigType = {
     errorMessage: string;
+    vhost: string;
 };
 declare const CONFIG: ConfigType;
 
@@ -22,9 +23,11 @@ const intervalId = setInterval(() => {
 
         const widget = new SiteimproveWidget({
             contentId: new ContentId(contentId),
+            vhost: CONFIG.vhost,
             errorMessage: CONFIG.errorMessage
         });
         containerEl.appendChild(widget);
+        containerEl.render();
 
     }
 }, 100);

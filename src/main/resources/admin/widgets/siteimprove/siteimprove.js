@@ -22,7 +22,8 @@ function handleGet(req) {
         uid: uid,
         contentId: contentId,
         errorMessage: errorMessage,
-        pageId: siteConfig ? pageId : -1
+        pageId: siteConfig ? pageId : -1,
+        vhost: siteConfig ? siteConfig.vhost : ''
     };
 
     return {

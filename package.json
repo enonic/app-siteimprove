@@ -9,6 +9,7 @@
     "fix": "tslint -p tsconfig.build.json -c tslint.json --fix"
   },
   "devDependencies": {
+    "@types/normalize-url": "^3.3.0",
     "autoprefixer": "9.3.0",
     "browserslist": "4.3.2",
     "browserslist-config-enonic": "1.0.3",
@@ -22,6 +23,7 @@
     "file-loader": "^1.1.11",
     "less": "3.8.1",
     "less-loader": "^4.1.0",
+    "normalize-url": "^3.3.0",
     "postcss-loader": "^2.1.1",
     "postcss-normalize": "^4.0.0",
     "prettier": "1.11.1",

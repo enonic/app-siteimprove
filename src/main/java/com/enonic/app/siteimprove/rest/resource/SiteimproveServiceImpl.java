@@ -1,6 +1,8 @@
 package com.enonic.app.siteimprove.rest.resource;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
@@ -18,10 +20,12 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.osgi.service.component.annotations.Activate;
@@ -30,7 +34,9 @@ import org.osgi.service.component.annotations.Component;
 import com.google.common.base.Strings;
 
 import com.enonic.app.siteimprove.rest.json.SiteimproveErrorResponseJson;
-import com.enonic.app.siteimprove.rest.json.SiteimprovePingAccountJson;
+import com.enonic.app.siteimprove.rest.json.SiteimproveListSitesJson;
+import com.enonic.app.siteimprove.rest.json.SiteimprovePingJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListSitesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveServiceGeneralRequestJson;
 import com.enonic.xp.jaxrs.JaxRsComponent;
 import com.enonic.xp.security.RoleKeys;
@@ -92,7 +98,15 @@ public class SiteimproveServiceImpl
     public Response pingAccount( final SiteimproveServiceGeneralRequestJson json )
         throws IOException
     {
-        return doSiteimproveAPICall( makePingAccountSiteimproveApiRequest(), SiteimprovePingAccountJson.class );
+        return doSiteimproveAPICall( makePingAccountSiteimproveApiRequest(), SiteimprovePingJson.class );
+    }
+
+    @POST
+    @Path("sites")
+    public Response listSites( final SiteimproveListSitesRequestJson json )
+        throws IOException, URISyntaxException
+    {
+        return doSiteimproveAPICall( makeListSitesSiteimproveApiRequest( json ), SiteimproveListSitesJson.class );
     }
 
     private <T> Response doSiteimproveAPICall( final HttpRequestBase httpRequest, final Class<T> responseJsonClass )
@@ -116,8 +130,11 @@ public class SiteimproveServiceImpl
             }
             else
             {
+                final SiteimproveErrorResponseJson errorJson = new SiteimproveErrorResponseJson();
+                errorJson.setMessage( translateBadResponse( response ) );
+                errorJson.setType( Integer.toString( response.getStatusLine().getStatusCode() ) );
                 return Response.status( statusCode ).
-                    entity( translateBadResponse( response ) ).build();
+                    entity( errorJson ).build();
             }
         }
         finally
@@ -138,7 +155,7 @@ public class SiteimproveServiceImpl
             EntityUtils.consume( entity );
 
             return translateBadStatusCode( response.getStatusLine().getStatusCode() ) +
-                ( json.getMessage() != null ? json.getMessage() : "" );
+                ( json.getMessage() != null ? " " + json.getMessage() : "" );
         }
         else
         {
@@ -153,7 +170,8 @@ public class SiteimproveServiceImpl
         T result = null;
         try
         {
-            result = new ObjectMapper().readValue( entity.getContent(), clazz );
+            result = new ObjectMapper().configure( DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false ).readValue(
+                entity.getContent(), clazz );
         }
         catch ( final JsonMappingException e )
         {
@@ -172,14 +190,23 @@ public class SiteimproveServiceImpl
         return result;
     }
 
-    private HttpGet makeGetRequest( final String path )
+    private URI createUriForPath( final String path )
     {
-        final String uri = SITEIMPROVE_API_URL + path;
+        return URI.create( SITEIMPROVE_API_URL + path );
+    }
 
+    private HttpGet makeGetRequest( final URI uri )
+    {
         final HttpGet httpGet = new HttpGet( uri );
         httpGet.setHeader( "Accept", "application/json" );
 
         return httpGet;
+    }
+
+    private HttpGet makeGetRequest( final String path )
+    {
+        final URI uri = this.createUriForPath( path );
+        return this.makeGetRequest( uri );
     }
 
     private HttpPost makePostRequest( final String path, final StringEntity input )
@@ -197,6 +224,30 @@ public class SiteimproveServiceImpl
     private HttpGet makePingAccountSiteimproveApiRequest()
     {
         return makeGetRequest( "/ping/account" );
+    }
+
+    private HttpGet makeListSitesSiteimproveApiRequest( final SiteimproveListSitesRequestJson json )
+        throws URISyntaxException
+    {
+        final URI uri = this.createUriForPath( "/sites" );
+        URIBuilder builder = new URIBuilder( uri );
+
+        if ( json.getGroupId() != null )
+        {
+            builder.setParameter( "group_id", json.getGroupId().toString() );
+        }
+
+        if ( json.getPage() != null )
+        {
+            builder.setParameter( "page", json.getPage().toString() );
+        }
+
+        if ( json.getPageSize() != null )
+        {
+            builder.setParameter( "page_size", json.getPageSize().toString() );
+        }
+
+        return makeGetRequest( builder.build() );
     }
 
     private String translateBadStatusCode( int code )
