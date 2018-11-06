@@ -1,7 +1,20 @@
 <body>
 <link rel="stylesheet" data-th-href="${portal.assetUrl({'_path=styles/siteimprove.css'})}" type="text/css" media="all"/>
 <script data-th-src="${portal.assetUrl({'_path=js/siteimprove.js'})}"></script>
-<div>
-    Hello Siteimprove
+<div data-th-id="'siteimproveid_' + ${uid}" class="siteimprove">
 </div>
 </body>
+
+<script data-th-inline="javascript">
+    /*<![CDATA[*/
+    var CONFIG = window.CONFIG;
+    CONFIG['errorMessage'] = [[${errorMessage}]];
+
+    var widgetMessages = JSON.parse(/*[[${messages}]]*/ {});
+    for (var property in widgetMessages) {
+        if (!CONFIG['messages'][property] && widgetMessages.hasOwnProperty(property)) {
+            CONFIG['messages'][property] = widgetMessages[property];
+        }
+    }
+    /*]]>*/
+</script>

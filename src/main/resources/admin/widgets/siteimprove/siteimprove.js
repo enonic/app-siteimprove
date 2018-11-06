@@ -1,6 +1,7 @@
 var contentLib = require('/lib/xp/content');
 var portalLib = require('/lib/xp/portal');
 var thymeleaf = require('/lib/xp/thymeleaf');
+var validator = require('./util/validator');
 
 function handleGet(req) {
     var uid = req.params.uid;
@@ -13,14 +14,14 @@ function handleGet(req) {
     var content = contentLib.get({key: contentId});
     var site = contentLib.getSite({key: contentId});
     var siteConfig = contentLib.getSiteConfig({key: contentId, applicationKey: app.name});
-    var pageId = "";
-
-    if (content.type.indexOf(":site") == -1 && !!site) {
-        pageId = content._path.replace(site._path, "");
-    }
+    var pageId = (content.type.indexOf(':site') === -1 && site) ? content._path.replace(site._path, '') : '';
+    var errorMessage = validator.validate(contentId);
 
     var view = resolve('siteimprove.html');
     var params = {
+        uid: uid,
+        contentId: contentId,
+        errorMessage: errorMessage,
         pageId: siteConfig ? pageId : -1
     };
 
