@@ -1,4 +1,5 @@
 var contentLib = require('/lib/xp/content');
+var url = require('./url');
 
 function isAppConfigured() {
     var hasUsername = !!app.config['siteimprove.username'];
@@ -12,7 +13,7 @@ function isAppHasAccess() {
 }
 
 function isValidVirtualHost(vhost) {
-    return vhost.startsWith('http://') || vhost.startsWith('https://');
+    return url.isValidUrl(vhost);
 }
 
 exports.validate = function validate(contentId) {
@@ -32,7 +33,7 @@ exports.validate = function validate(contentId) {
         } else if (!vhost) {
             return 'Virtual host is not found in the Siteimprove app config.';
         } else if (!isValidVirtualHost(vhost)) {
-            return 'Virtual host in the Siteimprove app config should start with "http://" or "https://" (' + vhost + ')';
+            return 'Virtual host in the Siteimprove app config is not a valid URL (' + vhost + ').';
         }
         return '';
     } catch (error) {

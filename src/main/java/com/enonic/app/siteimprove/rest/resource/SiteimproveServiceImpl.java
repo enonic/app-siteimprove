@@ -33,9 +33,11 @@ import org.osgi.service.component.annotations.Component;
 
 import com.google.common.base.Strings;
 
+import com.enonic.app.siteimprove.rest.json.SiteimproveDciOverallScoreJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveErrorResponseJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveListSitesJson;
 import com.enonic.app.siteimprove.rest.json.SiteimprovePingJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimproveDciOverviewRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListSitesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveServiceGeneralRequestJson;
 import com.enonic.xp.jaxrs.JaxRsComponent;
@@ -143,6 +145,14 @@ public class SiteimproveServiceImpl
         }
     }
 
+    @POST
+    @Path("dci/overview")
+    public Response dciOverview( final SiteimproveDciOverviewRequestJson json )
+        throws IOException, URISyntaxException
+    {
+        return doSiteimproveAPICall( makeDciScoreSiteimproveApiRequest( json ), SiteimproveDciOverallScoreJson.class );
+    }
+
     private String translateBadResponse( final CloseableHttpResponse response )
         throws IOException
     {
@@ -245,6 +255,21 @@ public class SiteimproveServiceImpl
         if ( json.getPageSize() != null )
         {
             builder.setParameter( "page_size", json.getPageSize().toString() );
+        }
+
+        return makeGetRequest( builder.build() );
+    }
+
+    private HttpGet makeDciScoreSiteimproveApiRequest( final SiteimproveDciOverviewRequestJson json )
+        throws URISyntaxException
+    {
+        final String contentId = json.getSiteId() != null ? json.getSiteId().toString() : "";
+        final URI uri = this.createUriForPath( "/sites/" + contentId + "/dci/overview" );
+        URIBuilder builder = new URIBuilder( uri );
+
+        if ( json.getGroupId() != null )
+        {
+            builder.setParameter( "group_id", json.getGroupId().toString() );
         }
 
         return makeGetRequest( builder.build() );
