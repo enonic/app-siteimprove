@@ -8,6 +8,7 @@ import {Site} from '../data/Site';
 import * as normalizeUrl from 'normalize-url';
 import {DciOverviewRequest} from '../resource/DciOverviewRequest';
 import {DciOverallScore} from '../data/DciOverallScore';
+import {ScoreCard} from './ScoreCard';
 
 export type SiteimproveWidgetConfig = {
     contentId: ContentId,
@@ -49,8 +50,7 @@ export class SiteimproveWidget
                 return null;
             }
             return new DciOverviewRequest(this.siteId).sendAndParse().then((dci: DciOverallScore) => {
-                console.log(dci);
-                this.getEl().setInnerHtml('Siteimprove widget');
+                this.createCards(dci);
             });
         }).then(() => {
             this.loadMask.hide();
@@ -80,6 +80,14 @@ export class SiteimproveWidget
 
             return null;
         });
+    }
+
+    private createCards(dci: DciOverallScore) {
+        const total = new ScoreCard('Total Score', dci.getTotal());
+        const a11n = new ScoreCard('Accessibility', dci.getAccessibility().getTotal());
+        const qa = new ScoreCard('QA', dci.getQA().getTotal());
+        const seo = new ScoreCard('SEO', dci.getSEO().getTotal());
+        this.appendChildren(total, a11n, qa, seo);
     }
 
 }
