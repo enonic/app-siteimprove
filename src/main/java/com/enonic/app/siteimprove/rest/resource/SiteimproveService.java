@@ -9,6 +9,7 @@ import javax.ws.rs.core.Response;
 import com.google.common.annotations.Beta;
 
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveDciOverviewRequestJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListPagesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListSitesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveServiceGeneralRequestJson;
 
@@ -24,5 +25,8 @@ public interface SiteimproveService
         throws IOException, URISyntaxException;
 
     Response dciOverview( final SiteimproveDciOverviewRequestJson json )
+        throws IOException, URISyntaxException;
+
+    Response listPages( final SiteimproveListPagesRequestJson json )
         throws IOException, URISyntaxException;
 }

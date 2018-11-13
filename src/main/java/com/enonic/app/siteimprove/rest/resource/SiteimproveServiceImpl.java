@@ -35,9 +35,11 @@ import com.google.common.base.Strings;
 
 import com.enonic.app.siteimprove.rest.json.SiteimproveDciOverallScoreJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveErrorResponseJson;
+import com.enonic.app.siteimprove.rest.json.SiteimproveListPagesJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveListSitesJson;
 import com.enonic.app.siteimprove.rest.json.SiteimprovePingJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveDciOverviewRequestJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListPagesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListSitesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveServiceGeneralRequestJson;
 import com.enonic.xp.jaxrs.JaxRsComponent;
@@ -111,6 +113,22 @@ public class SiteimproveServiceImpl
         return doSiteimproveAPICall( makeListSitesSiteimproveApiRequest( json ), SiteimproveListSitesJson.class );
     }
 
+    @POST
+    @Path("dci/overview")
+    public Response dciOverview( final SiteimproveDciOverviewRequestJson json )
+        throws IOException, URISyntaxException
+    {
+        return doSiteimproveAPICall( makeDciScoreSiteimproveApiRequest( json ), SiteimproveDciOverallScoreJson.class );
+    }
+
+    @POST
+    @Path("pages")
+    public Response listPages( final SiteimproveListPagesRequestJson json )
+        throws IOException, URISyntaxException
+    {
+        return doSiteimproveAPICall( makeListPagesSiteimproveApiRequest( json ), SiteimproveListPagesJson.class );
+    }
+
     private <T> Response doSiteimproveAPICall( final HttpRequestBase httpRequest, final Class<T> responseJsonClass )
         throws IOException
     {
@@ -143,14 +161,6 @@ public class SiteimproveServiceImpl
         {
             response.close();
         }
-    }
-
-    @POST
-    @Path("dci/overview")
-    public Response dciOverview( final SiteimproveDciOverviewRequestJson json )
-        throws IOException, URISyntaxException
-    {
-        return doSiteimproveAPICall( makeDciScoreSiteimproveApiRequest( json ), SiteimproveDciOverallScoreJson.class );
     }
 
     private String translateBadResponse( final CloseableHttpResponse response )
@@ -263,8 +273,23 @@ public class SiteimproveServiceImpl
     private HttpGet makeDciScoreSiteimproveApiRequest( final SiteimproveDciOverviewRequestJson json )
         throws URISyntaxException
     {
-        final String contentId = json.getSiteId() != null ? json.getSiteId().toString() : "";
-        final URI uri = this.createUriForPath( "/sites/" + contentId + "/dci/overview" );
+        final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
+        final URI uri = this.createUriForPath( "/sites/" + siteId + "/dci/overview" );
+        URIBuilder builder = new URIBuilder( uri );
+
+        if ( json.getGroupId() != null )
+        {
+            builder.setParameter( "group_id", json.getGroupId().toString() );
+        }
+
+        return makeGetRequest( builder.build() );
+    }
+
+    private HttpGet makeListPagesSiteimproveApiRequest( final SiteimproveListPagesRequestJson json )
+        throws URISyntaxException
+    {
+        final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
+        final URI uri = this.createUriForPath( "/sites/" + siteId + "/content/pages" );
         URIBuilder builder = new URIBuilder( uri );
 
         if ( json.getGroupId() != null )

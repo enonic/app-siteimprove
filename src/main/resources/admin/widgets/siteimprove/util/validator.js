@@ -18,6 +18,12 @@ function isValidVirtualHost(vhost) {
 
 exports.validate = function validate(contentId) {
     try {
+        var isSite = !!contentLib.getSite({key: contentId});
+
+        if (!isSite) {
+            return 'Content is not a site.'
+        }
+
         var siteConfig = contentLib.getSiteConfig({
             key: contentId,
             applicationKey: app.name
@@ -25,7 +31,7 @@ exports.validate = function validate(contentId) {
         var vhost = siteConfig ? siteConfig.vhost : null;
 
         if (!siteConfig) {
-            return 'Siteimprove app is not added to the site.'
+            return 'Siteimprove app is not added to the site.';
         } else if (!isAppConfigured()) {
             return 'API key and/or username are not found in the Siteimprove app config.';
         } else if (!isAppHasAccess()) {
