@@ -9,6 +9,7 @@ import * as normalizeUrl from 'normalize-url';
 import {DciOverviewRequest} from '../resource/DciOverviewRequest';
 import {DciOverallScore} from '../data/DciOverallScore';
 import {ScoreCard} from './ScoreCard';
+import {AppStyleHelper} from '../util/AppStyleHelper';
 
 export type SiteimproveWidgetConfig = {
     contentId: ContentId,
@@ -30,7 +31,7 @@ export class SiteimproveWidget
     private loadMask: LoadMask;
 
     constructor(config: SiteimproveWidgetConfig) {
-        super('siteimprove-widget');
+        super('widget', AppStyleHelper.SITEIMPROVE_PREFIX);
 
         this.contentId = config.contentId;
         this.vhost = config.vhost;
