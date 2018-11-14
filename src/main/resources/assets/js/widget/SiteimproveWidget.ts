@@ -30,6 +30,8 @@ export class SiteimproveWidget
 
     private loadMask: LoadMask;
 
+    private static dashboardHost = 'https://my2.siteimprove.com/';
+
     constructor(config: SiteimproveWidgetConfig) {
         super('widget', AppStyleHelper.SITEIMPROVE_PREFIX);
 
@@ -84,11 +86,26 @@ export class SiteimproveWidget
     }
 
     private createCards(dci: DciOverallScore) {
-        const total = new ScoreCard('Total Score', dci.getTotal());
-        const a11n = new ScoreCard('Accessibility', dci.getAccessibility().getTotal());
-        const qa = new ScoreCard('QA', dci.getQA().getTotal());
-        const seo = new ScoreCard('SEO', dci.getSEO().getTotal());
+        const total = new ScoreCard('Total Score', dci.getTotal(), this.getTotalOverviewUrl());
+        const a11n = new ScoreCard('Accessibility', dci.getAccessibility().getTotal(), this.getAccessibilityOverviewUrl());
+        const qa = new ScoreCard('QA', dci.getQA().getTotal(), this.getQAOverviewUrl());
+        const seo = new ScoreCard('SEO', dci.getSEO().getTotal(), this.getSEOOverviewUrl());
         this.appendChildren(total, a11n, qa, seo);
     }
 
+    private getTotalOverviewUrl() {
+        return `${SiteimproveWidget.dashboardHost}/Dashboard/${this.siteId}/Dci/Index`;
+    }
+
+    private getQAOverviewUrl() {
+        return `${SiteimproveWidget.dashboardHost}/QualityAssurance/${this.siteId}/Overview/Index`;
+    }
+
+    private getAccessibilityOverviewUrl() {
+        return `${SiteimproveWidget.dashboardHost}/Accessibility/${this.siteId}/Overview/Index`;
+    }
+
+    private getSEOOverviewUrl() {
+        return `${SiteimproveWidget.dashboardHost}/SEOv2/${this.siteId}/Overview/Index`;
+    }
 }
