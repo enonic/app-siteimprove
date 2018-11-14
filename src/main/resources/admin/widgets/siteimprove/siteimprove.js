@@ -21,6 +21,7 @@ function handleGet(req) {
     var params = {
         uid: uid,
         contentId: contentId,
+        contentPath: content._path,
         errorMessage: errorMessage,
         pageId: siteConfig ? pageId : -1,
         vhost: siteConfig ? siteConfig.vhost : ''

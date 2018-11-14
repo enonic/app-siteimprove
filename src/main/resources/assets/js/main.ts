@@ -1,14 +1,15 @@
 import {getDocumentData} from './util/DocumentHelper';
 import {SiteimproveWidget} from './widget/SiteimproveWidget';
-import ContentId = api.content.ContentId;
+import Path = api.rest.Path;
 
 type ConfigType = {
     errorMessage: string;
     vhost: string;
+    contentPath: string;
 };
 declare const CONFIG: ConfigType;
 
-const {uid, contentId} = getDocumentData();
+const {uid} = getDocumentData();
 const id = `siteimproveid_${uid}`;
 
 // Wait until the widget container is copied from the `<link/> to the actual document
@@ -22,7 +23,7 @@ const intervalId = setInterval(() => {
         const containerEl = api.dom.Element.fromHtmlElement(container, true);
 
         const widget = new SiteimproveWidget({
-            contentId: new ContentId(contentId),
+            contentPath: Path.fromString(CONFIG.contentPath),
             vhost: CONFIG.vhost,
             errorMessage: CONFIG.errorMessage
         });

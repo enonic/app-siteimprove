@@ -1,18 +1,16 @@
-import ContentId = api.content.ContentId;
 import DivEl = api.dom.DivEl;
 import LoadMask = api.ui.mask.LoadMask;
 import DefaultErrorHandler = api.DefaultErrorHandler;
+import Path = api.rest.Path;
 import {WidgetError} from './WidgetError';
-import {ListSitesRequest} from '../resource/ListSitesRequest';
-import {Site} from '../data/Site';
-import * as normalizeUrl from 'normalize-url';
 import {DciOverviewRequest} from '../resource/DciOverviewRequest';
 import {DciOverallScore} from '../data/DciOverallScore';
 import {ScoreCard} from './ScoreCard';
 import {AppStyleHelper} from '../util/AppStyleHelper';
+import {SiteimproveValidator, ValidationResult} from '../util/SiteimproveValidator';
 
 export type SiteimproveWidgetConfig = {
-    contentId: ContentId,
+    contentPath: Path,
     vhost: string,
     errorMessage: string,
 }
@@ -20,66 +18,39 @@ export type SiteimproveWidgetConfig = {
 export class SiteimproveWidget
     extends DivEl {
 
-    private contentId: ContentId;
-
-    private vhost: string;
-
-    private siteId: number;
-
-    private errorMessage: string;
-
     private loadMask: LoadMask;
 
     constructor(config: SiteimproveWidgetConfig) {
         super('widget', AppStyleHelper.SITEIMPROVE_PREFIX);
 
-        this.contentId = config.contentId;
-        this.vhost = config.vhost;
-        this.errorMessage = config.errorMessage;
-
         this.loadMask = new LoadMask(this);
 
-        this.initialize();
+        this.initialize(config);
     }
 
-    private initialize() {
+    private initialize(config: SiteimproveWidgetConfig) {
         this.loadMask.show();
 
-        return this.validate().then((error: string) => {
-            if (!api.util.StringHelper.isBlank(error)) {
-                this.appendChild(new WidgetError(error));
+        const {errorMessage, vhost, contentPath} = config;
+
+        SiteimproveValidator.validate(errorMessage, vhost, contentPath).then((result: ValidationResult) => {
+            if (!api.util.StringHelper.isBlank(result.error)) {
+                this.appendChild(new WidgetError(result.error));
                 return null;
             }
-            return new DciOverviewRequest(this.siteId).sendAndParse().then((dci: DciOverallScore) => {
-                this.createCards(dci);
-            });
+
+            if (result.siteId && !result.pageId) {
+                return new DciOverviewRequest(result.siteId).sendAndParse().then((dci: DciOverallScore) => {
+                    this.createCards(dci);
+                });
+            } else if (result.pageId) {
+                // TODO: Render page overview
+            }
         }).then(() => {
             this.loadMask.hide();
         }).catch(error => {
             DefaultErrorHandler.handle(error);
             this.loadMask.hide();
-        });
-    }
-
-    private validate(): wemQ.Promise<string> {
-        if (this.errorMessage) {
-            return wemQ(this.errorMessage);
-        }
-
-        return new ListSitesRequest().sendAndParse().then((sites: Site[]) => {
-            const normalizedVhost = normalizeUrl(this.vhost);
-            const siteEnabled = sites.some((site: Site) => {
-                if (normalizeUrl(site.getUrl()) === normalizedVhost) {
-                    this.siteId = site.getId();
-                    return true;
-                }
-                return false;
-            });
-            if (!siteEnabled) {
-                return `"${this.vhost}" is not enabled for your Siteimprove account.`;
-            }
-
-            return null;
         });
     }
 
