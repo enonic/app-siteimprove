@@ -5,7 +5,7 @@ export class WidgetError
     extends DivEl {
 
     constructor(message: string) {
-        super('error', AppStyleHelper.SITEIMPROVE_PREFIX);
+        super('error');
         this.getEl().setInnerHtml(message);
     }
 }
