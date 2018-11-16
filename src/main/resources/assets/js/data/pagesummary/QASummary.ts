@@ -48,8 +48,8 @@ export class QASummary
     toData(): Data[] {
         return [
             {name: 'Broken links', value: this.brokenLinks},
-            {name: 'Misspellings', value: this.misspellings},
-            {name: 'Potential misspellings', value: this.potentialMisspellings}
+            {name: 'Potential misspellings', value: this.potentialMisspellings},
+            {name: 'Misspellings', value: this.misspellings}
         ];
     }
 }
