@@ -1,4 +1,4 @@
-import {AccessibilityScoreJson} from '../resource/json/AccessibilityScoreJson';
+import {AccessibilityScoreJson} from '../../resource/json/dcioverallscore/AccessibilityScoreJson';
 
 export class AccessibilityScore {
 

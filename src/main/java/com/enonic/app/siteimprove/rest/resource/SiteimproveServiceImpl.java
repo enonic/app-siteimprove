@@ -37,10 +37,12 @@ import com.enonic.app.siteimprove.rest.json.SiteimproveDciOverallScoreJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveErrorResponseJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveListPagesJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveListSitesJson;
+import com.enonic.app.siteimprove.rest.json.SiteimprovePageSummaryJson;
 import com.enonic.app.siteimprove.rest.json.SiteimprovePingJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveDciOverviewRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListPagesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListSitesRequestJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimprovePageSummaryRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveServiceGeneralRequestJson;
 import com.enonic.xp.jaxrs.JaxRsComponent;
 import com.enonic.xp.security.RoleKeys;
@@ -127,6 +129,14 @@ public class SiteimproveServiceImpl
         throws IOException, URISyntaxException
     {
         return doSiteimproveAPICall( makeListPagesSiteimproveApiRequest( json ), SiteimproveListPagesJson.class );
+    }
+
+    @POST
+    @Path("page/summary")
+    public Response pageSummary( final SiteimprovePageSummaryRequestJson json )
+        throws IOException, URISyntaxException
+    {
+        return doSiteimproveAPICall( makePageSummarySiteimproveApiRequest( json ), SiteimprovePageSummaryJson.class );
     }
 
     private <T> Response doSiteimproveAPICall( final HttpRequestBase httpRequest, final Class<T> responseJsonClass )
@@ -290,6 +300,22 @@ public class SiteimproveServiceImpl
     {
         final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
         final URI uri = this.createUriForPath( "/sites/" + siteId + "/content/pages" );
+        URIBuilder builder = new URIBuilder( uri );
+
+        if ( json.getGroupId() != null )
+        {
+            builder.setParameter( "group_id", json.getGroupId().toString() );
+        }
+
+        return makeGetRequest( builder.build() );
+    }
+
+    private HttpGet makePageSummarySiteimproveApiRequest( final SiteimprovePageSummaryRequestJson json )
+        throws URISyntaxException
+    {
+        final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
+        final String pageId = json.getPageId() != null ? json.getPageId().toString() : "";
+        final URI uri = this.createUriForPath( "/sites/" + siteId + "/content/pages/" + pageId );
         URIBuilder builder = new URIBuilder( uri );
 
         if ( json.getGroupId() != null )

@@ -1,6 +1,6 @@
-import {AccessibilityScoreJson} from './AccessibilityScoreJson';
-import {QAScoreJson} from './QAScoreJson';
-import {SEOScoreJson} from './SEOScoreJson';
+import {AccessibilityScoreJson} from './dcioverallscore/AccessibilityScoreJson';
+import {QAScoreJson} from './dcioverallscore/QAScoreJson';
+import {SEOScoreJson} from './dcioverallscore/SEOScoreJson';
 
 export interface DciOverallScoreJson {
     accessibility: AccessibilityScoreJson;

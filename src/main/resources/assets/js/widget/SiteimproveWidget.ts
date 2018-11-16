@@ -8,6 +8,9 @@ import {DciOverallScore} from '../data/DciOverallScore';
 import {ScoreCard} from './ScoreCard';
 import {AppStyleHelper} from '../util/AppStyleHelper';
 import {SiteimproveValidator, ValidationResult} from '../util/SiteimproveValidator';
+import {UrlHelper} from '../util/UrlHelper';
+import {PageSummaryRequest} from '../resource/PageSummaryRequest';
+import {PageSummary} from '../data/PageSummary';
 
 export type SiteimproveWidgetConfig = {
     contentPath: Path,
@@ -19,8 +22,6 @@ export class SiteimproveWidget
     extends DivEl {
 
     private loadMask: LoadMask;
-
-    private static dashboardHost = 'https://my2.siteimprove.com/';
 
     constructor(config: SiteimproveWidgetConfig) {
         super('widget', AppStyleHelper.SITEIMPROVE_PREFIX);
@@ -43,10 +44,12 @@ export class SiteimproveWidget
 
             if (result.siteId && !result.pageId) {
                 return new DciOverviewRequest(result.siteId).sendAndParse().then((dci: DciOverallScore) => {
-                    this.createCards(dci);
+                    this.createSiteCards(dci, result.siteId);
                 });
             } else if (result.pageId) {
-                // TODO: Render page overview
+                return new PageSummaryRequest(result.siteId, result.pageId).sendAndParse().then((score: PageSummary) => {
+                    // this.createSiteCards(score, result.siteId);
+                });
             }
         }).then(() => {
             this.loadMask.hide();
@@ -56,27 +59,24 @@ export class SiteimproveWidget
         });
     }
 
-    private createCards(dci: DciOverallScore) {
-        const total = new ScoreCard('Total Score', dci.getTotal(), this.getTotalOverviewUrl());
-        const a11n = new ScoreCard('Accessibility', dci.getAccessibility().getTotal(), this.getAccessibilityOverviewUrl());
-        const qa = new ScoreCard('QA', dci.getQA().getTotal(), this.getQAOverviewUrl());
-        const seo = new ScoreCard('SEO', dci.getSEO().getTotal(), this.getSEOOverviewUrl());
+    private createSiteCards(dci: DciOverallScore, siteId: number) {
+        const total = new ScoreCard('Total Score', dci.getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'Dashboard'));
+        const a11n = new ScoreCard('Accessibility', dci.getAccessibility().getTotal(),
+            SiteimproveWidget.createScoreUrl(siteId, 'Accessibility'));
+        const qa = new ScoreCard('QA', dci.getQA().getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'QualityAssurance'));
+        const seo = new ScoreCard('SEO', dci.getSEO().getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'SEOv2'));
         this.appendChildren(total, a11n, qa, seo);
     }
 
-    private getTotalOverviewUrl() {
-        return `${SiteimproveWidget.dashboardHost}/Dashboard/${this.siteId}/Dci/Index`;
+    private createPageCards(score: /*PageSummary*/any, siteId: number, pageId: number) {
+        // const total = new ScoreCard('Total Score', dci.getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'Dashboard'));
+        // const a11n = new ScoreCard('Accessibility', dci.getAccessibility().getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'Accessibility'));
+        // const qa = new ScoreCard('QA', dci.getQA().getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'QualityAssurance'));
+        // const seo = new ScoreCard('SEO', dci.getSEO().getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'SEOv2'));
+        // this.appendChildren(total, a11n, qa, seo);
     }
 
-    private getQAOverviewUrl() {
-        return `${SiteimproveWidget.dashboardHost}/QualityAssurance/${this.siteId}/Overview/Index`;
-    }
-
-    private getAccessibilityOverviewUrl() {
-        return `${SiteimproveWidget.dashboardHost}/Accessibility/${this.siteId}/Overview/Index`;
-    }
-
-    private getSEOOverviewUrl() {
-        return `${SiteimproveWidget.dashboardHost}/SEOv2/${this.siteId}/Overview/Index`;
+    private static createScoreUrl(siteId: number, dashboardPath: string) {
+        return `${UrlHelper.SITEIMPROVE_DASHBOARD}/${dashboardPath}/${siteId}/Dci/Index`;
     }
 }

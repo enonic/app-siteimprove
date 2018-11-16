@@ -1,7 +1,7 @@
 import {DciOverallScoreJson} from '../resource/json/DciOverallScoreJson';
-import {QAScore} from './QAScore';
-import {SEOScore} from './SEOScore';
-import {AccessibilityScore} from './AccessibilityScore';
+import {QAScore} from './dcioverallscore/QAScore';
+import {SEOScore} from './dcioverallscore/SEOScore';
+import {AccessibilityScore} from './dcioverallscore/AccessibilityScore';
 
 export class DciOverallScore {
 

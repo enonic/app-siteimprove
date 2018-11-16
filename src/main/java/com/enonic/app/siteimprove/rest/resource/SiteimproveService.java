@@ -11,6 +11,7 @@ import com.google.common.annotations.Beta;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveDciOverviewRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListPagesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListSitesRequestJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimprovePageSummaryRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveServiceGeneralRequestJson;
 
 @Beta
@@ -28,5 +29,8 @@ public interface SiteimproveService
         throws IOException, URISyntaxException;
 
     Response listPages( final SiteimproveListPagesRequestJson json )
+        throws IOException, URISyntaxException;
+
+    Response pageSummary( final SiteimprovePageSummaryRequestJson json )
         throws IOException, URISyntaxException;
 }

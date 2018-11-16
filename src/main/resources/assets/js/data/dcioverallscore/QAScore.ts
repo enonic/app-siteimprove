@@ -1,4 +1,4 @@
-import {QAScoreJson} from '../resource/json/QAScoreJson';
+import {QAScoreJson} from '../../resource/json/dcioverallscore/QAScoreJson';
 
 export class QAScore {
 

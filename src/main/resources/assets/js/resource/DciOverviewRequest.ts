@@ -16,7 +16,7 @@ export class DciOverviewRequest
 
     getParams(): Object {
         return {
-            siteId: this.siteId || 0
+            site_id: this.siteId || 0
         };
     }
 

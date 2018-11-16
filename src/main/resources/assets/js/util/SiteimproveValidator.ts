@@ -16,27 +16,27 @@ export class SiteimproveValidator {
         }
 
         return SiteimproveFetcher.fetchSiteIdByUrl(url).then((siteId: number) => {
+            let result: ValidationResult;
             if (!siteId) {
                 const error = `"${url}" is not enabled for your Siteimprove account.`;
-                const result: ValidationResult = {error};
+                result = {error};
                 return wemQ(result);
             }
 
-            return SiteimproveValidator.getPageId(url, path, siteId).then((pageId: number) => {
-                const result: ValidationResult = {siteId, pageId};
-                return result;
-            });
+            if (path.hasParent()) {
+
+                const pageUrl = [UrlHelper.normalize(url), ...path.getElements().slice(1)].join('/');
+                const error = `Siteimprove statistics are not available for "${pageUrl}".`;
+
+                return SiteimproveFetcher.fetchPageIdByUrl(pageUrl, siteId).then((pageId: number) => {
+
+                    result = pageId == null ? {error} : {siteId, pageId};
+                    return result;
+                });
+            }
+
+            result = {siteId};
+            return wemQ(result);
         });
     }
-
-    private static getPageId(url: string, path: Path, siteId: number): wemQ.Promise<number> {
-        if (!path.hasParent()) {
-            return wemQ(null);
-        }
-
-        const pageUrl = [UrlHelper.normalize(url), ...path.getElements().slice(1)].join('/');
-
-        return SiteimproveFetcher.fetchPageIdByUrl(pageUrl, siteId);
-    }
-
 }

@@ -1,4 +1,4 @@
-import {SEOScoreJson} from '../resource/json/SEOScoreJson';
+import {SEOScoreJson} from '../../resource/json/dcioverallscore/SEOScoreJson';
 
 export class SEOScore {
 
