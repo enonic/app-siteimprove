@@ -1,9 +1,26 @@
-.@{_SITEIMPROVE_PREFIX}widget {
+.flex() {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: baseline;
   align-content: flex-start;
+}
+
+.@{_SITEIMPROVE_PREFIX}widget {
   font-size: 14px;
+
+  &.site {
+    .flex();
+  }
+
+  &.page {
+    .flex();
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .metadata {
+    .flex();
+  }
 }

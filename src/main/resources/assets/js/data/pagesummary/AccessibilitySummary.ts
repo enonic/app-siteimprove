@@ -1,6 +1,9 @@
-import {AccessibilitySummaryJson} from '../resource/json/pagesummary/AccessibilitySummaryJson';
+import {AccessibilitySummaryJson} from '../../resource/json/pagesummary/AccessibilitySummaryJson';
+import {Summary} from './Summary';
+import {Data} from '../Data';
 
-export class AccessibilitySummary {
+export class AccessibilitySummary
+    implements Summary {
 
     private aErrors: number;
 
@@ -40,6 +43,14 @@ export class AccessibilitySummary {
 
     static fromJson(json: AccessibilitySummaryJson): AccessibilitySummary {
         return new AccessibilitySummaryBuilder().fromJson(json).build();
+    }
+
+    toData(): Data[] {
+        return [
+            {name: '"A" errors', value: this.aErrors},
+            {name: '"AA" errors', value: this.aaErrors},
+            {name: '"AAA" errors', value: this.aaaErrors}
+        ];
     }
 }
 

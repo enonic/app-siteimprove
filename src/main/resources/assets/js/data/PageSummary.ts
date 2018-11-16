@@ -1,6 +1,6 @@
 import {PageSummaryJson} from '../resource/json/PageSummaryJson';
-import {SiteimproveLinks} from './SiteimproveLinks';
-import {SiteimproveSummary} from './SiteimproveSummary';
+import {SiteimproveLinks} from './pagesummary/SiteimproveLinks';
+import {SiteimproveSummary} from './pagesummary/SiteimproveSummary';
 
 export class PageSummary {
 

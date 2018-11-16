@@ -1,6 +1,9 @@
-import {QASummaryJson} from '../resource/json/pagesummary/QASummaryJson';
+import {QASummaryJson} from '../../resource/json/pagesummary/QASummaryJson';
+import {Data} from '../Data';
+import {Summary} from './Summary';
 
-export class QASummary {
+export class QASummary
+    implements Summary {
 
     private brokenLinks: number;
 
@@ -40,6 +43,14 @@ export class QASummary {
 
     static fromJson(json: QASummaryJson): QASummary {
         return new QASummaryBuilder().fromJson(json).build();
+    }
+
+    toData(): Data[] {
+        return [
+            {name: 'Broken links', value: this.brokenLinks},
+            {name: 'Misspellings', value: this.misspellings},
+            {name: 'Potential misspellings', value: this.potentialMisspellings}
+        ];
     }
 }
 

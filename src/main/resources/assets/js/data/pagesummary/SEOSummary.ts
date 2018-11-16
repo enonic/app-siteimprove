@@ -1,6 +1,9 @@
-import {SEOSummaryJson} from '../resource/json/pagesummary/SEOSummaryJson';
+import {SEOSummaryJson} from '../../resource/json/pagesummary/SEOSummaryJson';
+import {Summary} from './Summary';
+import {Data} from '../Data';
 
-export class SEOSummary {
+export class SEOSummary
+    implements Summary {
 
     private contentIssues: number;
 
@@ -40,6 +43,14 @@ export class SEOSummary {
 
     static fromJson(json: SEOSummaryJson): SEOSummary {
         return new SEOSummaryBuilder().fromJson(json).build();
+    }
+
+    toData(): Data[] {
+        return [
+            {name: 'Content issues', value: this.contentIssues},
+            {name: 'Technical issues', value: this.technicalIssues},
+            {name: 'UX issues', value: this.uxIssues}
+        ];
     }
 }
 

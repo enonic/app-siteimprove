@@ -1,4 +1,4 @@
-import {SiteimproveLinksJson} from '../resource/json/pagesummary/SiteimproveLinksJson';
+import {SiteimproveLinksJson} from '../../resource/json/pagesummary/SiteimproveLinksJson';
 
 export class SiteimproveLinks {
 

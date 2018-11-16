@@ -1,6 +1,6 @@
 import {QASummary} from './QASummary';
 import {SEOSummary} from './SEOSummary';
-import {SiteimproveSummaryJson} from '../resource/json/pagesummary/SiteimproveSummaryJson';
+import {SiteimproveSummaryJson} from '../../resource/json/pagesummary/SiteimproveSummaryJson';
 import {AccessibilitySummary} from './AccessibilitySummary';
 
 export class SiteimproveSummary {
