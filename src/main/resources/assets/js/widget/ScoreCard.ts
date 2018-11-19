@@ -13,24 +13,25 @@ export class ScoreCard
 
     private static RADIUS: number = 55;
 
-    constructor(title: string, score: number, url?: string) {
+    protected overviewButton: Button;
+
+    constructor(title: string, score: number) {
         super('score-card', AppStyleHelper.SITEIMPROVE_PREFIX);
 
         const titleEl = new DivEl('title').setHtml(title);
         const chartEl = ScoreCard.createChart(score);
-        const overviewButton = new Button('Overview').setClass('overview');
-
-        if (url) {
-            overviewButton.onClicked(() => {
-                window.open(url, '_blank');
-            });
-        }
+        this.overviewButton = new Button('Overview');
+        this.overviewButton.setClass('overview');
 
         this.appendChildren(
             titleEl,
             chartEl,
-            overviewButton
+            this.overviewButton
         );
+    }
+
+    getOverviewButton(): Button {
+        return this.overviewButton;
     }
 
     private static createChart(score: number): DivEl {

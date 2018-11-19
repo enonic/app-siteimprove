@@ -5,7 +5,6 @@ import Path = api.rest.Path;
 import {WidgetError} from './WidgetError';
 import {DciOverviewRequest} from '../resource/DciOverviewRequest';
 import {DciOverallScore} from '../data/DciOverallScore';
-import {ScoreCard} from './ScoreCard';
 import {AppStyleHelper} from '../util/AppStyleHelper';
 import {SiteimproveValidator, ValidationResult} from '../util/SiteimproveValidator';
 import {UrlHelper} from '../util/UrlHelper';
@@ -13,6 +12,8 @@ import {PageSummaryRequest} from '../resource/PageSummaryRequest';
 import {PageSummary} from '../data/PageSummary';
 import {DataLine} from './DataLine';
 import {DataCard} from './DataCard';
+import {LinkableScoreCard} from './LinkableScoreCard';
+import {TogglableScoreCard} from './TogglableScoreCard';
 
 export type SiteimproveWidgetConfig = {
     contentPath: Path,
@@ -46,7 +47,7 @@ export class SiteimproveWidget
 
             if (result.siteId && !result.pageId) {
                 return new DciOverviewRequest(result.siteId).sendAndParse().then((dci: DciOverallScore) => {
-                    this.createSiteCards(dci, result.siteId);
+                    this.createSiteCards(dci);
                 });
             } else if (result.pageId) {
                 return new PageSummaryRequest(result.siteId, result.pageId).sendAndParse().then((summary: PageSummary) => {
@@ -61,18 +62,20 @@ export class SiteimproveWidget
         });
     }
 
-    private createSiteCards(dci: DciOverallScore, siteId: number) {
-        const total = new ScoreCard('Total Score', dci.getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'Dashboard'));
-        const a11n = new ScoreCard('Accessibility', dci.getAccessibility().getTotal(),
-            SiteimproveWidget.createScoreUrl(siteId, 'Accessibility'));
-        const qa = new ScoreCard('QA', dci.getQA().getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'QualityAssurance'));
-        const seo = new ScoreCard('SEO', dci.getSEO().getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'SEOv2'));
+    private createSiteCards(dci: DciOverallScore) {
+        const toggleDetails = () => {
+            this.toggleClass('detailed');
+        };
+        const total = new TogglableScoreCard('Total Score', dci.getTotal(), toggleDetails);
+        const a11n = new TogglableScoreCard('Accessibility', dci.getAccessibility().getTotal(), toggleDetails);
+        const qa = new TogglableScoreCard('QA', dci.getQA().getTotal(), toggleDetails);
+        const seo = new TogglableScoreCard('SEO', dci.getSEO().getTotal(), toggleDetails);
         this.appendChildren(total, a11n, qa, seo);
         this.addClass('site');
     }
 
     private createPageCards(summary: PageSummary, siteId: number, pageId: number) {
-        const total = new ScoreCard('Total Score', summary.getSummary().getDci(), SiteimproveWidget.createPageUrl(siteId, pageId));
+        const total = new LinkableScoreCard('Total Score', summary.getSummary().getDci(), SiteimproveWidget.createPageUrl(siteId, pageId));
         const lastSeen = new DataLine({name: 'Last seen', value: summary.getSummary().getLastSeen().toLocaleString()});
         const metadata = new DivEl('metadata');
 

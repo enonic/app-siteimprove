@@ -12,6 +12,15 @@
 
   &.site {
     .flex();
+
+    &.detailed {
+      .@{_SITEIMPROVE_PREFIX}score-card:not(.active) {
+        .notSelectable();
+        pointer-events: none;
+        opacity: 0.5;
+        filter: grayscale(0.75);
+      }
+    }
   }
 
   &.page {
