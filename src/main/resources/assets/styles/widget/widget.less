@@ -10,6 +10,21 @@
 .@{_SITEIMPROVE_PREFIX}widget {
   font-size: 14px;
 
+  .url {
+    .card-box();
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    .link {
+      text-decoration: none;
+    }
+  }
+
   &.site {
     .flex();
 
@@ -33,6 +48,11 @@
     .flex();
     align-items: center;
     flex-direction: column;
+    padding: 0 10px;
+
+    .url {
+      margin: 10px 0;
+    }
   }
 
   .metadata {

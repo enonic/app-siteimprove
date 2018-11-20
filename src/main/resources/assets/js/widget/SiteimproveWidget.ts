@@ -2,6 +2,7 @@ import DivEl = api.dom.DivEl;
 import LoadMask = api.ui.mask.LoadMask;
 import DefaultErrorHandler = api.DefaultErrorHandler;
 import Path = api.rest.Path;
+import AEl = api.dom.AEl;
 import {WidgetError} from './WidgetError';
 import {DciOverviewRequest} from '../resource/DciOverviewRequest';
 import {DciOverallScore} from '../data/DciOverallScore';
@@ -49,10 +50,12 @@ export class SiteimproveWidget
 
             if (result.siteId && !result.pageId) {
                 return new DciOverviewRequest(result.siteId).sendAndParse().then((dci: DciOverallScore) => {
+                    this.createTitle(result.url);
                     this.createSiteCards(dci);
                 });
             } else if (result.pageId) {
                 return new PageSummaryRequest(result.siteId, result.pageId).sendAndParse().then((summary: PageSummary) => {
+                    this.createTitle(result.url);
                     this.createPageCards(summary, result.siteId, result.pageId);
                 });
             }
@@ -62,6 +65,18 @@ export class SiteimproveWidget
             DefaultErrorHandler.handle(error);
             this.loadMask.hide();
         });
+    }
+
+    private createTitle(url: string) {
+        const title = new DivEl('url');
+        const link = new AEl('link');
+
+        link.setUrl(url, '_blank');
+        link.setTitle(url);
+        title.appendChild(link);
+        link.getEl().setInnerHtml(url);
+
+        this.appendChild(title);
     }
 
     private createSiteCards(dci: DciOverallScore) {

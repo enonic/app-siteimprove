@@ -1,11 +1,15 @@
 @border-color: #e3e3e3;
 
-.card() {
+.card-box() {
   margin: 10px;
   background-color: @admin-white;
   border-radius: 3px;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.15);
   text-align: center;
+}
+
+.card() {
+  .card-box();
 
   & > .title {
     margin-bottom: 10px;

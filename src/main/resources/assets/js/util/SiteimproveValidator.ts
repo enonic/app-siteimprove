@@ -6,6 +6,7 @@ export interface ValidationResult {
     error?: string;
     siteId?: number;
     pageId?: number;
+    url?: string;
 }
 
 export class SiteimproveValidator {
@@ -30,12 +31,12 @@ export class SiteimproveValidator {
 
                 return SiteimproveFetcher.fetchPageIdByUrl(pageUrl, siteId).then((pageId: number) => {
 
-                    result = pageId == null ? {error} : {siteId, pageId};
+                    result = pageId == null ? {error} : {siteId, pageId, url: pageUrl};
                     return result;
                 });
             }
 
-            result = {siteId};
+            result = {siteId, url: UrlHelper.normalize(url)};
             return wemQ(result);
         });
     }
