@@ -1,0 +1,42 @@
+.@{_SITEIMPROVE_PREFIX}progress-line {
+  .header {
+    display: flex;
+    font-weight: bold;
+
+    .title {
+      flex: 1 0 auto;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .score {
+      flex: 0 0 auto;
+      text-align: right;
+
+      &::after {
+        content: ' / 100';
+        font-size: 0.8em;
+        font-weight: normal;
+      }
+    }
+  }
+
+  .progress-wrapper {
+    height: 6px;
+    margin-top: 5px;
+    background: @border-color;
+    border-radius: 3px;
+    position: relative;
+
+    .progress {
+      position: absolute;
+      height: 10px;
+      margin-top: -2px;
+      border-radius: 5px;
+      background: red;
+      transition: 1s;
+    }
+  }
+}

@@ -14,6 +14,8 @@ import {DataLine} from './DataLine';
 import {DataCard} from './DataCard';
 import {LinkableScoreCard} from './LinkableScoreCard';
 import {TogglableScoreCard} from './TogglableScoreCard';
+import {DetailsCard} from './DetailsCard';
+import {Data} from '../data/Data';
 
 export type SiteimproveWidgetConfig = {
     contentPath: Path,
@@ -63,20 +65,32 @@ export class SiteimproveWidget
     }
 
     private createSiteCards(dci: DciOverallScore) {
-        const toggleDetails = () => {
-            this.toggleClass('detailed');
+        const details = new DetailsCard('Site score details', []);
+
+        const createDetailsToggler = (data: Data[]) => (active: boolean) => {
+            if (active) {
+                details.updateLines(data);
+            }
+            this.toggleClass('detailed', active);
         };
-        const total = new TogglableScoreCard('Total Score', dci.getTotal(), toggleDetails);
-        const a11n = new TogglableScoreCard('Accessibility', dci.getAccessibility().getTotal(), toggleDetails);
-        const qa = new TogglableScoreCard('QA', dci.getQA().getTotal(), toggleDetails);
-        const seo = new TogglableScoreCard('SEO', dci.getSEO().getTotal(), toggleDetails);
-        this.appendChildren(total, a11n, qa, seo);
+
+        const totalData: Data[] = [
+            {name: 'Quality Assurance', value: dci.getQA().getTotal()},
+            {name: 'Accessibility', value: dci.getAccessibility().getTotal()},
+            {name: 'SEO', value: dci.getSEO().getTotal()}
+        ];
+
+        const total = new TogglableScoreCard('Total Score', dci.getTotal(), createDetailsToggler(totalData));
+        const qa = new TogglableScoreCard('QA', dci.getQA().getTotal(), createDetailsToggler([]));
+        const a11n = new TogglableScoreCard('Accessibility', dci.getAccessibility().getTotal(), createDetailsToggler([]));
+        const seo = new TogglableScoreCard('SEO', dci.getSEO().getTotal(), createDetailsToggler([]));
+        this.appendChildren<any>(total, qa, a11n, seo, details);
         this.addClass('site');
     }
 
     private createPageCards(summary: PageSummary, siteId: number, pageId: number) {
         const total = new LinkableScoreCard('Total Score', summary.getSummary().getDci(), SiteimproveWidget.createPageUrl(siteId, pageId));
-        const lastSeen = new DataLine({name: 'Last seen', value: summary.getSummary().getLastSeen().toLocaleString()});
+        const lastSeen = new DataLine('Last seen', summary.getSummary().getLastSeen().toLocaleString());
         const metadata = new DivEl('metadata');
 
         const a11n = new DataCard('Accessibility', summary.getSummary().getAccessibility().toData(),
