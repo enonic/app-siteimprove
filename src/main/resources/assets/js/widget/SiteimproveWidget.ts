@@ -94,11 +94,28 @@ export class SiteimproveWidget
             {name: 'Accessibility', value: dci.getAccessibility().getTotal()},
             {name: 'SEO', value: dci.getSEO().getTotal()}
         ];
+        const qaData: Data[] = [
+            {name: 'Content', value: dci.getQA().getContent()},
+            {name: 'Freshness', value: dci.getQA().getFreshness()},
+            {name: 'Security', value: dci.getQA().getSecurity()},
+            {name: 'UX', value: dci.getQA().getUx()}
+        ];
+        const a11nData: Data[] = [
+            {name: 'Error pages', value: dci.getAccessibility().getErrorPages()},
+            {name: 'Errors', value: dci.getAccessibility().getErrors()},
+            {name: 'Warnings', value: dci.getAccessibility().getWarnings()}
+        ];
+        const seoData: Data[] = [
+            {name: 'Content', value: dci.getSEO().getContent()},
+            {name: 'Mobile', value: dci.getSEO().getMobile()},
+            {name: 'Technical', value: dci.getSEO().getTechnical()},
+            {name: 'UX', value: dci.getSEO().getUx()}
+        ];
 
         const total = new TogglableScoreCard('Total Score', dci.getTotal(), createDetailsToggler(totalData));
-        const qa = new TogglableScoreCard('QA', dci.getQA().getTotal(), createDetailsToggler([]));
-        const a11n = new TogglableScoreCard('Accessibility', dci.getAccessibility().getTotal(), createDetailsToggler([]));
-        const seo = new TogglableScoreCard('SEO', dci.getSEO().getTotal(), createDetailsToggler([]));
+        const qa = new TogglableScoreCard('QA', dci.getQA().getTotal(), createDetailsToggler(qaData));
+        const a11n = new TogglableScoreCard('Accessibility', dci.getAccessibility().getTotal(), createDetailsToggler(a11nData));
+        const seo = new TogglableScoreCard('SEO', dci.getSEO().getTotal(), createDetailsToggler(seoData));
         this.appendChildren<any>(total, qa, a11n, seo, details);
         this.addClass('site');
     }
