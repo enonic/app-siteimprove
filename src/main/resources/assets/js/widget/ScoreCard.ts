@@ -1,7 +1,7 @@
 import DivEl = api.dom.DivEl;
 import Button = api.ui.button.Button;
 import SpanEl = api.dom.SpanEl;
-import {AppStyleHelper} from '../util/AppStyleHelper';
+import {Card} from './Card';
 
 type Progress = {
     color: string;
@@ -9,29 +9,40 @@ type Progress = {
 }
 
 export class ScoreCard
-    extends DivEl {
+    extends Card {
 
-    private static RADIUS: number = 55;
+    private static RADIUS: number = 65;
 
     protected overviewButton: Button;
 
-    constructor(title: string, score: number) {
-        super('score-card', AppStyleHelper.SITEIMPROVE_PREFIX);
+    constructor(title: string, score: number, url: string, overviewCallback: (active: boolean, that: ScoreCard) => void) {
+        super(title, url, 'score-card',);
 
-        const titleEl = new DivEl('title').setHtml(title);
         const chartEl = ScoreCard.createChart(score);
-        this.overviewButton = new Button('Overview');
+
+        this.overviewButton = new Button('Show details');
         this.overviewButton.setClass('overview');
+        this.overviewButton.onClicked(() => {
+            const active = this.toggleActive();
+            overviewCallback(active, this);
+        });
 
         this.appendChildren(
-            titleEl,
             chartEl,
             this.overviewButton
         );
     }
 
-    getOverviewButton(): Button {
-        return this.overviewButton;
+    private toggleActive(): boolean {
+        if (this.hasClass('active')) {
+            this.removeClass('active');
+            this.overviewButton.setLabel('Show details');
+            return false;
+        } else {
+            this.addClass('active');
+            this.overviewButton.setLabel('Hide details');
+            return true;
+        }
     }
 
     private static createChart(score: number): DivEl {
@@ -57,9 +68,9 @@ export class ScoreCard
         const c = Math.PI * (r * 2);
 
         return `
-            <svg class="chart" width="120" height="120" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                <circle r="${r}" cx="60" cy="60" fill="transparent" stroke-dasharray="${c}" stroke-dashoffset="0"></circle>
-                <circle class="progress" r="${r}" cx="60" cy="60" fill="transparent" stroke-dasharray="${c}" stroke-dashoffset="0" stroke-linecap="round"></circle>
+            <svg class="chart" width="140" height="140" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <circle r="${r}" cx="70" cy="70" fill="transparent" stroke-dasharray="${c}" stroke-dashoffset="0"></circle>
+                <circle class="progress" r="${r}" cx="70" cy="70" fill="transparent" stroke-dasharray="${c}" stroke-dashoffset="0" stroke-linecap="round"></circle>
             </svg>
         `;
     }

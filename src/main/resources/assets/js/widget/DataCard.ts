@@ -1,32 +1,18 @@
-import DivEl = api.dom.DivEl;
-import Button = api.ui.button.Button;
-import {AppStyleHelper} from '../util/AppStyleHelper';
 import {TableEl} from '../element/TableEl';
 import {TrEl} from '../element/TrEl';
 import {TdEl} from '../element/TdEl';
 import {Data} from '../data/Data';
+import {Card} from './Card';
 
 export class DataCard
-    extends DivEl {
+    extends Card {
 
-    constructor(title: string, dataList: Data[], url?: string) {
-        super('data-card', AppStyleHelper.SITEIMPROVE_PREFIX);
+    constructor(title: string, dataList: Data[], url: string) {
+        super(title, url, 'data-card');
 
-        const titleEl = new DivEl('title').setHtml(title);
         const dataTableEl = DataCard.createDataTable(dataList);
 
-        this.appendChildren(
-            titleEl,
-            dataTableEl
-        );
-
-        if (url) {
-            const overviewButton = new Button('Overview').setClass('overview');
-            overviewButton.onClicked(() => {
-                window.open(url, '_blank');
-            });
-            this.appendChild(overviewButton);
-        }
+        this.appendChild(dataTableEl);
     }
 
     private static createDataTable(dataList: Data[]): TableEl {

@@ -10,18 +10,19 @@
 .@{_SITEIMPROVE_PREFIX}widget {
   font-size: 14px;
 
-  .url {
+  .link-title();
+  & > .title {
     .card-box();
     width: 100%;
-    padding: 10px;
+    padding: 10px 30px;
     box-sizing: border-box;
     font-weight: bold;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
-    .link {
-      text-decoration: none;
+    .link::after {
+      right: 10px;
     }
   }
 
@@ -50,12 +51,15 @@
     flex-direction: column;
     padding: 0 10px;
 
-    .url {
-      margin: 10px 0;
+    &.detailed {
+      .metadata {
+        display: block;
+      }
     }
-  }
 
-  .metadata {
-    .flex();
+    .metadata {
+      .flex();
+      display: none;
+    }
   }
 }

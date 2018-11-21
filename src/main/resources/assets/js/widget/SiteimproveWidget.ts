@@ -13,10 +13,9 @@ import {PageSummaryRequest} from '../resource/PageSummaryRequest';
 import {PageSummary} from '../data/PageSummary';
 import {DataLine} from './DataLine';
 import {DataCard} from './DataCard';
-import {LinkableScoreCard} from './LinkableScoreCard';
-import {TogglableScoreCard} from './TogglableScoreCard';
 import {DetailsCard} from './DetailsCard';
 import {Data} from '../data/Data';
+import {ScoreCard} from './ScoreCard';
 
 export type SiteimproveWidgetConfig = {
     contentPath: Path,
@@ -51,7 +50,7 @@ export class SiteimproveWidget
             if (result.siteId && !result.pageId) {
                 return new DciOverviewRequest(result.siteId).sendAndParse().then((dci: DciOverallScore) => {
                     this.createTitle(result.url);
-                    this.createSiteCards(dci);
+                    this.createSiteCards(dci, result.siteId);
                 });
             } else if (result.pageId) {
                 return new PageSummaryRequest(result.siteId, result.pageId).sendAndParse().then((summary: PageSummary) => {
@@ -68,23 +67,23 @@ export class SiteimproveWidget
     }
 
     private createTitle(url: string) {
-        const title = new DivEl('url');
-        const link = new AEl('link');
+        const title = new DivEl('title');
+        const link = new AEl('link icon icon-new-tab');
 
         link.setUrl(url, '_blank');
-        link.setTitle(url);
+        link.setHtml(url);
         title.appendChild(link);
-        link.getEl().setInnerHtml(url);
 
         this.appendChild(title);
     }
 
-    private createSiteCards(dci: DciOverallScore) {
+    private createSiteCards(dci: DciOverallScore, siteId: number) {
         const details = new DetailsCard('Site score details', []);
 
-        const createDetailsToggler = (data: Data[]) => (active: boolean) => {
+        const createDetailsToggler = (data: Data[]) => (active: boolean, card: ScoreCard) => {
             if (active) {
                 details.updateLines(data);
+                this.insertAfterEl(card);
             }
             this.toggleClass('detailed', active);
         };
@@ -112,17 +111,25 @@ export class SiteimproveWidget
             {name: 'UX', value: dci.getSEO().getUx()}
         ];
 
-        const total = new TogglableScoreCard('Total Score', dci.getTotal(), createDetailsToggler(totalData));
-        const qa = new TogglableScoreCard('QA', dci.getQA().getTotal(), createDetailsToggler(qaData));
-        const a11n = new TogglableScoreCard('Accessibility', dci.getAccessibility().getTotal(), createDetailsToggler(a11nData));
-        const seo = new TogglableScoreCard('SEO', dci.getSEO().getTotal(), createDetailsToggler(seoData));
+        const total = new ScoreCard('Total Score', dci.getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'Dashboard'),
+            createDetailsToggler(totalData));
+        const qa = new ScoreCard('QA', dci.getQA().getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'QualityAssurance'),
+            createDetailsToggler(qaData));
+        const a11n = new ScoreCard('Accessibility', dci.getAccessibility().getTotal(),
+            SiteimproveWidget.createScoreUrl(siteId, 'Accessibility'), createDetailsToggler(a11nData));
+        const seo = new ScoreCard('SEO', dci.getSEO().getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'SEOv2'),
+            createDetailsToggler(seoData));
         this.appendChildren<any>(total, qa, a11n, seo, details);
         this.addClass('site');
     }
 
     private createPageCards(summary: PageSummary, siteId: number, pageId: number) {
-        const total = new LinkableScoreCard('Total Score', summary.getSummary().getDci(), SiteimproveWidget.createPageUrl(siteId, pageId));
-        const lastSeen = new DataLine('Last seen', summary.getSummary().getLastSeen().toLocaleString());
+        const detailsToggler = (active: boolean) => {
+            this.toggleClass('detailed', active);
+        };
+
+        const total = new ScoreCard('Total Score', summary.getSummary().getDci(), SiteimproveWidget.createPageUrl(siteId, pageId), detailsToggler);
+        const lastSeen = new DataLine('Last checked', summary.getSummary().getLastSeen().toLocaleString());
         const metadata = new DivEl('metadata');
 
         const a11n = new DataCard('Accessibility', summary.getSummary().getAccessibility().toData(),
@@ -131,7 +138,7 @@ export class SiteimproveWidget
         const seo = new DataCard('SEO', summary.getSummary().getSEO().toData(), summary.getSiteimproveLinks().getSEO());
 
         metadata.appendChildren(a11n, qa, seo);
-        this.appendChildren(total, lastSeen, metadata);
+        this.appendChildren(lastSeen, total, metadata);
         this.addClass('page');
     }
 

@@ -41,6 +41,10 @@ module.exports = {
                 })
             },
             {
+                test: /\.(eot|woff|woff2|ttf)$|icomoon.svg/,
+                use: 'file-loader?name=fonts/[name].[ext]'
+            },
+            {
                 test: /^\.(svg|png|jpg|gif)$/,
                 use: 'file-loader?name=img/[name].[ext]'
             }
