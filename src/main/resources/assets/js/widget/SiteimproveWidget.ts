@@ -82,8 +82,10 @@ export class SiteimproveWidget
 
         const createDetailsToggler = (data: Data[]) => (active: boolean, card: ScoreCard) => {
             if (active) {
+                details.insertAfterEl(card);
                 details.updateLines(data);
-                this.insertAfterEl(card);
+            } else {
+                details.remove();
             }
             this.toggleClass('detailed', active);
         };
@@ -119,7 +121,7 @@ export class SiteimproveWidget
             SiteimproveWidget.createScoreUrl(siteId, 'Accessibility'), createDetailsToggler(a11nData));
         const seo = new ScoreCard('SEO', dci.getSEO().getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'SEOv2'),
             createDetailsToggler(seoData));
-        this.appendChildren<any>(total, qa, a11n, seo, details);
+        this.appendChildren<any>(total, qa, a11n, seo);
         this.addClass('site');
     }
 
