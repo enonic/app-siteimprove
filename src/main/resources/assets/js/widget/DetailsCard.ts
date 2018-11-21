@@ -13,11 +13,8 @@ export class DetailsCard
 
     private data: Data[];
 
-    constructor(title: string, data: Data[]) {
+    constructor(data: Data[]) {
         super('details-card', AppStyleHelper.SITEIMPROVE_PREFIX);
-
-        const titleEl = new DivEl('title').setHtml(title);
-        this.appendChild(titleEl);
 
         this.updateLines(data);
     }

@@ -78,12 +78,14 @@ export class SiteimproveWidget
     }
 
     private createSiteCards(dci: DciOverallScore, siteId: number) {
-        const details = new DetailsCard('Site score details', []);
+        const details = new DetailsCard([]);
 
         const createDetailsToggler = (data: Data[]) => (active: boolean, card: ScoreCard) => {
             if (active) {
-                details.insertAfterEl(card);
+                card.appendChild(details);
+                details.insertBeforeEl(card.getOverviewButton());
                 details.updateLines(data);
+                card.getOverviewButton().getHTMLElement().scrollIntoView();
             } else {
                 details.remove();
             }

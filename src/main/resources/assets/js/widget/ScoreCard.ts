@@ -86,4 +86,8 @@ export class ScoreCard
 
         return {color, value};
     }
+
+    getOverviewButton(): Button {
+        return this.overviewButton;
+    }
 }
