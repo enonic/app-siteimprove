@@ -13,7 +13,6 @@ import {PageSummaryRequest} from '../resource/PageSummaryRequest';
 import {PageSummary} from '../data/PageSummary';
 import {DataLine} from './DataLine';
 import {DataCard} from './DataCard';
-import {Details} from './Details';
 import {Data} from '../data/Data';
 import {ScoreCard} from './ScoreCard';
 
@@ -78,20 +77,6 @@ export class SiteimproveWidget
     }
 
     private createSiteCards(dci: DciOverallScore, siteId: number) {
-        const details = new Details([]);
-
-        const createDetailsToggler = (data: Data[]) => (active: boolean, card: ScoreCard) => {
-            if (active) {
-                card.appendChild(details);
-                details.insertBeforeEl(card.getOverviewButton());
-                details.updateLines(data);
-                card.getEl().scrollIntoView();
-            } else {
-                details.remove();
-            }
-            this.toggleClass('detailed', active);
-        };
-
         const totalData: Data[] = [
             {name: 'Quality Assurance', value: dci.getQA().getTotal()},
             {name: 'Accessibility', value: dci.getAccessibility().getTotal()},
@@ -115,31 +100,58 @@ export class SiteimproveWidget
             {name: 'UX', value: dci.getSEO().getUx()}
         ];
 
-        const total = new ScoreCard('Total Score', dci.getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'Dashboard'),
-            createDetailsToggler(totalData));
-        const qa = new ScoreCard('QA', dci.getQA().getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'QualityAssurance'),
-            createDetailsToggler(qaData));
-        const a11n = new ScoreCard('Accessibility', dci.getAccessibility().getTotal(),
-            SiteimproveWidget.createScoreUrl(siteId, 'Accessibility'), createDetailsToggler(a11nData));
-        const seo = new ScoreCard('SEO', dci.getSEO().getTotal(), SiteimproveWidget.createScoreUrl(siteId, 'SEOv2'),
-            createDetailsToggler(seoData));
+        const total = new ScoreCard({
+            title: 'Total Score',
+            score: dci.getTotal(),
+            url: SiteimproveWidget.createScoreUrl(siteId, 'Dashboard'),
+            data: totalData
+        });
+        const qa = new ScoreCard({
+            title: 'QA',
+            score: dci.getQA().getTotal(),
+            url: SiteimproveWidget.createScoreUrl(siteId, 'QualityAssurance'),
+            data: qaData
+        });
+        const a11n = new ScoreCard({
+            title: 'Accessibility',
+            score: dci.getAccessibility().getTotal(),
+            url: SiteimproveWidget.createScoreUrl(siteId, 'Accessibility'),
+            data: a11nData
+        });
+        const seo = new ScoreCard({
+            title: 'SEO',
+            score: dci.getSEO().getTotal(),
+            url: SiteimproveWidget.createScoreUrl(siteId, 'SEOv2'),
+            data: seoData
+        });
         this.appendChildren<any>(total, qa, a11n, seo);
         this.addClass('site');
     }
 
     private createPageCards(summary: PageSummary, siteId: number, pageId: number) {
-        const detailsToggler = (active: boolean) => {
-            this.toggleClass('detailed', active);
-        };
-
-        const total = new ScoreCard('Total Score', summary.getSummary().getDci(), SiteimproveWidget.createPageUrl(siteId, pageId), detailsToggler);
+        const total = new ScoreCard({
+            title: 'Total Score',
+            score: summary.getSummary().getDci(),
+            url: SiteimproveWidget.createPageUrl(siteId, pageId)
+        });
         const lastSeen = new DataLine('Last checked', summary.getSummary().getLastSeen().toLocaleString());
         const metadata = new DivEl('metadata');
 
-        const a11n = new DataCard('Accessibility', summary.getSummary().getAccessibility().toData(),
-            summary.getSiteimproveLinks().getAccessibility());
-        const qa = new DataCard('QA', summary.getSummary().getQA().toData(), summary.getSiteimproveLinks().getQA());
-        const seo = new DataCard('SEO', summary.getSummary().getSEO().toData(), summary.getSiteimproveLinks().getSEO());
+        const a11n = new DataCard({
+            title: 'Accessibility',
+            data: summary.getSummary().getAccessibility().toData(),
+            url: summary.getSiteimproveLinks().getAccessibility()
+        });
+        const qa = new DataCard({
+            title: 'QA',
+            data: summary.getSummary().getQA().toData(),
+            url: summary.getSiteimproveLinks().getQA()
+        });
+        const seo = new DataCard({
+            title: 'SEO',
+            data: summary.getSummary().getSEO().toData(),
+            url: summary.getSiteimproveLinks().getSEO()
+        });
 
         metadata.appendChildren(a11n, qa, seo);
         this.appendChildren(lastSeen, total, metadata);

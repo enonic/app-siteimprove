@@ -2,13 +2,18 @@ import DivEl = api.dom.DivEl;
 import AEl = api.dom.AEl;
 import {AppStyleHelper} from '../util/AppStyleHelper';
 
+export interface CardSettings {
+    title: string;
+    url: string;
+}
+
 export class Card
     extends DivEl {
 
-    constructor(title: string, url: string, className?: string) {
+    constructor(settings: CardSettings, className?: string) {
         super(`card ${className || ''}`, AppStyleHelper.SITEIMPROVE_PREFIX);
 
-        const titleEl = Card.createTitle(title, url);
+        const titleEl = Card.createTitle(settings.title, settings.url);
 
         this.appendChildren(titleEl);
     }

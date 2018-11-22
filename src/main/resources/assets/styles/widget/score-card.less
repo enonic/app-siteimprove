@@ -1,7 +1,20 @@
 .@{_SITEIMPROVE_PREFIX}score-card {
 
-  &.active {
+  width: 190px;
+
+  &.detailed {
     width: 100%;
+
+    .@{_SITEIMPROVE_PREFIX}details {
+      max-height: 250px;
+      margin: 10px;
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .separator {
+      display: block;
+    }
   }
 
   .chart-wrapper {
@@ -47,7 +60,16 @@
   }
 
   .@{_SITEIMPROVE_PREFIX}details {
+    max-height: 0;
+    overflow: hidden;
+    transform: scale(0.75);
+    opacity: 0.3;
+    transition: 0.5s;
+  }
+
+  .separator {
     .card-border();
+    display: none;
   }
 
 

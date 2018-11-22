@@ -1,10 +1,10 @@
 .@{_SITEIMPROVE_PREFIX}progress-line {
   .header {
     display: flex;
+    justify-content: space-between;
     font-weight: bold;
 
     .title {
-      flex: 1 0 auto;
       text-align: left;
       white-space: nowrap;
       overflow: hidden;
@@ -13,6 +13,7 @@
 
     .score {
       flex: 0 0 auto;
+      padding-left: 0.25em;
       text-align: right;
 
       &::after {

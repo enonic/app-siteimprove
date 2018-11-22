@@ -1,11 +1,19 @@
 import DivEl = api.dom.DivEl;
 import Button = api.ui.button.Button;
 import SpanEl = api.dom.SpanEl;
-import {Card} from './Card';
+import {Card, CardSettings} from './Card';
+import {Data} from '../data/Data';
+import {Details} from './Details';
 
 type Progress = {
     color: string;
     value: number;
+}
+
+export interface ScoreCardSettings
+    extends CardSettings {
+    score: number;
+    data?: Data[];
 }
 
 export class ScoreCard
@@ -15,31 +23,29 @@ export class ScoreCard
 
     protected overviewButton: Button;
 
-    constructor(title: string, score: number, url: string, overviewCallback: (active: boolean, that: ScoreCard) => void) {
-        super(title, url, 'score-card',);
+    constructor(settings: ScoreCardSettings) {
+        super(settings, 'score-card');
 
-        const chartEl = ScoreCard.createChart(score);
+        const chartEl = ScoreCard.createChart(settings.score);
+        this.appendChild(chartEl);
 
-        this.overviewButton = new Button('Show details');
-        this.overviewButton.setClass('overview');
-        this.overviewButton.onClicked(() => {
-            const active = this.toggleActive();
-            overviewCallback(active, this);
-        });
+        if (settings.data) {
+            const details = ScoreCard.createDetails(settings.data);
+            const separator = new DivEl('separator');
+            this.appendChildren(details, separator);
+        }
 
-        this.appendChildren(
-            chartEl,
-            this.overviewButton
-        );
+        this.overviewButton = ScoreCard.createOverviewButton(this);
+        this.appendChild(this.overviewButton);
     }
 
-    private toggleActive(): boolean {
-        if (this.hasClass('active')) {
-            this.removeClass('active');
+    private toggleDetails(): boolean {
+        if (this.hasClass('detailed')) {
+            this.removeClass('detailed');
             this.overviewButton.setLabel('Show details');
             return false;
         } else {
-            this.addClass('active');
+            this.addClass('detailed');
             this.overviewButton.setLabel('Hide details');
             return true;
         }
@@ -87,7 +93,15 @@ export class ScoreCard
         return {color, value};
     }
 
-    getOverviewButton(): Button {
-        return this.overviewButton;
+    private static createDetails(data: Data[]): Details {
+        return new Details(data);
+    }
+
+    private static createOverviewButton(that: ScoreCard): Button {
+        const overviewButton = new Button('Show details');
+        overviewButton.setClass('overview');
+        overviewButton.onClicked(that.toggleDetails.bind(that));
+
+        return overviewButton;
     }
 }

@@ -2,15 +2,20 @@ import {TableEl} from '../element/TableEl';
 import {TrEl} from '../element/TrEl';
 import {TdEl} from '../element/TdEl';
 import {Data} from '../data/Data';
-import {Card} from './Card';
+import {Card, CardSettings} from './Card';
+
+export interface DataCardSettings
+    extends CardSettings {
+    data: Data[];
+}
 
 export class DataCard
     extends Card {
 
-    constructor(title: string, dataList: Data[], url: string) {
-        super(title, url, 'data-card');
+    constructor(settings: DataCardSettings) {
+        super(settings, 'data-card');
 
-        const dataTableEl = DataCard.createDataTable(dataList);
+        const dataTableEl = DataCard.createDataTable(settings.data);
 
         this.appendChild(dataTableEl);
     }
