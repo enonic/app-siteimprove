@@ -53,7 +53,7 @@ export class SiteimproveWidget
                 });
             } else if (result.pageId) {
                 return new PageSummaryRequest(result.siteId, result.pageId).sendAndParse().then((summary: PageSummary) => {
-                    this.createTitle(result.url);
+                    this.createTitle(result.url, summary.getSummary().getLastSeen().toLocaleString());
                     this.createPageCards(summary, result.siteId, result.pageId);
                 });
             }
@@ -65,13 +65,18 @@ export class SiteimproveWidget
         });
     }
 
-    private createTitle(url: string) {
+    private createTitle(url: string, lastSeenDate?: string) {
         const title = new DivEl('title');
         const link = new AEl('link icon icon-new-tab');
 
         link.setUrl(url, '_blank');
         link.setHtml(url);
         title.appendChild(link);
+
+        if (lastSeenDate) {
+            const lastSeen = new DataLine('Last checked', lastSeenDate);
+            title.appendChild(lastSeen);
+        }
 
         this.appendChild(title);
     }
@@ -129,8 +134,6 @@ export class SiteimproveWidget
     }
 
     private createPageCards(summary: PageSummary, siteId: number, pageId: number) {
-        const lastSeen = new DataLine('Last checked', summary.getSummary().getLastSeen().toLocaleString());
-
         const a11nSettings = {
             title: 'Accessibility',
             data: summary.getSummary().getAccessibility().toData(),
@@ -154,7 +157,7 @@ export class SiteimproveWidget
             data: [a11nSettings, qaSettings, seoSettings]
         });
 
-        this.appendChildren(lastSeen, total);
+        this.appendChild(total);
         this.addClass('page');
     }
 
