@@ -12,9 +12,9 @@ import {UrlHelper} from '../util/UrlHelper';
 import {PageSummaryRequest} from '../resource/PageSummaryRequest';
 import {PageSummary} from '../data/PageSummary';
 import {DataLine} from './DataLine';
-import {DataCard} from './DataCard';
 import {Data} from '../data/Data';
-import {ScoreCard} from './ScoreCard';
+import {SiteScoreCard} from './SiteScoreCard';
+import {PageScoreCard} from './PageScoreCard';
 
 export type SiteimproveWidgetConfig = {
     contentPath: Path,
@@ -100,25 +100,25 @@ export class SiteimproveWidget
             {name: 'UX', value: dci.getSEO().getUx()}
         ];
 
-        const total = new ScoreCard({
+        const total = new SiteScoreCard({
             title: 'Total Score',
             score: dci.getTotal(),
             url: SiteimproveWidget.createScoreUrl(siteId, 'Dashboard'),
             data: totalData
         });
-        const qa = new ScoreCard({
+        const qa = new SiteScoreCard({
             title: 'QA',
             score: dci.getQA().getTotal(),
             url: SiteimproveWidget.createScoreUrl(siteId, 'QualityAssurance'),
             data: qaData
         });
-        const a11n = new ScoreCard({
+        const a11n = new SiteScoreCard({
             title: 'Accessibility',
             score: dci.getAccessibility().getTotal(),
             url: SiteimproveWidget.createScoreUrl(siteId, 'Accessibility'),
             data: a11nData
         });
-        const seo = new ScoreCard({
+        const seo = new SiteScoreCard({
             title: 'SEO',
             score: dci.getSEO().getTotal(),
             url: SiteimproveWidget.createScoreUrl(siteId, 'SEOv2'),
@@ -129,32 +129,32 @@ export class SiteimproveWidget
     }
 
     private createPageCards(summary: PageSummary, siteId: number, pageId: number) {
-        const total = new ScoreCard({
-            title: 'Total Score',
-            score: summary.getSummary().getDci(),
-            url: SiteimproveWidget.createPageUrl(siteId, pageId)
-        });
         const lastSeen = new DataLine('Last checked', summary.getSummary().getLastSeen().toLocaleString());
-        const metadata = new DivEl('metadata');
 
-        const a11n = new DataCard({
+        const a11nSettings = {
             title: 'Accessibility',
             data: summary.getSummary().getAccessibility().toData(),
             url: summary.getSiteimproveLinks().getAccessibility()
-        });
-        const qa = new DataCard({
+        };
+        const qaSettings = {
             title: 'QA',
             data: summary.getSummary().getQA().toData(),
             url: summary.getSiteimproveLinks().getQA()
-        });
-        const seo = new DataCard({
+        };
+        const seoSettings = {
             title: 'SEO',
             data: summary.getSummary().getSEO().toData(),
             url: summary.getSiteimproveLinks().getSEO()
+        };
+
+        const total = new PageScoreCard({
+            title: 'Total Score',
+            score: summary.getSummary().getDci(),
+            url: SiteimproveWidget.createPageUrl(siteId, pageId),
+            data: [a11nSettings, qaSettings, seoSettings]
         });
 
-        metadata.appendChildren(a11n, qa, seo);
-        this.appendChildren(lastSeen, total, metadata);
+        this.appendChildren(lastSeen, total);
         this.addClass('page');
     }
 

@@ -2,40 +2,38 @@ import DivEl = api.dom.DivEl;
 import Button = api.ui.button.Button;
 import SpanEl = api.dom.SpanEl;
 import {Card, CardSettings} from './Card';
-import {Data} from '../data/Data';
-import {Details} from './Details';
 
 type Progress = {
     color: string;
     value: number;
 }
 
-export interface ScoreCardSettings
+export interface ScoreCardSettings<T>
     extends CardSettings {
     score: number;
-    data?: Data[];
+    data?: T[];
 }
 
-export class ScoreCard
+export abstract class ScoreCard<T>
     extends Card {
 
     private static RADIUS: number = 65;
 
     protected overviewButton: Button;
 
-    constructor(settings: ScoreCardSettings) {
-        super(settings, 'score-card');
+    protected constructor(settings: ScoreCardSettings<T>, className?: string) {
+        super(settings, `score-card ${className || ''}`);
 
         const chartEl = ScoreCard.createChart(settings.score);
         this.appendChild(chartEl);
 
         if (settings.data) {
-            const details = ScoreCard.createDetails(settings.data);
+            const details = this.createDetails(settings.data);
             const separator = new DivEl('separator');
             this.appendChildren(details, separator);
         }
 
-        this.overviewButton = ScoreCard.createOverviewButton(this);
+        this.overviewButton = ScoreCard.createOverviewButton<T>(this);
         this.appendChild(this.overviewButton);
     }
 
@@ -100,11 +98,9 @@ export class ScoreCard
         return {color, value};
     }
 
-    private static createDetails(data: Data[]): Details {
-        return new Details(data);
-    }
+    protected abstract createDetails(data: T[]): DivEl;
 
-    private static createOverviewButton(that: ScoreCard): Button {
+    private static createOverviewButton<T>(that: ScoreCard<T>): Button {
         const overviewButton = new Button('Show details');
         overviewButton.setClass('overview');
         overviewButton.onClicked(that.toggleDetails.bind(that));

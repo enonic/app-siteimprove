@@ -1,0 +1,24 @@
+.@{_SITEIMPROVE_PREFIX}page-score-card {
+
+  &.detailed {
+    .data-cards-wrapper {
+      max-height: 9999px;
+      margin: 10px;
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .data-cards-wrapper {
+    .flex();
+    max-height: 0;
+    overflow: hidden;
+    transform: scale(0.75);
+    opacity: 0.3;
+    transition: 0.3s;
+
+    .@{_SITEIMPROVE_PREFIX}data-card {
+      box-shadow: none;
+    }
+  }
+}
