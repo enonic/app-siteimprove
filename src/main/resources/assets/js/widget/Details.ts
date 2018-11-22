@@ -3,18 +3,13 @@ import {AppStyleHelper} from '../util/AppStyleHelper';
 import {Data} from '../data/Data';
 import {ProgressLine} from './ProgressLine';
 
-type Progress = {
-    color: string;
-    value: number;
-}
-
-export class DetailsCard
+export class Details
     extends DivEl {
 
     private data: Data[];
 
     constructor(data: Data[]) {
-        super('details-card', AppStyleHelper.SITEIMPROVE_PREFIX);
+        super('details', AppStyleHelper.SITEIMPROVE_PREFIX);
 
         this.updateLines(data);
     }

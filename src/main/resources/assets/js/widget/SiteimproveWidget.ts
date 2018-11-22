@@ -13,7 +13,7 @@ import {PageSummaryRequest} from '../resource/PageSummaryRequest';
 import {PageSummary} from '../data/PageSummary';
 import {DataLine} from './DataLine';
 import {DataCard} from './DataCard';
-import {DetailsCard} from './DetailsCard';
+import {Details} from './Details';
 import {Data} from '../data/Data';
 import {ScoreCard} from './ScoreCard';
 
@@ -78,14 +78,14 @@ export class SiteimproveWidget
     }
 
     private createSiteCards(dci: DciOverallScore, siteId: number) {
-        const details = new DetailsCard([]);
+        const details = new Details([]);
 
         const createDetailsToggler = (data: Data[]) => (active: boolean, card: ScoreCard) => {
             if (active) {
                 card.appendChild(details);
                 details.insertBeforeEl(card.getOverviewButton());
                 details.updateLines(data);
-                card.getOverviewButton().getHTMLElement().scrollIntoView();
+                card.getEl().scrollIntoView();
             } else {
                 details.remove();
             }

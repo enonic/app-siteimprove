@@ -1,5 +1,9 @@
 @border-color: #e3e3e3;
 
+.card-border() {
+  border-bottom: 1px solid @border-color;
+}
+
 .card-box() {
   margin: 10px;
   background-color: @admin-white;
@@ -14,7 +18,7 @@
     margin-bottom: 10px;
     padding: 10px;
     font-weight: bold;
-    border-bottom: 1px solid @border-color;
+    .card-border();
 
     .link {
       text-decoration: none;
