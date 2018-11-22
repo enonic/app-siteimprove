@@ -39,15 +39,22 @@ export class ScoreCard
         this.appendChild(this.overviewButton);
     }
 
-    private toggleDetails(): boolean {
+    private toggleDetails() {
         if (this.hasClass('detailed')) {
             this.removeClass('detailed');
             this.overviewButton.setLabel('Show details');
-            return false;
         } else {
             this.addClass('detailed');
             this.overviewButton.setLabel('Hide details');
-            return true;
+
+            const smoothScroll = () => this.getHTMLElement().scrollIntoView({behavior: 'smooth'});
+            const relatives = this.getEl().getParent().getChildren();
+            if (relatives[relatives.length - 1] === this.getHTMLElement()) {
+                // Must wait for the animation end on the last element to do scroll correctly
+                setTimeout(smoothScroll, 300);
+            } else {
+                smoothScroll();
+            }
         }
     }
 
