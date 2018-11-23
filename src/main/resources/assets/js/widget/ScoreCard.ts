@@ -69,7 +69,11 @@ export abstract class ScoreCard<T>
         const progress = ScoreCard.percentsToProgress(score);
         const circle: SVGCircleElement = chartEl.getEl().getHTMLElement().querySelector('.progress');
         circle.style.stroke = progress.color;
-        circle.style.strokeDashoffset = `${progress.value}px`;
+        circle.style.strokeDashoffset = `${Math.PI * (ScoreCard.RADIUS * 2) - 1}px`;
+
+        chartEl.onRendered(() => {
+            circle.style.strokeDashoffset = `${progress.value}px`;
+        });
 
         return chartEl;
     }
