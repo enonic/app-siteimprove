@@ -49,9 +49,9 @@ export abstract class ScoreCard<T>
             const relatives = this.getEl().getParent().getChildren();
             if (relatives[relatives.length - 1] === this.getHTMLElement()) {
                 // Must wait for the animation end on the last element to do scroll correctly
-                setTimeout(smoothScroll, 300);
+                setTimeout(smoothScroll, 450);
             } else {
-                smoothScroll();
+                setTimeout(smoothScroll, 150);
             }
         }
     }
