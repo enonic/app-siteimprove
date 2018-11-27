@@ -1,34 +1,36 @@
-import {getDocumentData} from './util/DocumentHelper';
 import {SiteimproveWidget} from './widget/SiteimproveWidget';
 import Path = api.rest.Path;
 
 type ConfigType = {
-    errorMessage: string;
-    vhost: string;
-    contentPath: string;
+    currentWidget: {
+        id: string;
+        errorMessage: string;
+        vhost: string;
+        contentPath: string;
+    }
 };
+
 declare const CONFIG: ConfigType;
 
-const {uid} = getDocumentData();
-const id = `siteimproveid_${uid}`;
+window['HTMLImports'].whenReady(function() {
 
-// Wait until the widget container is copied from the `<link/> to the actual document
-const intervalId = setInterval(() => {
-    const container = document.getElementById(id);
-    if (container) {
-        clearInterval(intervalId);
+    const widgetId = CONFIG.currentWidget.id;
+    const widgetContainer = document.getElementById(`widget-${widgetId}`);
+
+    if (widgetContainer) {
+        const container = widgetContainer.getElementsByClassName('siteimprove').item(0);
         while (container.firstChild) {
             container.removeChild(container.firstChild);
         }
-        const containerEl = api.dom.Element.fromHtmlElement(container, true);
+        const containerEl = api.dom.Element.fromHtmlElement((container as HTMLElement), true);
 
         const widget = new SiteimproveWidget({
-            contentPath: Path.fromString(CONFIG.contentPath),
-            vhost: CONFIG.vhost,
-            errorMessage: CONFIG.errorMessage
+            contentPath: Path.fromString(CONFIG.currentWidget.contentPath),
+            vhost: CONFIG.currentWidget.vhost,
+            errorMessage: CONFIG.currentWidget.errorMessage
         });
         containerEl.appendChild(widget);
         containerEl.render();
-
     }
-}, 100);
+
+});
