@@ -2,39 +2,47 @@ var contentLib = require('/lib/xp/content');
 var portalLib = require('/lib/xp/portal');
 
 exports.responseProcessor = function (req, res) {
+
+    if (req.mode !== 'live') {
+        return res;
+    }
+
+    var content = portalLib.getContent();
     var contentId = req.params.contentId;
     if (!contentId) {
-        contentId = portalLib.getContent()._id;
+        contentId = content._id;
     }
     var siteConfig = contentLib.getSiteConfig({
         key: contentId,
         applicationKey: app.name
     });
-    var trackingID = siteConfig['vhost'] || '';
 
-    var pageUrl = '';
+    var analyticsCode = siteConfig['analyticsCode'];
 
-    if (req.mode !== 'preview') {
+    if (!analyticsCode) {
         return res;
     }
 
-
     var snippet = '<!-- Siteimprove -->';
-    snippet += '<script async src=\'https://cdn.siteimprove.net/cms/overlay.js\'></script>'
-    snippet += '<script>'
-    snippet += 'var _si = window._si || []; _si.push([\'input\', "http://enonic.com/pricing",'
-    snippet += '\'01138618b01d406798ad1a985f013b8d\', function() { console.log(\'Inputted specific Domain url to Siteimprove\'); }])'
-    snippet += '</script>'
+    snippet += '<script type="text/javascript">';
+    snippet += '(function() {';
+    snippet += 'var sz = document.createElement("script"); sz.type = "text/javascript"; sz.async = true;';
+    snippet += 'sz.src = "//siteimproveanalytics.com/js/siteanalyze_' + analyticsCode.trim() + '.js";';
+    snippet += 'var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(sz, s);';
+    snippet += '})();';
+    snippet += '</script>';
     snippet += '<!-- End Siteimprove -->';
 
-    var headEnd = res.pageContributions.headEnd;
-    if (!headEnd) {
-        res.pageContributions.headEnd = [];
+
+    var bodyEnd = res.pageContributions.bodyEnd;
+    if (!bodyEnd) {
+        res.pageContributions.bodyEnd = [];
     }
-    else if (typeof(headEnd) == 'string') {
-        res.pageContributions.headEnd = [headEnd];
+    else if (typeof(bodyEnd) == 'string') {
+        res.pageContributions.bodyEnd = [bodyEnd];
     }
 
-    res.pageContributions.headEnd.push(snippet);
+    res.pageContributions.bodyEnd.push(snippet);
+
     return res;
 };
