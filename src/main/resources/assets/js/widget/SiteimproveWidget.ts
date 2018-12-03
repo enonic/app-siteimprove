@@ -159,6 +159,7 @@ export class SiteimproveWidget
 
         this.appendChild(total);
         this.addClass('page');
+        total.toggleDetails();
     }
 
     private static createScoreUrl(siteId: number, dashboardPath: string) {

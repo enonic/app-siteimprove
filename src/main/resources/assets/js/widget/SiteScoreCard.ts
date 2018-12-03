@@ -13,4 +13,9 @@ export class SiteScoreCard
     protected createDetails(data: Data[]): DivEl {
         return new Details(data);
     }
+
+    protected createButton() {
+        this.overviewButton = ScoreCard.createOverviewButton<Data>(this);
+        this.appendChild(this.overviewButton);
+    }
 }
