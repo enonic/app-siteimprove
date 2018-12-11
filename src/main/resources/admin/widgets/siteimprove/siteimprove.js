@@ -26,7 +26,8 @@ function handleGet(req) {
         pageId: siteConfig ? pageId : -1,
         vhost: siteConfig ? siteConfig.vhost : '',
         services: {
-            sitesUrl: portalLib.serviceUrl({service: 'sites'})
+            sitesUrl: portalLib.serviceUrl({service: 'sites'}),
+            pagesUrl: portalLib.serviceUrl({service: 'pages'})
         }
     };
 

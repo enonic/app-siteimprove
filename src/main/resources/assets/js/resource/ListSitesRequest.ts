@@ -14,7 +14,7 @@ export class ListSitesRequest
     getParams(): Object {
         return {
             page: 1,
-            page_size: 1000
+            pageSize: 1000
         };
     }
 

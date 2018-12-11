@@ -16,9 +16,9 @@ export class ListPagesRequest
 
     getParams(): Object {
         return {
-            site_id: this.siteId,
+            siteId: this.siteId,
             page: 1,
-            page_size: 1000
+            pageSize: 1000
         };
     }
 
@@ -28,6 +28,10 @@ export class ListPagesRequest
             const hasPages = !!pages.items && pages.items.length > 0;
             return hasPages ? pages.items.map(pageApi => PageApi.fromJson(pageApi)) : [];
         });
+    }
+
+    getRequestPath(): Path {
+        return Path.fromString(CONFIG.services.pagesUrl);
     }
 
 }

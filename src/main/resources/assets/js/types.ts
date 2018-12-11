@@ -1,5 +1,6 @@
 type Services = {
-    sitesUrl: string
+    sitesUrl: string,
+    pagesUrl: string
 };
 
 type ConfigType = {
