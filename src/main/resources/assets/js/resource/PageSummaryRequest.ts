@@ -1,7 +1,6 @@
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {PageSummaryJson} from './json/PageSummaryJson';
 import {PageSummary} from '../data/PageSummary';
-import Path = api.rest.Path;
 import JsonResponse = api.rest.JsonResponse;
 
 export class PageSummaryRequest
@@ -12,7 +11,7 @@ export class PageSummaryRequest
     private pageId: number;
 
     constructor(siteId: number, pageId: number) {
-        super(Path.fromString('page/summary'));
+        super(CONFIG.services.pageSummaryUrl);
         this.siteId = siteId;
         this.pageId = pageId;
     }
@@ -29,10 +28,6 @@ export class PageSummaryRequest
             const result = response.getResult();
             return PageSummary.fromJson(result);
         });
-    }
-
-    getRequestPath(): Path {
-        return Path.fromString(CONFIG.services.pageSummaryUrl);
     }
 
 }

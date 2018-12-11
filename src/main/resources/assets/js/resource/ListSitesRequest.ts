@@ -1,14 +1,13 @@
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {ListSitesJson} from './json/ListSitesJson';
 import {Site} from '../data/Site';
-import Path = api.rest.Path;
 import JsonResponse = api.rest.JsonResponse;
 
 export class ListSitesRequest
     extends SiteimproveRequest<ListSitesJson, Site[]> {
 
     constructor() {
-        super(Path.fromString('sites'));
+        super(CONFIG.services.sitesUrl);
     }
 
     getParams(): Object {
@@ -26,7 +25,4 @@ export class ListSitesRequest
         });
     }
 
-    getRequestPath(): Path {
-        return Path.fromString(CONFIG.services.sitesUrl);
-    }
 }

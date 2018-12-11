@@ -1,7 +1,6 @@
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {ListPagesJson} from './json/ListPagesJson';
 import {PageApi} from '../data/PageApi';
-import Path = api.rest.Path;
 import JsonResponse = api.rest.JsonResponse;
 
 export class ListPagesRequest
@@ -10,7 +9,7 @@ export class ListPagesRequest
     private siteId: number;
 
     constructor(siteId: number) {
-        super(Path.fromString('pages'));
+        super(CONFIG.services.pagesUrl);
         this.siteId = siteId;
     }
 
@@ -28,10 +27,6 @@ export class ListPagesRequest
             const hasPages = !!pages.items && pages.items.length > 0;
             return hasPages ? pages.items.map(pageApi => PageApi.fromJson(pageApi)) : [];
         });
-    }
-
-    getRequestPath(): Path {
-        return Path.fromString(CONFIG.services.pagesUrl);
     }
 
 }
