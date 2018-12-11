@@ -27,7 +27,9 @@ function handleGet(req) {
         vhost: siteConfig ? siteConfig.vhost : '',
         services: {
             sitesUrl: portalLib.serviceUrl({service: 'sites'}),
-            pagesUrl: portalLib.serviceUrl({service: 'pages'})
+            pagesUrl: portalLib.serviceUrl({service: 'pages'}),
+            dciOverviewUrl: portalLib.serviceUrl({service: 'dcioverview'}),
+            pageSummaryUrl: portalLib.serviceUrl({service: 'pagesummary'})
         }
     };
 

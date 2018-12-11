@@ -19,8 +19,8 @@ export class PageSummaryRequest
 
     getParams(): Object {
         return {
-            site_id: this.siteId || 0,
-            page_id: this.pageId || 0
+            siteId: this.siteId || 0,
+            pageId: this.pageId || 0
         };
     }
 
@@ -29,6 +29,10 @@ export class PageSummaryRequest
             const result = response.getResult();
             return PageSummary.fromJson(result);
         });
+    }
+
+    getRequestPath(): Path {
+        return Path.fromString(CONFIG.services.pageSummaryUrl);
     }
 
 }

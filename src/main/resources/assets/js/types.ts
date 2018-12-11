@@ -1,6 +1,8 @@
 type Services = {
     sitesUrl: string,
-    pagesUrl: string
+    pagesUrl: string,
+    dciOverviewUrl: string,
+    pageSummaryUrl: string
 };
 
 type ConfigType = {

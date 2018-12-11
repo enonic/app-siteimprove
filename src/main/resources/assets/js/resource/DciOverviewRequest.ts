@@ -16,7 +16,7 @@ export class DciOverviewRequest
 
     getParams(): Object {
         return {
-            site_id: this.siteId || 0
+            siteId: this.siteId || 0
         };
     }
 
@@ -25,6 +25,10 @@ export class DciOverviewRequest
             const result = response.getResult();
             return DciOverallScore.fromJson(result);
         });
+    }
+
+    getRequestPath(): Path {
+        return Path.fromString(CONFIG.services.dciOverviewUrl);
     }
 
 }
