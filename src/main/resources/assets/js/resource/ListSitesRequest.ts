@@ -26,4 +26,7 @@ export class ListSitesRequest
         });
     }
 
+    getRequestPath(): Path {
+        return Path.fromString(CONFIG.services.sitesUrl);
+    }
 }

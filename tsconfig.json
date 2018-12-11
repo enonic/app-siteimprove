@@ -15,5 +15,8 @@
     "build/**/*",
     "out/**/*",
     "node_modules/*"
+  ],
+  "types": [
+    "types"
   ]
 }
