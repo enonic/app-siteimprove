@@ -2,13 +2,6 @@ import {getDocumentData} from './util/DocumentHelper';
 import {SiteimproveWidget} from './widget/SiteimproveWidget';
 import Path = api.rest.Path;
 
-type ConfigType = {
-    errorMessage: string;
-    vhost: string;
-    contentPath: string;
-};
-declare const CONFIG: ConfigType;
-
 const {uid} = getDocumentData();
 const id = `siteimproveid_${uid}`;
 
@@ -29,6 +22,5 @@ const intervalId = setInterval(() => {
         });
         containerEl.appendChild(widget);
         containerEl.render();
-
     }
 }, 100);

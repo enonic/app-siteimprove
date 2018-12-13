@@ -4,11 +4,15 @@
     "sourceMap": true
   },
   "include": [
-    ".xp/dev/d.ts/*"
+    ".xp/dev/d.ts/*",
+    "src/main/resources/assets/js/types.ts"
   ],
   "exclude": [
     "build/**/*",
     "out/**/*",
     "node_modules/*"
+  ],
+  "types": [
+    "types"
   ]
 }

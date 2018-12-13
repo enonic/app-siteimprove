@@ -1,7 +1,6 @@
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {DciOverallScoreJson} from './json/DciOverallScoreJson';
 import {DciOverallScore} from '../data/DciOverallScore';
-import Path = api.rest.Path;
 import JsonResponse = api.rest.JsonResponse;
 
 export class DciOverviewRequest
@@ -10,13 +9,13 @@ export class DciOverviewRequest
     private siteId: number;
 
     constructor(siteId: number) {
-        super(Path.fromString('dci/overview'));
+        super(CONFIG.services.dciOverviewUrl);
         this.siteId = siteId;
     }
 
     getParams(): Object {
         return {
-            site_id: this.siteId || 0
+            siteId: this.siteId || 0
         };
     }
 

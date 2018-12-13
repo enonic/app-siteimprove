@@ -1,20 +1,19 @@
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {ListSitesJson} from './json/ListSitesJson';
 import {Site} from '../data/Site';
-import Path = api.rest.Path;
 import JsonResponse = api.rest.JsonResponse;
 
 export class ListSitesRequest
     extends SiteimproveRequest<ListSitesJson, Site[]> {
 
     constructor() {
-        super(Path.fromString('sites'));
+        super(CONFIG.services.sitesUrl);
     }
 
     getParams(): Object {
         return {
             page: 1,
-            page_size: 1000
+            pageSize: 1000
         };
     }
 
