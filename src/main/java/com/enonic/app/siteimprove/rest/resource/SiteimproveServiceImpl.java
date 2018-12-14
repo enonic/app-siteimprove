@@ -1,8 +1,11 @@
 package com.enonic.app.siteimprove.rest.resource;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
@@ -13,9 +16,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -24,6 +29,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -33,17 +39,19 @@ import org.osgi.service.component.annotations.Component;
 
 import com.google.common.base.Strings;
 
+import com.enonic.app.siteimprove.rest.json.SiteimproveCrawlJson;
+import com.enonic.app.siteimprove.rest.json.SiteimproveCrawlStatusJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveDciOverallScoreJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveErrorResponseJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveListPagesJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveListSitesJson;
 import com.enonic.app.siteimprove.rest.json.SiteimprovePageSummaryJson;
 import com.enonic.app.siteimprove.rest.json.SiteimprovePingJson;
-import com.enonic.app.siteimprove.rest.json.resource.SiteimproveDciOverviewRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListPagesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListSitesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimprovePageSummaryRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveServiceGeneralRequestJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimproveSiteRequestJson;
 import com.enonic.xp.jaxrs.JaxRsComponent;
 import com.enonic.xp.security.RoleKeys;
 
@@ -117,10 +125,26 @@ public class SiteimproveServiceImpl
 
     @POST
     @Path("dci/overview")
-    public Response dciOverview( final SiteimproveDciOverviewRequestJson json )
+    public Response dciOverview( final SiteimproveSiteRequestJson json )
         throws IOException, URISyntaxException
     {
         return doSiteimproveAPICall( makeDciScoreSiteimproveApiRequest( json ), SiteimproveDciOverallScoreJson.class );
+    }
+
+    @POST
+    @Path("crawl/status")
+    public Response crawlStatus( final SiteimproveSiteRequestJson json )
+        throws IOException, URISyntaxException
+    {
+        return doSiteimproveAPICall( makeCrawlStatusSiteimproveApiRequest( json ), SiteimproveCrawlStatusJson.class );
+    }
+
+    @POST
+    @Path("crawl")
+    public Response crawl( final SiteimproveSiteRequestJson json )
+        throws IOException
+    {
+        return doSiteimproveAPICall( makeCrawlSiteimproveApiRequest( json ), SiteimproveCrawlJson.class );
     }
 
     @POST
@@ -154,7 +178,7 @@ public class SiteimproveServiceImpl
 
             int statusCode = response.getStatusLine().getStatusCode();
 
-            if ( statusCode == 200 || statusCode == 201 )
+            if ( statusCode == 200 || statusCode == 201 || statusCode == 202 )
             {
                 return Response.ok( parseSiteimproveHttpResponse( response, responseJsonClass ) ).build();
             }
@@ -241,7 +265,7 @@ public class SiteimproveServiceImpl
 
     private HttpPost makePostRequest( final String path, final StringEntity input )
     {
-        final String uri = SITEIMPROVE_API_URL + path;
+        final URI uri = this.createUriForPath( path );
 
         final HttpPost httpPost = new HttpPost( uri );
 
@@ -280,7 +304,7 @@ public class SiteimproveServiceImpl
         return makeGetRequest( builder.build() );
     }
 
-    private HttpGet makeDciScoreSiteimproveApiRequest( final SiteimproveDciOverviewRequestJson json )
+    private HttpGet makeDciScoreSiteimproveApiRequest( final SiteimproveSiteRequestJson json )
         throws URISyntaxException
     {
         final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
@@ -293,6 +317,34 @@ public class SiteimproveServiceImpl
         }
 
         return makeGetRequest( builder.build() );
+    }
+
+    private HttpGet makeCrawlStatusSiteimproveApiRequest( final SiteimproveSiteRequestJson json )
+        throws URISyntaxException
+    {
+        final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
+        final URI uri = this.createUriForPath( "/sites/" + siteId + "/content/crawl" );
+        URIBuilder builder = new URIBuilder( uri );
+
+        if ( json.getGroupId() != null )
+        {
+            builder.setParameter( "group_id", json.getGroupId().toString() );
+        }
+
+        return makeGetRequest( builder.build() );
+    }
+
+    private HttpPost makeCrawlSiteimproveApiRequest( final SiteimproveSiteRequestJson json )
+        throws UnsupportedEncodingException
+    {
+        final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
+        final String path = "/sites/" + siteId + "/content/crawl";
+
+        List<NameValuePair> params = new ArrayList<>( 1 );
+        params.add( new BasicNameValuePair( "site_id", siteId ) );
+        final StringEntity input = new UrlEncodedFormEntity( params, "UTF-8" );
+
+        return makePostRequest( path, input );
     }
 
     private HttpGet makeListPagesSiteimproveApiRequest( final SiteimproveListPagesRequestJson json )

@@ -2,7 +2,9 @@ type Services = {
     sitesUrl: string,
     pagesUrl: string,
     dciOverviewUrl: string,
-    pageSummaryUrl: string
+    pageSummaryUrl: string,
+    crawlStatusUrl: string,
+    crawlUrl: string
 };
 
 type ConfigType = {

@@ -1,5 +1,7 @@
 exports.createResponse = function createResponse(result) {
-    if (!result) {
+    var status = result ? result.status : 500;
+    var badCode = status !== 200 && status !== 201 && status !== 202;
+    if (badCode) {
         return {
             status: 500,
             contentType: 'application/json',

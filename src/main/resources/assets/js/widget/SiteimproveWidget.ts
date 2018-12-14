@@ -2,7 +2,6 @@ import DivEl = api.dom.DivEl;
 import LoadMask = api.ui.mask.LoadMask;
 import DefaultErrorHandler = api.DefaultErrorHandler;
 import Path = api.rest.Path;
-import AEl = api.dom.AEl;
 import {WidgetError} from './WidgetError';
 import {DciOverviewRequest} from '../resource/DciOverviewRequest';
 import {DciOverallScore} from '../data/DciOverallScore';
@@ -11,10 +10,13 @@ import {SiteimproveValidator, ValidationResult} from '../util/SiteimproveValidat
 import {UrlHelper} from '../util/UrlHelper';
 import {PageSummaryRequest} from '../resource/PageSummaryRequest';
 import {PageSummary} from '../data/PageSummary';
-import {DataLine} from './DataLine';
 import {Data} from '../data/Data';
 import {SiteScoreCard} from './SiteScoreCard';
 import {PageScoreCard} from './PageScoreCard';
+import {CrawlStatusRequest} from '../resource/CrawlStatusRequest';
+import {CrawlStatus} from '../data/CrawlStatus';
+import {SiteTitle} from './SiteTitle';
+import {PageTitle} from './PageTitle';
 
 export type SiteimproveWidgetConfig = {
     contentPath: Path,
@@ -47,13 +49,16 @@ export class SiteimproveWidget
             }
 
             if (result.siteId && !result.pageId) {
-                return new DciOverviewRequest(result.siteId).sendAndParse().then((dci: DciOverallScore) => {
-                    this.createTitle(result.url);
+                return wemQ.all([
+                    new DciOverviewRequest(result.siteId).sendAndParse(),
+                    new CrawlStatusRequest(result.siteId).sendAndParse()
+                ]).spread((dci: DciOverallScore, crawlStatus: CrawlStatus) => {
+                    this.createSiteTitle(result.url, result.siteId, crawlStatus);
                     this.createSiteCards(dci, result.siteId);
                 });
             } else if (result.pageId) {
                 return new PageSummaryRequest(result.siteId, result.pageId).sendAndParse().then((summary: PageSummary) => {
-                    this.createTitle(result.url, summary.getSummary().getLastSeen().toLocaleString());
+                    this.createPageTitle(result.url, summary);
                     this.createPageCards(summary, result.siteId, result.pageId);
                 });
             }
@@ -65,19 +70,14 @@ export class SiteimproveWidget
         });
     }
 
-    private createTitle(url: string, lastSeenDate?: string) {
-        const title = new DivEl('title');
-        const link = new AEl('link icon icon-new-tab');
+    private createSiteTitle(url: string, siteId: number, crawlStatus: CrawlStatus) {
+        const title = new SiteTitle(url, siteId, crawlStatus);
+        this.appendChild(title);
+    }
 
-        link.setUrl(url, '_blank');
-        link.setHtml(url);
-        title.appendChild(link);
-
-        if (lastSeenDate) {
-            const lastSeen = new DataLine('Last checked', lastSeenDate);
-            title.appendChild(lastSeen);
-        }
-
+    private createPageTitle(url: string, summary: PageSummary) {
+        const lastSeenDate = summary.getSummary().getLastSeen().toLocaleString();
+        const title = new PageTitle(url, lastSeenDate);
         this.appendChild(title);
     }
 

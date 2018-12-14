@@ -29,7 +29,9 @@ function handleGet(req) {
             sitesUrl: portalLib.serviceUrl({service: 'sites'}),
             pagesUrl: portalLib.serviceUrl({service: 'pages'}),
             dciOverviewUrl: portalLib.serviceUrl({service: 'dcioverview'}),
-            pageSummaryUrl: portalLib.serviceUrl({service: 'pagesummary'})
+            pageSummaryUrl: portalLib.serviceUrl({service: 'pagesummary'}),
+            crawlStatusUrl: portalLib.serviceUrl({service: 'crawlstatus'}),
+            crawlUrl: portalLib.serviceUrl({service: 'crawl'})
         }
     };
 

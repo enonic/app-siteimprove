@@ -22,24 +22,35 @@
 }
 
 .link-title() {
-  & > .title {
-    position: relative;
-    margin-bottom: 10px;
-    padding: 10px;
+  position: relative;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-weight: bold;
+
+  .link {
+    text-decoration: none;
     font-weight: bold;
-    .card-border();
+    color: @admin-black;
 
-    .link {
-      text-decoration: none;
-      font-weight: bold;
-      color: @admin-black;
-
-      &::after {
-        position: absolute;
-        padding-left: 0.25em;
-        font-weight: normal;
-        color: @admin-dark-gray;
-      }
+    &::after {
+      position: absolute;
+      padding-left: 0.25em;
+      font-weight: normal;
+      color: @admin-dark-gray;
     }
   }
+}
+
+.card-button() {
+  border-radius: 15px;
+  min-width: 110px;
+  height: 32px;
+  margin: 10px auto;
+  padding: 0 10px;
+  background: transparent;
+  border: 2px solid @border-color;
+  font-size: 0.8em;
+  font-weight: bold;
+  user-select: none;
+  cursor: pointer;
 }

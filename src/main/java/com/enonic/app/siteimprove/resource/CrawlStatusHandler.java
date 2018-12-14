@@ -9,7 +9,7 @@ import com.enonic.app.siteimprove.rest.resource.SiteimproveService;
 import com.enonic.xp.lib.content.BaseContextHandler;
 import com.enonic.xp.script.bean.BeanContext;
 
-public final class DciOverviewHandler
+public final class CrawlStatusHandler
     extends BaseContextHandler
 {
     private Supplier<SiteimproveService> siteimproveService;
@@ -21,7 +21,7 @@ public final class DciOverviewHandler
     {
         try
         {
-            final Response response = this.siteimproveService.get().dciOverview( new SiteimproveSiteRequestJson( this.siteId, null ) );
+            final Response response = this.siteimproveService.get().crawlStatus( new SiteimproveSiteRequestJson( this.siteId, null ) );
             return new ResponseMapper( response );
         }
         catch ( Exception e )
