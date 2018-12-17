@@ -17,6 +17,8 @@ import {CrawlStatusRequest} from '../resource/CrawlStatusRequest';
 import {CrawlStatus} from '../data/CrawlStatus';
 import {SiteTitle} from './SiteTitle';
 import {PageTitle} from './PageTitle';
+import {CheckStatus} from '../data/CheckStatus';
+import {CheckStatusRequest} from '../resource/CheckStatusRequest';
 
 export type SiteimproveWidgetConfig = {
     contentPath: Path,
@@ -43,23 +45,28 @@ export class SiteimproveWidget
         const {errorMessage, vhost, contentPath} = config;
 
         SiteimproveValidator.validate(errorMessage, vhost, contentPath).then((result: ValidationResult) => {
-            if (!api.util.StringHelper.isBlank(result.error)) {
-                this.appendChild(new WidgetError(result.error));
+            const {url, error, siteId, pageId} = result;
+
+            if (!api.util.StringHelper.isBlank(error)) {
+                this.appendChild(new WidgetError(error));
                 return null;
             }
 
-            if (result.siteId && !result.pageId) {
+            if (siteId && !pageId) {
                 return wemQ.all([
-                    new DciOverviewRequest(result.siteId).sendAndParse(),
-                    new CrawlStatusRequest(result.siteId).sendAndParse()
+                    new DciOverviewRequest(siteId).sendAndParse(),
+                    new CrawlStatusRequest(siteId).sendAndParse()
                 ]).spread((dci: DciOverallScore, crawlStatus: CrawlStatus) => {
-                    this.createSiteTitle(result.url, result.siteId, crawlStatus);
-                    this.createSiteCards(dci, result.siteId);
+                    this.createSiteTitle(url, siteId, crawlStatus);
+                    this.createSiteCards(dci, siteId);
                 });
-            } else if (result.pageId) {
-                return new PageSummaryRequest(result.siteId, result.pageId).sendAndParse().then((summary: PageSummary) => {
-                    this.createPageTitle(result.url, summary);
-                    this.createPageCards(summary, result.siteId, result.pageId);
+            } else if (pageId) {
+                return wemQ.all([
+                    new PageSummaryRequest(siteId, pageId).sendAndParse(),
+                    new CheckStatusRequest(siteId, pageId).sendAndParse()
+                ]).spread((summary: PageSummary, checkStatus: CheckStatus) => {
+                    this.createPageTitle(url, siteId, pageId, checkStatus);
+                    this.createPageCards(summary, siteId, pageId);
                 });
             }
         }).then(() => {
@@ -75,9 +82,8 @@ export class SiteimproveWidget
         this.appendChild(title);
     }
 
-    private createPageTitle(url: string, summary: PageSummary) {
-        const lastSeenDate = summary.getSummary().getLastSeen().toLocaleString();
-        const title = new PageTitle(url, lastSeenDate);
+    private createPageTitle(url: string, siteId: number, pageId: number, checkStatus: CheckStatus) {
+        const title = new PageTitle(url, siteId, pageId, checkStatus);
         this.appendChild(title);
     }
 

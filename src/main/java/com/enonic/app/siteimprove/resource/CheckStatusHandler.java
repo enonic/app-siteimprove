@@ -9,7 +9,7 @@ import com.enonic.app.siteimprove.rest.resource.SiteimproveService;
 import com.enonic.xp.lib.content.BaseContextHandler;
 import com.enonic.xp.script.bean.BeanContext;
 
-public final class PageSummaryHandler
+public final class CheckStatusHandler
     extends BaseContextHandler
 {
     private Supplier<SiteimproveService> siteimproveService;
@@ -24,7 +24,7 @@ public final class PageSummaryHandler
         try
         {
             final Response response =
-                this.siteimproveService.get().pageSummary( new SiteimprovePageRequestJson( this.siteId, this.pageId, null ) );
+                this.siteimproveService.get().checkStatus( new SiteimprovePageRequestJson( this.siteId, this.pageId, null ) );
             return new ResponseMapper( response );
         }
         catch ( Exception e )

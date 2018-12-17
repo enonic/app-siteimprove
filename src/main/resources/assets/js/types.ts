@@ -4,7 +4,9 @@ type Services = {
     dciOverviewUrl: string,
     pageSummaryUrl: string,
     crawlStatusUrl: string,
-    crawlUrl: string
+    crawlUrl: string,
+    checkStatusUrl: string,
+    checkUrl: string
 };
 
 type ConfigType = {

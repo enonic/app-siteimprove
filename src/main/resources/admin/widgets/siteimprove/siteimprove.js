@@ -31,7 +31,9 @@ function handleGet(req) {
             dciOverviewUrl: portalLib.serviceUrl({service: 'dcioverview'}),
             pageSummaryUrl: portalLib.serviceUrl({service: 'pagesummary'}),
             crawlStatusUrl: portalLib.serviceUrl({service: 'crawlstatus'}),
-            crawlUrl: portalLib.serviceUrl({service: 'crawl'})
+            crawlUrl: portalLib.serviceUrl({service: 'crawl'}),
+            checkStatusUrl: portalLib.serviceUrl({service: 'checkstatus'}),
+            checkUrl: portalLib.serviceUrl({service: 'check'})
         }
     };
 

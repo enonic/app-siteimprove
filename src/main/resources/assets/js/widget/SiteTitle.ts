@@ -1,7 +1,7 @@
 import {Title} from './Title';
 import {CrawlStatus} from '../data/CrawlStatus';
 import {CrawlRequest} from '../resource/CrawlRequest';
-import {Crawl} from '../data/Crawl';
+import {Job} from '../data/Job';
 import DefaultErrorHandler = api.DefaultErrorHandler;
 import Exception = api.Exception;
 
@@ -16,7 +16,7 @@ export class SiteTitle
                 activeTitle: 'Start crawling',
                 processingTitle: 'Crawling',
                 processing: crawlStatus.isCrawlRunning(),
-                clickHandler: () => new CrawlRequest(siteId).sendAndParse().then((result: Crawl) => {
+                clickHandler: () => new CrawlRequest(siteId).sendAndParse().then((result: Job) => {
                     if (!result.isSuccess()) {
                         DefaultErrorHandler.handle(new Exception(result.getMessage()));
                     }
@@ -25,7 +25,7 @@ export class SiteTitle
             });
         }
 
-        this.addDataLine('Last crawl', crawlStatus.getLastCrawl());
-        this.addDataLine('Next crawl', crawlStatus.getNextCrawl());
+        this.addDataLine('Last crawl', crawlStatus.getLastCrawl().toLocaleString());
+        this.addDataLine('Next crawl', crawlStatus.getNextCrawl().toLocaleString());
     }
 }

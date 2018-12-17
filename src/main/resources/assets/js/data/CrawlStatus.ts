@@ -7,9 +7,9 @@ export class CrawlStatus {
 
     private crawlRunning: boolean;
 
-    private lastCrawl: string;
+    private lastCrawl: Date;
 
-    private nextCrawl: string;
+    private nextCrawl: Date;
 
     private permission: CrawlPermissions;
 
@@ -29,11 +29,11 @@ export class CrawlStatus {
         return this.crawlRunning;
     }
 
-    getLastCrawl(): string {
+    getLastCrawl(): Date {
         return this.lastCrawl;
     }
 
-    getNextCrawl(): string {
+    getNextCrawl(): Date {
         return this.nextCrawl;
     }
 
@@ -64,9 +64,9 @@ export class CrawlStatusBuilder {
 
     crawlRunning: boolean;
 
-    lastCrawl: string;
+    lastCrawl: Date;
 
-    nextCrawl: string;
+    nextCrawl: Date;
 
     permission: CrawlPermissions;
 
@@ -100,12 +100,12 @@ export class CrawlStatusBuilder {
         return this;
     }
 
-    setLastCrawl(lastCrawl: string): CrawlStatusBuilder {
+    setLastCrawl(lastCrawl: Date): CrawlStatusBuilder {
         this.lastCrawl = lastCrawl;
         return this;
     }
 
-    setNextCrawl(nextCrawl: string) {
+    setNextCrawl(nextCrawl: Date) {
         this.nextCrawl = nextCrawl;
         return this;
     }
@@ -118,8 +118,8 @@ export class CrawlStatusBuilder {
     fromJson(json: CrawlStatusJson): CrawlStatusBuilder {
         this.crawlEnabled = json.isCrawlEnabled;
         this.crawlRunning = json.isCrawlRunning;
-        this.lastCrawl = json.lastCrawl;
-        this.nextCrawl = json.nextCrawl;
+        this.lastCrawl = new Date(json.lastCrawl);
+        this.nextCrawl = new Date(json.nextCrawl);
         this.permission = CrawlPermissions.fromString(json.permission);
 
         return this;

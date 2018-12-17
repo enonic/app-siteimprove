@@ -1,6 +1,6 @@
-import {CrawlJson} from '../resource/json/CrawlJson';
+import {JobJson} from '../resource/json/JobJson';
 
-export class Crawl {
+export class Job {
 
     private statusCode: number;
 
@@ -26,7 +26,7 @@ export class Crawl {
         return this.message;
     }
 
-    clone(): Crawl {
+    clone(): Job {
         return this.newBuilder().build();
     }
 
@@ -38,7 +38,7 @@ export class Crawl {
         return new CrawlBuilder();
     }
 
-    static fromJson(json: CrawlJson): Crawl {
+    static fromJson(json: JobJson): Job {
         return new CrawlBuilder().fromJson(json).build();
     }
 }
@@ -51,7 +51,7 @@ export class CrawlBuilder {
 
     message: string;
 
-    constructor(pageNextCrawl?: Crawl) {
+    constructor(pageNextCrawl?: Job) {
         if (pageNextCrawl) {
             if (pageNextCrawl.getStatusCode() != null) {
                 this.statusCode = pageNextCrawl.getStatusCode();
@@ -80,7 +80,7 @@ export class CrawlBuilder {
         return this;
     }
 
-    fromJson(json: CrawlJson): CrawlBuilder {
+    fromJson(json: JobJson): CrawlBuilder {
         this.statusCode = json.statusCode;
         this.success = json.success;
         this.message = json.message;
@@ -88,7 +88,7 @@ export class CrawlBuilder {
         return this;
     }
 
-    build(): Crawl {
-        return new Crawl(this);
+    build(): Job {
+        return new Job(this);
     }
 }

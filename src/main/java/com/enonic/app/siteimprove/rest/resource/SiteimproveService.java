@@ -10,7 +10,7 @@ import com.google.common.annotations.Beta;
 
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListPagesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListSitesRequestJson;
-import com.enonic.app.siteimprove.rest.json.resource.SiteimprovePageSummaryRequestJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimprovePageRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveServiceGeneralRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveSiteRequestJson;
 
@@ -37,6 +37,12 @@ public interface SiteimproveService
     Response listPages( final SiteimproveListPagesRequestJson json )
         throws IOException, URISyntaxException;
 
-    Response pageSummary( final SiteimprovePageSummaryRequestJson json )
+    Response pageSummary( final SiteimprovePageRequestJson json )
         throws IOException, URISyntaxException;
+
+    Response checkStatus( final SiteimprovePageRequestJson json )
+        throws IOException, URISyntaxException;
+
+    Response check( final SiteimprovePageRequestJson json )
+        throws IOException;
 }
