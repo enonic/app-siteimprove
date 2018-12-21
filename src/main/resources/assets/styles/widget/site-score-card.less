@@ -1,8 +1,13 @@
 .@{_SITEIMPROVE_PREFIX}site-score-card {
 
-  &.total-score { // Remove this when https://github.com/enonic/app-siteimprove/issues/21 is fixed
-    .link::after {
-      visibility: visible;
+  // Remove this when https://github.com/enonic/app-siteimprove/issues/21 is fixed
+  &:not(.total-score) {
+    .link {
+      pointer-events: none;
+
+      &::after {
+        visibility: hidden;
+      }
     }
   }
 
