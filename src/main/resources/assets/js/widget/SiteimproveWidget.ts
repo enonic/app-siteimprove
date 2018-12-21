@@ -116,7 +116,7 @@ export class SiteimproveWidget
             score: dci.getTotal(),
             url: SiteimproveWidget.createScoreUrl(siteId, 'Dashboard'),
             data: totalData
-        });
+        }).addClass('total-score');
         const qa = new SiteScoreCard({
             title: 'QA',
             score: dci.getQA().getTotal(),

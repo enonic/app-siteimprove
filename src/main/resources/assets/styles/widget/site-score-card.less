@@ -1,6 +1,13 @@
 .@{_SITEIMPROVE_PREFIX}site-score-card {
 
+  &.total-score { // Remove this when https://github.com/enonic/app-siteimprove/issues/21 is fixed
+    .link::after {
+      visibility: visible;
+    }
+  }
+
   &.detailed {
+
     .@{_SITEIMPROVE_PREFIX}details {
       max-height: 180px;
       margin: 10px;
