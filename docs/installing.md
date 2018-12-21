@@ -20,7 +20,7 @@ siteimprove.username = admin@domain.com
 
 5.Build and deploy the app
 
-6.Open Content Studio and assign the Siteimprove app to your website
+6.Open Content Studio and add the Siteimprove app to your website
 
 ![](images/siteimprove-2.png)
 
@@ -29,7 +29,7 @@ website with Siteimprove data.
 
 ![](images/siteimprove-3.png)
 
-8.If you need analytics script on your pages, fill in the "Analytics Cdde" field in the same dialog
+8.If you need analytics script on your pages, fill in the "Analytics Code" field in the same dialog
 
 9.Save the changes and open the context panel for the site on the right-hand side of the Content Studio. 
 It should look something like this:
