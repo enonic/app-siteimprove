@@ -24,6 +24,7 @@ import com.enonic.app.siteimprove.rest.json.SiteimproveListSitesJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListPagesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListSitesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimprovePageRequestJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimproveSiteRequestJson;
 import com.enonic.app.siteimprove.rest.resource.SiteimproveService;
 import com.enonic.xp.lib.content.BaseContextHandler;
 import com.enonic.xp.script.bean.BeanContext;
@@ -55,16 +56,16 @@ public final class PostPublishHandler
                     v -> PostPublishHandler.findSite( v, allSites ).map( SiteJson::getId ).orElse( null ) ).filter(
                     Objects::nonNull ).distinct().collect( Collectors.toList() );
 
-//                siteToCrawlIds.forEach( id -> {
-//                    try
-//                    {
-//                        this.siteimproveService.get().crawl( new SiteimproveSiteRequestJson( id, null ) );
-//                    }
-//                    catch ( IOException e )
-//                    {
-//                        e.printStackTrace();
-//                    }
-//                } );
+                siteToCrawlIds.forEach( id -> {
+                    try
+                    {
+                        this.siteimproveService.get().crawl( new SiteimproveSiteRequestJson( id, null ) );
+                    }
+                    catch ( IOException e )
+                    {
+                        e.printStackTrace();
+                    }
+                } );
             }
 
             if ( pages.size() > 0 )

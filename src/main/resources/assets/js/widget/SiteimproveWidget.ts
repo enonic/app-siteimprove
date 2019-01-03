@@ -116,7 +116,7 @@ export class SiteimproveWidget
             score: dci.getTotal(),
             url: SiteimproveWidget.createScoreUrl(siteId, 'Dashboard'),
             data: totalData
-        });
+        }).addClass('total-score');
         const qa = new SiteScoreCard({
             title: 'QA',
             score: dci.getQA().getTotal(),
@@ -160,7 +160,7 @@ export class SiteimproveWidget
             title: 'Total Score',
             score: summary.getSummary().getDci(),
             url: SiteimproveWidget.createPageUrl(siteId, pageId),
-            data: [a11nSettings, qaSettings, seoSettings]
+            data: [qaSettings, a11nSettings, seoSettings]
         });
 
         this.appendChild(total);
