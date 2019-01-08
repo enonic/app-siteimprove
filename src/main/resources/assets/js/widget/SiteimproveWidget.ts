@@ -19,6 +19,8 @@ import {SiteTitle} from './SiteTitle';
 import {PageTitle} from './PageTitle';
 import {CheckStatus} from '../data/CheckStatus';
 import {CheckStatusRequest} from '../resource/CheckStatusRequest';
+import {PageReportLinksRequest} from '../resource/PageReportLinksRequest';
+import {PageReportLinks} from '../data/PageReportLinks';
 
 export type SiteimproveWidgetConfig = {
     contentPath: Path,
@@ -55,10 +57,11 @@ export class SiteimproveWidget
             if (siteId && !pageId) {
                 return wemQ.all([
                     new DciOverviewRequest(siteId).sendAndParse(),
-                    new CrawlStatusRequest(siteId).sendAndParse()
-                ]).spread((dci: DciOverallScore, crawlStatus: CrawlStatus) => {
+                    new CrawlStatusRequest(siteId).sendAndParse(),
+                    new PageReportLinksRequest(siteId).sendAndParse()
+                ]).spread((dci: DciOverallScore, crawlStatus: CrawlStatus, links: PageReportLinks) => {
                     this.createSiteTitle(url, siteId, crawlStatus);
-                    this.createSiteCards(dci, siteId);
+                    this.createSiteCards(dci, siteId, links);
                 });
             } else if (pageId) {
                 return wemQ.all([
@@ -87,7 +90,7 @@ export class SiteimproveWidget
         this.appendChild(title);
     }
 
-    private createSiteCards(dci: DciOverallScore, siteId: number) {
+    private createSiteCards(dci: DciOverallScore, siteId: number, links: PageReportLinks) {
         const totalData: Data[] = [
             {name: 'Quality Assurance', value: dci.getQA().getTotal()},
             {name: 'Accessibility', value: dci.getAccessibility().getTotal()},
@@ -120,19 +123,19 @@ export class SiteimproveWidget
         const qa = new SiteScoreCard({
             title: 'QA',
             score: dci.getQA().getTotal(),
-            url: SiteimproveWidget.createScoreUrl(siteId, 'QualityAssurance'),
+            url: links.getQA(),
             data: qaData
         });
         const a11n = new SiteScoreCard({
             title: 'Accessibility',
             score: dci.getAccessibility().getTotal(),
-            url: SiteimproveWidget.createScoreUrl(siteId, 'Accessibility'),
+            url: links.getAccessibility(),
             data: a11nData
         });
         const seo = new SiteScoreCard({
             title: 'SEO',
             score: dci.getSEO().getTotal(),
-            url: SiteimproveWidget.createScoreUrl(siteId, 'SEOv2'),
+            url: links.getSEO(),
             data: seoData
         });
         this.appendChildren<any>(total, qa, a11n, seo);

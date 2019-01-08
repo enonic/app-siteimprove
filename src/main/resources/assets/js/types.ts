@@ -6,7 +6,8 @@ type Services = {
     crawlStatusUrl: string,
     crawlUrl: string,
     checkStatusUrl: string,
-    checkUrl: string
+    checkUrl: string,
+    linksUrl: string
 };
 
 type ConfigType = {

@@ -33,7 +33,8 @@ function handleGet(req) {
             crawlStatusUrl: portalLib.serviceUrl({service: 'crawlstatus'}),
             crawlUrl: portalLib.serviceUrl({service: 'crawl'}),
             checkStatusUrl: portalLib.serviceUrl({service: 'checkstatus'}),
-            checkUrl: portalLib.serviceUrl({service: 'check'})
+            checkUrl: portalLib.serviceUrl({service: 'check'}),
+            linksUrl: portalLib.serviceUrl({service: 'links'})
         }
     };
 
