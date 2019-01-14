@@ -1,7 +1,6 @@
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {PageSummaryJson} from './json/PageSummaryJson';
 import {PageSummary} from '../data/PageSummary';
-import Path = api.rest.Path;
 import JsonResponse = api.rest.JsonResponse;
 
 export class PageSummaryRequest
@@ -12,15 +11,15 @@ export class PageSummaryRequest
     private pageId: number;
 
     constructor(siteId: number, pageId: number) {
-        super(Path.fromString('page/summary'));
+        super(CONFIG.services.pageSummaryUrl);
         this.siteId = siteId;
         this.pageId = pageId;
     }
 
     getParams(): Object {
         return {
-            site_id: this.siteId || 0,
-            page_id: this.pageId || 0
+            siteId: this.siteId || 0,
+            pageId: this.pageId || 0
         };
     }
 

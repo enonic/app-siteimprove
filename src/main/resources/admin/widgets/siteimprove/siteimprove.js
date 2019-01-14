@@ -23,7 +23,18 @@ function handleGet(req) {
         contentPath: content._path,
         errorMessage: errorMessage,
         pageId: siteConfig ? pageId : -1,
-        vhost: siteConfig ? siteConfig.vhost : ''
+        vhost: siteConfig ? siteConfig.vhost : '',
+        services: {
+            sitesUrl: portalLib.serviceUrl({service: 'sites'}),
+            pagesUrl: portalLib.serviceUrl({service: 'pages'}),
+            dciOverviewUrl: portalLib.serviceUrl({service: 'dcioverview'}),
+            pageSummaryUrl: portalLib.serviceUrl({service: 'pagesummary'}),
+            crawlStatusUrl: portalLib.serviceUrl({service: 'crawlstatus'}),
+            crawlUrl: portalLib.serviceUrl({service: 'crawl'}),
+            checkStatusUrl: portalLib.serviceUrl({service: 'checkstatus'}),
+            checkUrl: portalLib.serviceUrl({service: 'check'}),
+            linksUrl: portalLib.serviceUrl({service: 'links'})
+        }
     };
 
     return {

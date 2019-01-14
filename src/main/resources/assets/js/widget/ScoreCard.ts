@@ -33,17 +33,14 @@ export abstract class ScoreCard<T>
             this.appendChildren(details, separator);
         }
 
-        this.overviewButton = ScoreCard.createOverviewButton<T>(this);
-        this.appendChild(this.overviewButton);
+        this.createButton();
     }
 
-    private toggleDetails() {
+    public toggleDetails() {
         if (this.hasClass('detailed')) {
             this.removeClass('detailed');
-            this.overviewButton.setLabel('Show details');
         } else {
             this.addClass('detailed');
-            this.overviewButton.setLabel('Hide details');
 
             const smoothScroll = () => this.getHTMLElement().scrollIntoView({behavior: 'smooth'});
             const relatives = this.getEl().getParent().getChildren();
@@ -53,6 +50,10 @@ export abstract class ScoreCard<T>
             } else {
                 setTimeout(smoothScroll, 150);
             }
+        }
+
+        if (this.overviewButton) {
+            this.overviewButton.setLabel(this.hasClass('detailed') ? 'Hide details' : 'Show details');
         }
     }
 
@@ -103,8 +104,9 @@ export abstract class ScoreCard<T>
     }
 
     protected abstract createDetails(data: T[]): DivEl;
+    protected abstract createButton(): void;
 
-    private static createOverviewButton<T>(that: ScoreCard<T>): Button {
+    protected static createOverviewButton<T>(that: ScoreCard<T>): Button {
         const overviewButton = new Button('Show details');
         overviewButton.setClass('overview');
         overviewButton.onClicked(that.toggleDetails.bind(that));

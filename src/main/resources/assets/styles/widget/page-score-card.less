@@ -1,5 +1,13 @@
 .@{_SITEIMPROVE_PREFIX}page-score-card {
 
+  .link {
+    pointer-events: all;
+
+    &::after {
+      visibility: visible;
+    }
+  }
+
   &.detailed {
     .data-cards-wrapper {
       max-height: 9999px;

@@ -1,8 +1,10 @@
 package com.enonic.app.siteimprove.rest.resource;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
@@ -16,6 +18,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -33,17 +36,20 @@ import org.osgi.service.component.annotations.Component;
 
 import com.google.common.base.Strings;
 
+import com.enonic.app.siteimprove.rest.json.SiteimproveCheckStatusJson;
+import com.enonic.app.siteimprove.rest.json.SiteimproveCrawlStatusJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveDciOverallScoreJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveErrorResponseJson;
+import com.enonic.app.siteimprove.rest.json.SiteimproveJobJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveListPagesJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveListSitesJson;
 import com.enonic.app.siteimprove.rest.json.SiteimprovePageSummaryJson;
 import com.enonic.app.siteimprove.rest.json.SiteimprovePingJson;
-import com.enonic.app.siteimprove.rest.json.resource.SiteimproveDciOverviewRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListPagesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListSitesRequestJson;
-import com.enonic.app.siteimprove.rest.json.resource.SiteimprovePageSummaryRequestJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimprovePageRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveServiceGeneralRequestJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimproveSiteRequestJson;
 import com.enonic.xp.jaxrs.JaxRsComponent;
 import com.enonic.xp.security.RoleKeys;
 
@@ -117,10 +123,26 @@ public class SiteimproveServiceImpl
 
     @POST
     @Path("dci/overview")
-    public Response dciOverview( final SiteimproveDciOverviewRequestJson json )
+    public Response dciOverview( final SiteimproveSiteRequestJson json )
         throws IOException, URISyntaxException
     {
         return doSiteimproveAPICall( makeDciScoreSiteimproveApiRequest( json ), SiteimproveDciOverallScoreJson.class );
+    }
+
+    @POST
+    @Path("crawl/status")
+    public Response crawlStatus( final SiteimproveSiteRequestJson json )
+        throws IOException, URISyntaxException
+    {
+        return doSiteimproveAPICall( makeCrawlStatusSiteimproveApiRequest( json ), SiteimproveCrawlStatusJson.class );
+    }
+
+    @POST
+    @Path("crawl")
+    public Response crawl( final SiteimproveSiteRequestJson json )
+        throws IOException
+    {
+        return doSiteimproveAPICall( makeCrawlSiteimproveApiRequest( json ), SiteimproveJobJson.class );
     }
 
     @POST
@@ -133,7 +155,7 @@ public class SiteimproveServiceImpl
 
     @POST
     @Path("page/summary")
-    public Response pageSummary( final SiteimprovePageSummaryRequestJson json )
+    public Response pageSummary( final SiteimprovePageRequestJson json )
         throws IOException, URISyntaxException
     {
         return doSiteimproveAPICall( makePageSummarySiteimproveApiRequest( json ), SiteimprovePageSummaryJson.class );
@@ -154,7 +176,7 @@ public class SiteimproveServiceImpl
 
             int statusCode = response.getStatusLine().getStatusCode();
 
-            if ( statusCode == 200 || statusCode == 201 )
+            if ( statusCode == 200 || statusCode == 201 || statusCode == 202 )
             {
                 return Response.ok( parseSiteimproveHttpResponse( response, responseJsonClass ) ).build();
             }
@@ -171,6 +193,22 @@ public class SiteimproveServiceImpl
         {
             response.close();
         }
+    }
+
+    @POST
+    @Path("check/status")
+    public Response checkStatus( final SiteimprovePageRequestJson json )
+        throws IOException, URISyntaxException
+    {
+        return doSiteimproveAPICall( makeCheckStatusSiteimproveApiRequest( json ), SiteimproveCheckStatusJson.class );
+    }
+
+    @POST
+    @Path("check")
+    public Response check( final SiteimprovePageRequestJson json )
+        throws IOException
+    {
+        return doSiteimproveAPICall( makeCheckSiteimproveApiRequest( json ), SiteimproveJobJson.class );
     }
 
     private String translateBadResponse( final CloseableHttpResponse response )
@@ -241,12 +279,13 @@ public class SiteimproveServiceImpl
 
     private HttpPost makePostRequest( final String path, final StringEntity input )
     {
-        final String uri = SITEIMPROVE_API_URL + path;
+        final URI uri = this.createUriForPath( path );
 
         final HttpPost httpPost = new HttpPost( uri );
 
         input.setContentType( "application/json" );
         httpPost.setEntity( input );
+        httpPost.setHeader( "Accept", "application/json" );
 
         return httpPost;
     }
@@ -280,7 +319,7 @@ public class SiteimproveServiceImpl
         return makeGetRequest( builder.build() );
     }
 
-    private HttpGet makeDciScoreSiteimproveApiRequest( final SiteimproveDciOverviewRequestJson json )
+    private HttpGet makeDciScoreSiteimproveApiRequest( final SiteimproveSiteRequestJson json )
         throws URISyntaxException
     {
         final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
@@ -293,6 +332,34 @@ public class SiteimproveServiceImpl
         }
 
         return makeGetRequest( builder.build() );
+    }
+
+    private HttpGet makeCrawlStatusSiteimproveApiRequest( final SiteimproveSiteRequestJson json )
+        throws URISyntaxException
+    {
+        final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
+        final URI uri = this.createUriForPath( "/sites/" + siteId + "/content/crawl" );
+        URIBuilder builder = new URIBuilder( uri );
+
+        if ( json.getGroupId() != null )
+        {
+            builder.setParameter( "group_id", json.getGroupId().toString() );
+        }
+
+        return makeGetRequest( builder.build() );
+    }
+
+    private HttpPost makeCrawlSiteimproveApiRequest( final SiteimproveSiteRequestJson json )
+        throws UnsupportedEncodingException
+    {
+        final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
+        final String path = "/sites/" + siteId + "/content/crawl";
+
+//        List<NameValuePair> params = new ArrayList<>( 1 );
+//        params.add( new BasicNameValuePair( "site_id", siteId ) );
+        final StringEntity input = new UrlEncodedFormEntity( Collections.emptyList(), "UTF-8" );
+
+        return makePostRequest( path, input );
     }
 
     private HttpGet makeListPagesSiteimproveApiRequest( final SiteimproveListPagesRequestJson json )
@@ -310,7 +377,7 @@ public class SiteimproveServiceImpl
         return makeGetRequest( builder.build() );
     }
 
-    private HttpGet makePageSummarySiteimproveApiRequest( final SiteimprovePageSummaryRequestJson json )
+    private HttpGet makePageSummarySiteimproveApiRequest( final SiteimprovePageRequestJson json )
         throws URISyntaxException
     {
         final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
@@ -324,6 +391,38 @@ public class SiteimproveServiceImpl
         }
 
         return makeGetRequest( builder.build() );
+    }
+
+    private HttpGet makeCheckStatusSiteimproveApiRequest( final SiteimprovePageRequestJson json )
+        throws URISyntaxException
+    {
+        final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
+        final String pageId = json.getPageId() != null ? json.getPageId().toString() : "";
+        final URI uri = this.createUriForPath( "/sites/" + siteId + "/content/check/page/" + pageId );
+        URIBuilder builder = new URIBuilder( uri );
+
+        if ( json.getGroupId() != null )
+        {
+            builder.setParameter( "group_id", json.getGroupId().toString() );
+        }
+
+        return makeGetRequest( builder.build() );
+    }
+
+    private HttpPost makeCheckSiteimproveApiRequest( final SiteimprovePageRequestJson json )
+        throws UnsupportedEncodingException
+    {
+        final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
+        final String pageId = json.getPageId() != null ? json.getPageId().toString() : "";
+        final String path = "/sites/" + siteId + "/content/check/page/" + pageId;
+
+//        List<NameValuePair> params = new ArrayList<>( 2 );
+//        params.add( new BasicNameValuePair( "site_id", siteId ) );
+//        params.add( new BasicNameValuePair( "page_id", siteId ) );
+//        final StringEntity input = new UrlEncodedFormEntity( params, "UTF-8" );
+        final StringEntity input = new UrlEncodedFormEntity( Collections.emptyList(), "UTF-8" );
+
+        return makePostRequest( path, input );
     }
 
     private String translateBadStatusCode( int code )
