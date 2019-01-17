@@ -1,26 +1,14 @@
 var eventLib = require('/lib/xp/event');
 var contentLib = require('/lib/xp/content');
+var contextLib = require('/lib/xp/context');
 
 exports.init = function () {
     try {
         eventLib.listener({
             type: 'node.pushed',
             localOnly: true,
-            callback: function (event) {
-                var nodes = (event && event.data && event.data.nodes) ? event.data.nodes : [];
-
-                nodes = nodes.filter(function (node) {
-                    return hasConfig(getSiteConfig(node));
-                }).sort();
-                var result = processSiteAndPages(nodes);
-                logObject(result);
-                postPublish(result.sites, result.pages);
-                // fetch sites and normalize them
-                // compare with normalized sites from result, filter
-                // run crawl on sites
-                // compare each normalized page with sites, filter
-                // fetch all pages by id's and concat array
-                // find pages by id and run check
+            callback: function(event) {
+                runInContext(event);
             }
         });
 
@@ -29,10 +17,41 @@ exports.init = function () {
     }
 };
 
+function publishContent(event) {
+    var nodes = (event && event.data && event.data.nodes) ? event.data.nodes : [];
+
+    nodes = nodes.filter(function (node) {
+        return hasConfig(getSiteConfig(node));
+    }).sort();
+    if (nodes.length == 0) {
+        return;
+    }
+
+    var result = processSiteAndPages(nodes);
+    logObject(result);
+    postPublish(result.sites, result.pages);
+}
+
+function runInContext(event) {
+
+    var context = contextLib.get();
+    return contextLib.run({
+        repository: context.repository,
+        branch: 'master',
+        user: {
+            login: 'su',
+            userStore: 'system'
+        },
+        principals: ["role:system.admin"]
+    }, function() {
+        publishContent(event);
+    });
+}
+
 function getSiteConfig(node) {
     return contentLib.getSiteConfig({
         key: node.id,
-        applicationKey: 'com.enonic.app.siteimprove'
+        applicationKey: app.name
     });
 }
 

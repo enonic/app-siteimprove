@@ -20,6 +20,7 @@ dependencies {
     compile "com.enonic.xp:jaxrs-api:${xpVersion}"
     compile "com.enonic.xp:portal-api:${xpVersion}"
     include "com.enonic.xp:lib-content:${xpVersion}"
+    include "com.enonic.xp:lib-context:${xpVersion}"
     include "com.enonic.xp:lib-portal:${xpVersion}"
     include "com.enonic.xp:lib-event:${xpVersion}"
     include "com.enonic.xp:lib-thymeleaf:${xpVersion}"

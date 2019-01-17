@@ -6,8 +6,6 @@ exports.post = function (req) {
 
     var sitesResult = fetchPageReportLinks(siteId);
 
-    log.info(JSON.stringify(sitesResult));
-
     return createResponse({status: 200, entity: JSON.stringify(sitesResult)});
 };
 
