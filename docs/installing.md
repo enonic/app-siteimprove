@@ -35,3 +35,14 @@ website with Siteimprove data.
 It should look something like this:
 
 ![](images/siteimprove-4.png)
+
+## Configure edit link from Siteimprove to Enonic XP
+
+When you browse pages in Siteimprove you can jump directly into Enonic XP to fix errors. To accomplish this the Siteimprove app adds the pageID to the meta data on your site. This pageID will help Siteimprove open the right content for editing.
+
+This is how the pageID looks:
+```
+<meta name="pageID" content="xxxxx">
+```
+
+To configure Siteimprove you can click on the "CMS integrasjon" link in the middle of the header when you browse a page in Siteimprove. Then you fill in the form.
