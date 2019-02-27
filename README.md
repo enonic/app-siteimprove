@@ -1,50 +1,48 @@
-# Siteimprove for Enonic XP
 
-This app extends the administration console by allowing to collect
-Siteimprove statistics and error reports for current page or site and use suggestions for improvement.
+## Configuring the app
 
-Here's the installation guide for this application:
+1.Make sure you have an account at Siteimprove
 
-* [Installing the App](docs/installing.md)
+2.You will need two credentials to access the Siteimprove API: username and API token. 
+They can be retrieved via Siteimprove dashboard: in the Main Menu go to Integrations > API > API Keys.
+Click "Create API key" button, select user and create the API key. It should appear in the table as shown below:
 
+![](images/siteimprove-1.png)
 
-## Releases and Compatibility
+3.Create a config file called `com.enonic.app.siteimprove.cfg` in the config folder of your XP installation
 
-| App version | Required XP version | Download |
-| ----------- | ------------------- | -------- |
-| 1.0.0 | 6.14.3 | [Download](http://repo.enonic.com/public/com/enonic/app/siteimprove/1.0.0/siteimprove-1.0.0.jar) |
-| 1.1.0 | 6.14.3 | [Download](http://repo.enonic.com/public/com/enonic/app/siteimprove/1.1.0/siteimprove-1.1.0.jar) |
+4.Add the email and API key from Siteimprove to this file, like this:
+```
+siteimprove.apikey = 20394823rlkwjfwelfksd
 
+siteimprove.username = admin@domain.com
+```
 
-## Building and deploying
+5.Build and deploy the app
 
-Build this application from the command line. Go to the root of the project and enter:
+6.Open Content Studio and add the Siteimprove app to your website
 
-    ./gradlew clean build
+![](images/siteimprove-2.png)
 
-To deploy the app, set `$XP_HOME` environment variable and enter:
+7.Open the site config dialog and set virtual host of your website (with domain prefix). This will match pages of your 
+website with Siteimprove data.
 
-    ./gradlew deploy
+![](images/siteimprove-3.png)
 
+8.If you need analytics script on your pages, fill in the "Analytics Code" field in the same dialog
 
-## Releasing new version
+9.Save the changes and open the context panel for the site on the right-hand side of the Content Studio. 
+It should look something like this:
 
-To release a new version of this app, please follow the steps below:
+![](images/siteimprove-4.png)
 
-1. Update `version` (and possibly `xpVersion`) in  `gradle.properties`.
+## Configure edit link from Siteimprove to Enonic XP
 
-2. Compile and deploy to our Maven repository:
+When you browse pages in Siteimprove you can jump directly into Enonic XP to fix errors. To accomplish this the Siteimprove app adds the pageID to the meta data on your site. This pageID will help Siteimprove open the right content for editing.
 
-    ./gradlew clean build publishMavenJavaPublicationToPublicRepository
+This is how the pageID looks:
+```
+<meta name="pageID" content="xxxxx">
+```
 
-3. Update `README.md` file with new version information and compatibility.
-
-4. Tag the source code using `git tag` command (where `X.X.X` is the released version):
-
-    git tag vX.X.X
-
-5. Update `gradle.properties` with the next snapshot version and commit changes.
-
-6. Push the updated code to GitHub.
-
-    git push origin master --tags
+To configure Siteimprove you can click on the "CMS integrasjon" link in the middle of the header when you browse a page in Siteimprove. Then you fill in the form.
