@@ -355,8 +355,6 @@ public class SiteimproveServiceImpl
         final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
         final String path = "/sites/" + siteId + "/content/crawl";
 
-//        List<NameValuePair> params = new ArrayList<>( 1 );
-//        params.add( new BasicNameValuePair( "site_id", siteId ) );
         final StringEntity input = new UrlEncodedFormEntity( Collections.emptyList(), "UTF-8" );
 
         return makePostRequest( path, input );
@@ -416,10 +414,6 @@ public class SiteimproveServiceImpl
         final String pageId = json.getPageId() != null ? json.getPageId().toString() : "";
         final String path = "/sites/" + siteId + "/content/check/page/" + pageId;
 
-//        List<NameValuePair> params = new ArrayList<>( 2 );
-//        params.add( new BasicNameValuePair( "site_id", siteId ) );
-//        params.add( new BasicNameValuePair( "page_id", siteId ) );
-//        final StringEntity input = new UrlEncodedFormEntity( params, "UTF-8" );
         final StringEntity input = new UrlEncodedFormEntity( Collections.emptyList(), "UTF-8" );
 
         return makePostRequest( path, input );

@@ -73,6 +73,10 @@ export class QASummaryBuilder {
             if (summary.getPotentialMisspellings() != null) {
                 this.potentialMisspellings = summary.getPotentialMisspellings();
             }
+        } else {
+            this.brokenLinks = 0;
+            this.misspellings = 0;
+            this.potentialMisspellings = 0;
         }
     }
 
@@ -92,9 +96,11 @@ export class QASummaryBuilder {
     }
 
     fromJson(json: QASummaryJson): QASummaryBuilder {
-        this.brokenLinks = json.brokenLinks;
-        this.misspellings = json.misspellings;
-        this.potentialMisspellings = json.potentialMisspellings;
+        if (json) {
+            this.brokenLinks = json.brokenLinks || 0;
+            this.misspellings = json.misspellings || 0;
+            this.potentialMisspellings = json.potentialMisspellings || 0;
+        }
 
         return this;
     }
