@@ -98,10 +98,12 @@ export class SiteimproveLinksBuilder {
     }
 
     fromJson(json: SiteimproveLinksJson): SiteimproveLinksBuilder {
-        this.accessibility = json.accessibility.pageReport.href;
-        this.policy = json.policy.pageReport.href;
-        this.qa = json.qa.pageReport.href;
-        this.seo = json.seo.pageReport.href;
+        if (json) {
+            this.accessibility = json.accessibility.pageReport.href;
+            this.policy = json.policy.pageReport.href;
+            this.qa = json.qa.pageReport.href;
+            this.seo = json.seo.pageReport.href;
+        }
 
         return this;
     }

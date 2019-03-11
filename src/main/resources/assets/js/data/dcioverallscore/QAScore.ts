@@ -86,6 +86,12 @@ export class QAScoreBuilder {
             if (qaScore.getTotal() != null) {
                 this.total = qaScore.getTotal();
             }
+        } else {
+            this.content = 0;
+            this.freshness = 0;
+            this.security = 0;
+            this.ux = 0;
+            this.total = 0;
         }
     }
 
@@ -115,11 +121,13 @@ export class QAScoreBuilder {
     }
 
     fromJson(json: QAScoreJson): QAScoreBuilder {
-        this.content = json.content;
-        this.freshness = json.freshness;
-        this.security = json.security;
-        this.ux = json.ux;
-        this.total = json.total;
+        if (json) {
+            this.content = json.content || 0;
+            this.freshness = json.freshness || 0;
+            this.security = json.security || 0;
+            this.ux = json.ux || 0;
+            this.total = json.total || 0;
+        }
 
         return this;
     }
