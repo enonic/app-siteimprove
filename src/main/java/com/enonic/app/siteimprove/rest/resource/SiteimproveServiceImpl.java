@@ -371,6 +371,10 @@ public class SiteimproveServiceImpl
         {
             builder.setParameter( "group_id", json.getGroupId().toString() );
         }
+        if ( json.getPageSize() != null )
+        {
+            builder.setParameter( "page_size", json.getPageSize().toString() );
+        }
 
         return makeGetRequest( builder.build() );
     }
