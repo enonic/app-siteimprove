@@ -2,7 +2,6 @@ import DivEl = api.dom.DivEl;
 import LoadMask = api.ui.mask.LoadMask;
 import DefaultErrorHandler = api.DefaultErrorHandler;
 import Path = api.rest.Path;
-import AEl = api.dom.AEl;
 import {WidgetError} from './WidgetError';
 import {DciOverviewRequest} from '../resource/DciOverviewRequest';
 import {DciOverallScore} from '../data/DciOverallScore';
@@ -11,10 +10,17 @@ import {SiteimproveValidator, ValidationResult} from '../util/SiteimproveValidat
 import {UrlHelper} from '../util/UrlHelper';
 import {PageSummaryRequest} from '../resource/PageSummaryRequest';
 import {PageSummary} from '../data/PageSummary';
-import {DataLine} from './DataLine';
 import {Data} from '../data/Data';
 import {SiteScoreCard} from './SiteScoreCard';
 import {PageScoreCard} from './PageScoreCard';
+import {CrawlStatusRequest} from '../resource/CrawlStatusRequest';
+import {CrawlStatus} from '../data/CrawlStatus';
+import {SiteTitle} from './SiteTitle';
+import {PageTitle} from './PageTitle';
+import {CheckStatus} from '../data/CheckStatus';
+import {CheckStatusRequest} from '../resource/CheckStatusRequest';
+import {PageReportLinksRequest} from '../resource/PageReportLinksRequest';
+import {PageReportLinks} from '../data/PageReportLinks';
 
 export type SiteimproveWidgetConfig = {
     contentPath: Path,
@@ -41,20 +47,29 @@ export class SiteimproveWidget
         const {errorMessage, vhost, contentPath} = config;
 
         SiteimproveValidator.validate(errorMessage, vhost, contentPath).then((result: ValidationResult) => {
-            if (!api.util.StringHelper.isBlank(result.error)) {
-                this.appendChild(new WidgetError(result.error));
+            const {url, error, siteId, pageId} = result;
+
+            if (!api.util.StringHelper.isBlank(error)) {
+                this.appendChild(new WidgetError(error));
                 return null;
             }
 
-            if (result.siteId && !result.pageId) {
-                return new DciOverviewRequest(result.siteId).sendAndParse().then((dci: DciOverallScore) => {
-                    this.createTitle(result.url);
-                    this.createSiteCards(dci, result.siteId);
+            if (siteId && !pageId) {
+                return wemQ.all([
+                    new DciOverviewRequest(siteId).sendAndParse(),
+                    new CrawlStatusRequest(siteId).sendAndParse(),
+                    new PageReportLinksRequest(siteId).sendAndParse()
+                ]).spread((dci: DciOverallScore, crawlStatus: CrawlStatus, links: PageReportLinks) => {
+                    this.createSiteTitle(url, siteId, crawlStatus);
+                    this.createSiteCards(dci, siteId, links);
                 });
-            } else if (result.pageId) {
-                return new PageSummaryRequest(result.siteId, result.pageId).sendAndParse().then((summary: PageSummary) => {
-                    this.createTitle(result.url, summary.getSummary().getLastSeen().toLocaleString());
-                    this.createPageCards(summary, result.siteId, result.pageId);
+            } else if (pageId) {
+                return wemQ.all([
+                    new PageSummaryRequest(siteId, pageId).sendAndParse(),
+                    new CheckStatusRequest(siteId, pageId).sendAndParse()
+                ]).spread((summary: PageSummary, checkStatus: CheckStatus) => {
+                    this.createPageTitle(url, siteId, pageId, checkStatus);
+                    this.createPageCards(summary, siteId, pageId);
                 });
             }
         }).then(() => {
@@ -65,23 +80,17 @@ export class SiteimproveWidget
         });
     }
 
-    private createTitle(url: string, lastSeenDate?: string) {
-        const title = new DivEl('title');
-        const link = new AEl('link icon icon-new-tab');
-
-        link.setUrl(url, '_blank');
-        link.setHtml(url);
-        title.appendChild(link);
-
-        if (lastSeenDate) {
-            const lastSeen = new DataLine('Last checked', lastSeenDate);
-            title.appendChild(lastSeen);
-        }
-
+    private createSiteTitle(url: string, siteId: number, crawlStatus: CrawlStatus) {
+        const title = new SiteTitle(url, siteId, crawlStatus);
         this.appendChild(title);
     }
 
-    private createSiteCards(dci: DciOverallScore, siteId: number) {
+    private createPageTitle(url: string, siteId: number, pageId: number, checkStatus: CheckStatus) {
+        const title = new PageTitle(url, siteId, pageId, checkStatus);
+        this.appendChild(title);
+    }
+
+    private createSiteCards(dci: DciOverallScore, siteId: number, links: PageReportLinks) {
         const totalData: Data[] = [
             {name: 'Quality Assurance', value: dci.getQA().getTotal()},
             {name: 'Accessibility', value: dci.getAccessibility().getTotal()},
@@ -110,23 +119,23 @@ export class SiteimproveWidget
             score: dci.getTotal(),
             url: SiteimproveWidget.createScoreUrl(siteId, 'Dashboard'),
             data: totalData
-        });
+        }).addClass('total-score');
         const qa = new SiteScoreCard({
             title: 'QA',
             score: dci.getQA().getTotal(),
-            url: SiteimproveWidget.createScoreUrl(siteId, 'QualityAssurance'),
+            url: links.getQA(),
             data: qaData
         });
         const a11n = new SiteScoreCard({
             title: 'Accessibility',
             score: dci.getAccessibility().getTotal(),
-            url: SiteimproveWidget.createScoreUrl(siteId, 'Accessibility'),
+            url: links.getAccessibility(),
             data: a11nData
         });
         const seo = new SiteScoreCard({
             title: 'SEO',
             score: dci.getSEO().getTotal(),
-            url: SiteimproveWidget.createScoreUrl(siteId, 'SEOv2'),
+            url: links.getSEO(),
             data: seoData
         });
         this.appendChildren<any>(total, qa, a11n, seo);
@@ -154,11 +163,12 @@ export class SiteimproveWidget
             title: 'Total Score',
             score: summary.getSummary().getDci(),
             url: SiteimproveWidget.createPageUrl(siteId, pageId),
-            data: [a11nSettings, qaSettings, seoSettings]
+            data: [qaSettings, a11nSettings, seoSettings]
         });
 
         this.appendChild(total);
         this.addClass('page');
+        total.toggleDetails();
     }
 
     private static createScoreUrl(siteId: number, dashboardPath: string) {

@@ -23,7 +23,7 @@ public final class PingAccountHandler
         {
             final Response response = this.siteimproveService.get().pingAccount( new SiteimproveServiceGeneralRequestJson() );
             final int status = response.getStatus();
-            return status == 200 || status == 201;
+            return status == 200 || status == 201 || status == 202;
         }
         catch ( IOException e )
         {

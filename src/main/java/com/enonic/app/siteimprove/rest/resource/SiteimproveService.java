@@ -8,11 +8,11 @@ import javax.ws.rs.core.Response;
 
 import com.google.common.annotations.Beta;
 
-import com.enonic.app.siteimprove.rest.json.resource.SiteimproveDciOverviewRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListPagesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListSitesRequestJson;
-import com.enonic.app.siteimprove.rest.json.resource.SiteimprovePageSummaryRequestJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimprovePageRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveServiceGeneralRequestJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimproveSiteRequestJson;
 
 @Beta
 public interface SiteimproveService
@@ -25,12 +25,24 @@ public interface SiteimproveService
     Response listSites( final SiteimproveListSitesRequestJson json )
         throws IOException, URISyntaxException;
 
-    Response dciOverview( final SiteimproveDciOverviewRequestJson json )
+    Response dciOverview( final SiteimproveSiteRequestJson json )
         throws IOException, URISyntaxException;
+
+    Response crawlStatus( final SiteimproveSiteRequestJson json )
+        throws IOException, URISyntaxException;
+
+    Response crawl( final SiteimproveSiteRequestJson json )
+        throws IOException;
 
     Response listPages( final SiteimproveListPagesRequestJson json )
         throws IOException, URISyntaxException;
 
-    Response pageSummary( final SiteimprovePageSummaryRequestJson json )
+    Response pageSummary( final SiteimprovePageRequestJson json )
         throws IOException, URISyntaxException;
+
+    Response checkStatus( final SiteimprovePageRequestJson json )
+        throws IOException, URISyntaxException;
+
+    Response check( final SiteimprovePageRequestJson json )
+        throws IOException;
 }

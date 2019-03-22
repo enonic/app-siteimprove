@@ -104,7 +104,7 @@ export class DciOverallScoreBuilder {
         this.accessibility = AccessibilityScore.fromJson(json.accessibility);
         this.qa = QAScore.fromJson(json.qa);
         this.seo = SEOScore.fromJson(json.seo);
-        this.total = json.total;
+        this.total = json.total || 0;
 
         return this;
     }

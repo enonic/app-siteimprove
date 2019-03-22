@@ -1,13 +1,22 @@
 var contentLib = require('/lib/xp/content');
 var portalLib = require('/lib/xp/portal');
-var thymeleaf = require('/lib/xp/thymeleaf');
+var thymeleaf = require('/lib/thymeleaf');
 var validator = require('./util/validator');
 
 function handleGet(req) {
 
     var contentId = req.params.contentId;
-    if (!contentId) {
+
+    if (!contentId && portalLib.getContent()) {
         contentId = portalLib.getContent()._id;
+    }
+
+    if (!contentId) {
+        log.info('Returning');
+        return {
+            contentType: 'text/html',
+            body: '<widget class="no-selection-message">No content selected</widget>'
+        };
     }
 
     var content = contentLib.get({key: contentId});
@@ -23,7 +32,18 @@ function handleGet(req) {
         contentPath: content._path,
         errorMessage: errorMessage,
         pageId: siteConfig ? pageId : -1,
-        vhost: siteConfig ? siteConfig.vhost : ''
+        vhost: siteConfig ? siteConfig.vhost : '',
+        services: {
+            sitesUrl: portalLib.serviceUrl({service: 'sites'}),
+            pagesUrl: portalLib.serviceUrl({service: 'pages'}),
+            dciOverviewUrl: portalLib.serviceUrl({service: 'dcioverview'}),
+            pageSummaryUrl: portalLib.serviceUrl({service: 'pagesummary'}),
+            crawlStatusUrl: portalLib.serviceUrl({service: 'crawlstatus'}),
+            crawlUrl: portalLib.serviceUrl({service: 'crawl'}),
+            checkStatusUrl: portalLib.serviceUrl({service: 'checkstatus'}),
+            checkUrl: portalLib.serviceUrl({service: 'check'}),
+            linksUrl: portalLib.serviceUrl({service: 'links'})
+        }
     };
 
     return {

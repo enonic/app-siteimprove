@@ -73,6 +73,10 @@ export class SEOSummaryBuilder {
             if (summary.getUxIssues() != null) {
                 this.uxIssues = summary.getUxIssues();
             }
+        } else {
+            this.contentIssues = 0;
+            this.technicalIssues = 0;
+            this.uxIssues = 0;
         }
     }
 
@@ -92,9 +96,11 @@ export class SEOSummaryBuilder {
     }
 
     fromJson(json: SEOSummaryJson): SEOSummaryBuilder {
-        this.contentIssues = json.contentIssues;
-        this.technicalIssues = json.technicalIssues;
-        this.uxIssues = json.uxIssues;
+        if (json) {
+            this.contentIssues = json.contentIssues || 0;
+            this.technicalIssues = json.technicalIssues || 0;
+            this.uxIssues = json.uxIssues || 0;
+        }
 
         return this;
     }

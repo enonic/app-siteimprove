@@ -1,7 +1,6 @@
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {ListPagesJson} from './json/ListPagesJson';
 import {PageApi} from '../data/PageApi';
-import Path = api.rest.Path;
 import JsonResponse = api.rest.JsonResponse;
 
 export class ListPagesRequest
@@ -10,15 +9,15 @@ export class ListPagesRequest
     private siteId: number;
 
     constructor(siteId: number) {
-        super(Path.fromString('pages'));
+        super(CONFIG.services.pagesUrl);
         this.siteId = siteId;
     }
 
     getParams(): Object {
         return {
-            site_id: this.siteId,
+            siteId: this.siteId,
             page: 1,
-            page_size: 1000
+            pageSize: 1000
         };
     }
 

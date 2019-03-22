@@ -74,6 +74,11 @@ export class AccessibilityScoreBuilder {
             if (accessibilityScore.getTotal() != null) {
                 this.total = accessibilityScore.getTotal();
             }
+        } else {
+            this.errorPages = 0;
+            this.errors = 0;
+            this.warnings = 0;
+            this.total = 0;
         }
     }
 
@@ -98,10 +103,12 @@ export class AccessibilityScoreBuilder {
     }
 
     fromJson(json: AccessibilityScoreJson): AccessibilityScoreBuilder {
-        this.errorPages = json.errorpages;
-        this.errors = json.errors;
-        this.warnings = json.warnings;
-        this.total = json.total;
+        if (json) {
+            this.errorPages = json.errorpages || 0;
+            this.errors = json.errors || 0;
+            this.warnings = json.warnings || 0;
+            this.total = json.total || 0;
+        }
 
         return this;
     }

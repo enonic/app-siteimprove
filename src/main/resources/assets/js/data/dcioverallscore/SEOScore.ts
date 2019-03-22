@@ -86,6 +86,12 @@ export class SEOScoreBuilder {
             if (seoScore.getTotal() != null) {
                 this.total = seoScore.getTotal();
             }
+        } else {
+            this.content = 0;
+            this.mobile = 0;
+            this.technical = 0;
+            this.ux = 0;
+            this.total = 0;
         }
     }
 
@@ -115,11 +121,13 @@ export class SEOScoreBuilder {
     }
 
     fromJson(json: SEOScoreJson): SEOScoreBuilder {
-        this.content = json.content;
-        this.mobile = json.mobile;
-        this.technical = json.technical;
-        this.ux = json.ux;
-        this.total = json.total;
+        if (json) {
+            this.content = json.content || 0;
+            this.mobile = json.mobile || 0;
+            this.technical = json.technical || 0;
+            this.ux = json.ux || 0;
+            this.total = json.total || 0;
+        }
 
         return this;
     }

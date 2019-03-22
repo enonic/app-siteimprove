@@ -3,7 +3,7 @@ package com.enonic.app.siteimprove.rest.json.resource;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SiteimproveDciOverviewRequestJson
+public class SiteimproveSiteRequestJson
     extends SiteimproveServiceGeneralRequestJson
 {
     private Long groupId;
@@ -11,7 +11,7 @@ public class SiteimproveDciOverviewRequestJson
     private Long siteId;
 
     @JsonCreator
-    public SiteimproveDciOverviewRequestJson( @JsonProperty("site_id") final Long siteId, @JsonProperty("group_id") final Long groupId )
+    public SiteimproveSiteRequestJson( @JsonProperty("site_id") final Long siteId, @JsonProperty("group_id") final Long groupId )
     {
         this.siteId = siteId;
         this.groupId = groupId;

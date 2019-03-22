@@ -15,4 +15,8 @@ export class PageScoreCard
         cardWrapper.appendChildren(...cards);
         return cardWrapper;
     }
+
+    protected createButton() {
+        return;
+    }
 }

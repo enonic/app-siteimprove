@@ -28,11 +28,17 @@ exports.validate = function validate(contentId) {
             key: contentId,
             applicationKey: app.name
         });
+        var content = contentLib.get({
+            key: contentId,
+            branch: 'master'
+        });
         var vhost = siteConfig ? siteConfig.vhost : null;
 
         if (!siteConfig) {
             return 'Siteimprove app is not added to the site.';
-        } else if (!isAppConfigured()) {
+        } else if (!content) {
+            return 'Content is not published';
+        } if (!isAppConfigured()) {
             return 'API key and/or username are not found in the Siteimprove app config.';
         } else if (!isAppHasAccess()) {
             return 'App has no access to the Siteimprove API.';

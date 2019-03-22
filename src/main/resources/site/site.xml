@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-  <config>
+  <form>
     <input type="TextLine" name="vhost">
       <label>Virtual Host</label>
       <help-text>i.e. mydomain.com/optional</help-text>
       <occurrences minimum="1" maximum="1"/>
     </input>
-    <input type="TextLine" name="trackingId">
-      <label>Tracking Id</label>
-      <help-text>i.e. mydomain.com/optional</help-text>
+    <input type="TextLine" name="analyticsCode">
+      <label>Analytics Code</label>
+      <help-text>5-digit code from Siteimprove</help-text>
       <occurrences minimum="0" maximum="1"/>
     </input>
-  </config>
+  </form>
   <processors>
     <response-processor name="cms-plugin" order="10"/>
   </processors>

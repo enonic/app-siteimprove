@@ -73,6 +73,10 @@ export class AccessibilitySummaryBuilder {
             if (summary.getAaaErrors() != null) {
                 this.aaaErrors = summary.getAaaErrors();
             }
+        } else {
+            this.aErrors = 0;
+            this.aaErrors = 0;
+            this.aaaErrors = 0;
         }
     }
 
@@ -92,9 +96,11 @@ export class AccessibilitySummaryBuilder {
     }
 
     fromJson(json: AccessibilitySummaryJson): AccessibilitySummaryBuilder {
-        this.aErrors = json.aErrors;
-        this.aaErrors = json.aaErrors;
-        this.aaaErrors = json.aaaErrors;
+        if (json) {
+            this.aErrors = json.aErrors || 0;
+            this.aaErrors = json.aaErrors || 0;
+            this.aaaErrors = json.aaaErrors || 0;
+        }
 
         return this;
     }
