@@ -7,10 +7,8 @@
 
 <script data-th-inline="javascript">
     /*<![CDATA[*/
-    var CONFIG = window.CONFIG || {};
-
-    CONFIG.currentWidget = {
-        id: [[${widgetId}]],
+    var CONFIG = {
+        widgetId: [[${widgetId}]],
         errorMessage: [[${errorMessage}]],
         vhost: [[${vhost}]],
         contentPath: [[${contentPath}]],
