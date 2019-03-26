@@ -7,7 +7,9 @@ type Services = {
     crawlUrl: string,
     checkStatusUrl: string,
     checkUrl: string,
-    linksUrl: string
+    checkByUrlUrl: string,
+    linksUrl: string,
+    checkUrlExistsUrl: string
 };
 
 type ConfigType = {

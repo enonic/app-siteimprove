@@ -8,8 +8,10 @@ import javax.ws.rs.core.Response;
 
 import com.google.common.annotations.Beta;
 
+import com.enonic.app.siteimprove.rest.json.resource.SiteimproveCheckUrlExistsRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListPagesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListSitesRequestJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimprovePageByUrlRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimprovePageRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveServiceGeneralRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveSiteRequestJson;
@@ -44,5 +46,11 @@ public interface SiteimproveService
         throws IOException, URISyntaxException;
 
     Response check( final SiteimprovePageRequestJson json )
+        throws IOException;
+
+    Response checkByUrl( final SiteimprovePageByUrlRequestJson json )
+        throws IOException, URISyntaxException;
+
+    Response checkUrlExists( final SiteimproveCheckUrlExistsRequestJson json )
         throws IOException;
 }

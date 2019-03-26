@@ -6,7 +6,7 @@ import {WidgetError} from './WidgetError';
 import {DciOverviewRequest} from '../resource/DciOverviewRequest';
 import {DciOverallScore} from '../data/DciOverallScore';
 import {AppStyleHelper} from '../util/AppStyleHelper';
-import {SiteimproveValidator, ValidationResult} from '../util/SiteimproveValidator';
+import {SiteimproveValidator, ValidationResult, ValidationType} from '../util/SiteimproveValidator';
 import {UrlHelper} from '../util/UrlHelper';
 import {PageSummaryRequest} from '../resource/PageSummaryRequest';
 import {PageSummary} from '../data/PageSummary';
@@ -21,6 +21,7 @@ import {CheckStatus} from '../data/CheckStatus';
 import {CheckStatusRequest} from '../resource/CheckStatusRequest';
 import {PageReportLinksRequest} from '../resource/PageReportLinksRequest';
 import {PageReportLinks} from '../data/PageReportLinks';
+import {UnindexedPageTitle} from './UnindexedPageTitle';
 
 export type SiteimproveWidgetConfig = {
     contentPath: Path,
@@ -47,14 +48,14 @@ export class SiteimproveWidget
         const {errorMessage, vhost, contentPath} = config;
 
         SiteimproveValidator.validate(errorMessage, vhost, contentPath).then((result: ValidationResult) => {
-            const {url, error, siteId, pageId} = result;
+            const {url, error, siteId, pageId, type} = result;
 
-            if (!api.util.StringHelper.isBlank(error)) {
+            if (type === ValidationType.ERROR || !api.util.StringHelper.isBlank(error)) {
                 this.appendChild(new WidgetError(error));
                 return null;
             }
 
-            if (siteId && !pageId) {
+            if (type === ValidationType.SITE) {
                 return wemQ.all([
                     new DciOverviewRequest(siteId).sendAndParse(),
                     new CrawlStatusRequest(siteId).sendAndParse(),
@@ -63,14 +64,16 @@ export class SiteimproveWidget
                     this.createSiteTitle(url, siteId, crawlStatus);
                     this.createSiteCards(dci, siteId, links);
                 });
-            } else if (pageId) {
+            } else if (type === ValidationType.PAGE && pageId !== undefined) {
                 return wemQ.all([
-                    new PageSummaryRequest(siteId, pageId).sendAndParse(),
-                    new CheckStatusRequest(siteId, pageId).sendAndParse()
-                ]).spread((summary: PageSummary, checkStatus: CheckStatus) => {
+                    new CheckStatusRequest(siteId, pageId).sendAndParse(),
+                    new PageSummaryRequest(siteId, pageId).sendAndParse()
+                ]).spread((checkStatus: CheckStatus, summary: PageSummary) => {
                     this.createPageTitle(url, siteId, pageId, checkStatus);
                     this.createPageCards(summary, siteId, pageId);
                 });
+            } else if (type === ValidationType.PAGE) {
+                this.createUnindexedPageTitle(url, siteId);
             }
         }).then(() => {
             this.loadMask.hide();
@@ -83,11 +86,19 @@ export class SiteimproveWidget
     private createSiteTitle(url: string, siteId: number, crawlStatus: CrawlStatus) {
         const title = new SiteTitle(url, siteId, crawlStatus);
         this.appendChild(title);
+        this.addClass('site');
     }
 
     private createPageTitle(url: string, siteId: number, pageId: number, checkStatus: CheckStatus) {
         const title = new PageTitle(url, siteId, pageId, checkStatus);
         this.appendChild(title);
+        this.addClass('page');
+    }
+
+    private createUnindexedPageTitle(url: string, siteId: number) {
+        const title = new UnindexedPageTitle(url, siteId);
+        this.appendChild(title);
+        this.addClass('page');
     }
 
     private createSiteCards(dci: DciOverallScore, siteId: number, links: PageReportLinks) {
@@ -139,7 +150,6 @@ export class SiteimproveWidget
             data: seoData
         });
         this.appendChildren<any>(total, qa, a11n, seo);
-        this.addClass('site');
     }
 
     private createPageCards(summary: PageSummary, siteId: number, pageId: number) {
@@ -167,7 +177,6 @@ export class SiteimproveWidget
         });
 
         this.appendChild(total);
-        this.addClass('page');
         total.toggleDetails();
     }
 

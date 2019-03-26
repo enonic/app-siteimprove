@@ -8,7 +8,7 @@ export class PageReportLinks {
 
     private seo: string;
 
-    constructor(builder: CrawlBuilder) {
+    constructor(builder: PageReportLinksBuilder) {
         this.qa = builder.qa;
         this.accessibility = builder.accessibility;
         this.seo = builder.seo;
@@ -30,20 +30,20 @@ export class PageReportLinks {
         return this.newBuilder().build();
     }
 
-    newBuilder(): CrawlBuilder {
-        return new CrawlBuilder(this);
+    newBuilder(): PageReportLinksBuilder {
+        return new PageReportLinksBuilder(this);
     }
 
-    static create(): CrawlBuilder {
-        return new CrawlBuilder();
+    static create(): PageReportLinksBuilder {
+        return new PageReportLinksBuilder();
     }
 
     static fromJson(json: PageReportLinksJson): PageReportLinks {
-        return new CrawlBuilder().fromJson(json).build();
+        return new PageReportLinksBuilder().fromJson(json).build();
     }
 }
 
-export class CrawlBuilder {
+export class PageReportLinksBuilder {
 
     qa: string;
 
@@ -65,22 +65,22 @@ export class CrawlBuilder {
         }
     }
 
-    setQA(qa: string): CrawlBuilder {
+    setQA(qa: string): PageReportLinksBuilder {
         this.qa = qa;
         return this;
     }
 
-    setAccessibility(accessibility: string): CrawlBuilder {
+    setAccessibility(accessibility: string): PageReportLinksBuilder {
         this.accessibility = accessibility;
         return this;
     }
 
-    setSEO(seo: string): CrawlBuilder {
+    setSEO(seo: string): PageReportLinksBuilder {
         this.seo = seo;
         return this;
     }
 
-    fromJson(json: PageReportLinksJson): CrawlBuilder {
+    fromJson(json: PageReportLinksJson): PageReportLinksBuilder {
         this.qa = json.qa;
         this.accessibility = json.accessibility;
         this.seo = json.seo;
