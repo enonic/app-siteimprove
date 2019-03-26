@@ -12,10 +12,9 @@ function handleGet(req) {
     }
 
     if (!contentId) {
-        log.info('Returning');
         return {
             contentType: 'text/html',
-            body: '<widget class="no-selection-message">No content selected</widget>'
+            body: '<widget class="error">No content selected</widget>'
         };
     }
 
