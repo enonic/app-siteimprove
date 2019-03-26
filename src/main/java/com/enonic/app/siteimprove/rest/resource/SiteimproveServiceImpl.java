@@ -483,18 +483,6 @@ public class SiteimproveServiceImpl
         builder.setParameter( "url", url );
 
         return makeGetRequest( builder.build() );
-
-        /*
-        final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
-        final String url = json.getUrl() != null ? json.getUrl() : "";
-        final String path = "/sites/" + siteId + "/content/check/page/";
-
-        JsonObject params = new JsonObject();
-        params.addProperty( "url", url );
-        final StringEntity input = new StringEntity( params.toString(), ContentType.APPLICATION_JSON );
-
-        return makePostRequest( path, input );
-        */
     }
 
     private String translateBadStatusCode( int code )
