@@ -42,7 +42,7 @@ export abstract class ScoreCard<T>
         } else {
             this.addClass('detailed');
 
-            const smoothScroll = () => this.getHTMLElement().scrollIntoView({behavior: 'smooth'});
+            const smoothScroll = () => this.getHTMLElement().scrollIntoView({block: 'center', behavior: 'smooth'});
             const relatives = this.getEl().getParent().getChildren();
             if (relatives[relatives.length - 1] === this.getHTMLElement()) {
                 // Must wait for the animation end on the last element to do scroll correctly
