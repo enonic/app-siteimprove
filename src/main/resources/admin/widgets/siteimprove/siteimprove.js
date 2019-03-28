@@ -12,7 +12,6 @@ function handleGet(req) {
     }
 
     if (!contentId) {
-        log.info('Returning');
         return {
             contentType: 'text/html',
             body: '<widget class="error">No content selected</widget>'
