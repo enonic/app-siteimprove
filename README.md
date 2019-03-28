@@ -15,6 +15,7 @@ Here's the installation guide for this application:
 | 1.0.0 | 6.14.3 | [Download](http://repo.enonic.com/public/com/enonic/app/siteimprove/1.0.0/siteimprove-1.0.0.jar) |
 | 1.1.0 | 6.14.3 | [Download](http://repo.enonic.com/public/com/enonic/app/siteimprove/1.1.0/siteimprove-1.1.0.jar) |
 | 1.2.0 | 6.14.3 | [Download](http://repo.enonic.com/public/com/enonic/app/siteimprove/1.2.0/siteimprove-1.2.0.jar) |
+| 1.3.0 | 6.14.3 | [Download](http://repo.enonic.com/public/com/enonic/app/siteimprove/1.3.0/siteimprove-1.3.0.jar) |
 
 
 ## Building and deploying
