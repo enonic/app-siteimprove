@@ -5,7 +5,7 @@ exports.createResponse = function createResponse(result) {
         return {
             status: 500,
             contentType: 'application/json',
-            body: 'Error reading the siteimprove request.'
+            body: JSON.stringify({message: 'Error reading the siteimprove request.'})
         }
     }
 

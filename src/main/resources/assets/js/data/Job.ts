@@ -8,7 +8,7 @@ export class Job {
 
     private message: string;
 
-    constructor(builder: CrawlBuilder) {
+    constructor(builder: JobBuilder) {
         this.statusCode = builder.statusCode;
         this.success = builder.success;
         this.message = builder.message;
@@ -30,20 +30,20 @@ export class Job {
         return this.newBuilder().build();
     }
 
-    newBuilder(): CrawlBuilder {
-        return new CrawlBuilder(this);
+    newBuilder(): JobBuilder {
+        return new JobBuilder(this);
     }
 
-    static create(): CrawlBuilder {
-        return new CrawlBuilder();
+    static create(): JobBuilder {
+        return new JobBuilder();
     }
 
     static fromJson(json: JobJson): Job {
-        return new CrawlBuilder().fromJson(json).build();
+        return new JobBuilder().fromJson(json).build();
     }
 }
 
-export class CrawlBuilder {
+export class JobBuilder {
 
     statusCode: number;
 
@@ -65,22 +65,22 @@ export class CrawlBuilder {
         }
     }
 
-    setStatusCode(statusCode: number): CrawlBuilder {
+    setStatusCode(statusCode: number): JobBuilder {
         this.statusCode = statusCode;
         return this;
     }
 
-    setSuccess(success: boolean): CrawlBuilder {
+    setSuccess(success: boolean): JobBuilder {
         this.success = success;
         return this;
     }
 
-    setMessage(message: string): CrawlBuilder {
+    setMessage(message: string): JobBuilder {
         this.message = message;
         return this;
     }
 
-    fromJson(json: JobJson): CrawlBuilder {
+    fromJson(json: JobJson): JobBuilder {
         this.statusCode = json.statusCode;
         this.success = json.success;
         this.message = json.message;

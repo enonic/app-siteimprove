@@ -7,7 +7,7 @@ exports.init = function () {
         eventLib.listener({
             type: 'node.pushed',
             localOnly: true,
-            callback: function(event) {
+            callback: function (event) {
                 runInContext(event);
             }
         });
@@ -23,12 +23,11 @@ function publishContent(event) {
     nodes = nodes.filter(function (node) {
         return hasConfig(getSiteConfig(node));
     }).sort();
-    if (nodes.length == 0) {
+    if (nodes.length === 0) {
         return;
     }
 
     var result = processSiteAndPages(nodes);
-    logObject(result);
     postPublish(result.sites, result.pages);
 }
 
@@ -43,7 +42,7 @@ function runInContext(event) {
             userStore: 'system'
         },
         principals: ["role:system.admin"]
-    }, function() {
+    }, function () {
         publishContent(event);
     });
 }
@@ -109,8 +108,4 @@ function postPublish(sites, pages) {
     bean.sites = sites || [];
     bean.pages = pages || [];
     return __.toNativeObject(bean.execute());
-}
-
-function logObject(o) {
-    log.info(JSON.stringify(o));
 }

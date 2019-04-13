@@ -47,7 +47,7 @@ export class Title
                 });
             }
         });
-        this.appendChild(check)
+        this.appendChild(check);
     }
 
     protected addDataLine(name: string, value: string): DataLine | null {

@@ -21,6 +21,7 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
@@ -37,6 +38,7 @@ import org.osgi.service.component.annotations.Component;
 import com.google.common.base.Strings;
 
 import com.enonic.app.siteimprove.rest.json.SiteimproveCheckStatusJson;
+import com.enonic.app.siteimprove.rest.json.SiteimproveCheckUrlExistsResponseJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveCrawlStatusJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveDciOverallScoreJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveErrorResponseJson;
@@ -45,8 +47,10 @@ import com.enonic.app.siteimprove.rest.json.SiteimproveListPagesJson;
 import com.enonic.app.siteimprove.rest.json.SiteimproveListSitesJson;
 import com.enonic.app.siteimprove.rest.json.SiteimprovePageSummaryJson;
 import com.enonic.app.siteimprove.rest.json.SiteimprovePingJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimproveCheckUrlExistsRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListPagesRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveListSitesRequestJson;
+import com.enonic.app.siteimprove.rest.json.resource.SiteimprovePageByUrlRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimprovePageRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveServiceGeneralRequestJson;
 import com.enonic.app.siteimprove.rest.json.resource.SiteimproveSiteRequestJson;
@@ -103,6 +107,32 @@ public class SiteimproveServiceImpl
             return false;
         }
         return true;
+    }
+
+    @POST
+    @Path("сheckurlexists")
+    public Response checkUrlExists( final SiteimproveCheckUrlExistsRequestJson json )
+        throws IOException
+    {
+        final HttpRequestBase httpRequest = makeCheckUrlExistsRequest( json );
+        CloseableHttpResponse response = null;
+        try
+        {
+            response = HttpClients.custom().build().execute( httpRequest );
+
+            int statusCode = response.getStatusLine().getStatusCode();
+
+            final Boolean exists = statusCode < 400 || statusCode >= 500;
+
+            final SiteimproveCheckUrlExistsResponseJson jsonResponse = new SiteimproveCheckUrlExistsResponseJson();
+            jsonResponse.setExist( exists );
+
+            return Response.status( 200 ).entity( jsonResponse ).build();
+        }
+        finally
+        {
+            response.close();
+        }
     }
 
     @POST
@@ -184,7 +214,7 @@ public class SiteimproveServiceImpl
             {
                 final SiteimproveErrorResponseJson errorJson = new SiteimproveErrorResponseJson();
                 errorJson.setMessage( translateBadResponse( response ) );
-                errorJson.setType( Integer.toString( response.getStatusLine().getStatusCode() ) );
+                errorJson.setType( Integer.toString( statusCode ) );
                 return Response.status( statusCode ).
                     entity( errorJson ).build();
             }
@@ -209,6 +239,14 @@ public class SiteimproveServiceImpl
         throws IOException
     {
         return doSiteimproveAPICall( makeCheckSiteimproveApiRequest( json ), SiteimproveJobJson.class );
+    }
+
+    @POST
+    @Path("checkbyurl")
+    public Response checkByUrl( final SiteimprovePageByUrlRequestJson json )
+        throws IOException, URISyntaxException
+    {
+        return doSiteimproveAPICall( makeCheckByUrlSiteimproveApiRequest( json ), SiteimproveJobJson.class );
     }
 
     private String translateBadResponse( final CloseableHttpResponse response )
@@ -288,6 +326,17 @@ public class SiteimproveServiceImpl
         httpPost.setHeader( "Accept", "application/json" );
 
         return httpPost;
+    }
+
+    private HttpHead makeHeadRequest( final URI uri )
+    {
+        return new HttpHead( uri );
+    }
+
+    private HttpHead makeCheckUrlExistsRequest( final SiteimproveCheckUrlExistsRequestJson json )
+    {
+        final URI uri = URI.create( json.getUrl() );
+        return makeHeadRequest( uri );
     }
 
     private HttpGet makePingAccountSiteimproveApiRequest()
@@ -421,6 +470,19 @@ public class SiteimproveServiceImpl
         final StringEntity input = new UrlEncodedFormEntity( Collections.emptyList(), "UTF-8" );
 
         return makePostRequest( path, input );
+    }
+
+    private HttpGet makeCheckByUrlSiteimproveApiRequest( final SiteimprovePageByUrlRequestJson json )
+        throws URISyntaxException
+    {
+        final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
+        final String url = json.getUrl() != null ? json.getUrl() : "";
+
+        final URI uri = this.createUriForPath( "/sites/" + siteId + "/content/check/page/" );
+        final URIBuilder builder = new URIBuilder( uri );
+        builder.setParameter( "url", url );
+
+        return makeGetRequest( builder.build() );
     }
 
     private String translateBadStatusCode( int code )

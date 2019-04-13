@@ -37,23 +37,24 @@ export abstract class ScoreCard<T>
     }
 
     public toggleDetails() {
-        if (this.hasClass('detailed')) {
-            this.removeClass('detailed');
-        } else {
-            this.addClass('detailed');
+        const isDetailed = this.hasClass('detailed');
+        this.toggleClass('detailed', !isDetailed);
 
-            const smoothScroll = () => this.getHTMLElement().scrollIntoView({behavior: 'smooth'});
+        if (!isDetailed) {
+            const smoothScroll = (block: ScrollLogicalPosition = 'center') => this.getHTMLElement().scrollIntoView(
+                {block, behavior: 'smooth'});
             const relatives = this.getEl().getParent().getChildren();
-            if (relatives[relatives.length - 1] === this.getHTMLElement()) {
-                // Must wait for the animation end on the last element to do scroll correctly
-                setTimeout(smoothScroll, 450);
+            const isLastElement = relatives[relatives.length - 1] === this.getHTMLElement();
+            if (isLastElement) {
+                setTimeout(() => smoothScroll('end'), 350);
             } else {
-                setTimeout(smoothScroll, 150);
+                setTimeout(smoothScroll, 350);
             }
+
         }
 
         if (this.overviewButton) {
-            this.overviewButton.setLabel(this.hasClass('detailed') ? 'Hide details' : 'Show details');
+            this.overviewButton.setLabel(!isDetailed ? 'Hide details' : 'Show details');
         }
     }
 

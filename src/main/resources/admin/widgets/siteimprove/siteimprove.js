@@ -41,7 +41,9 @@ function handleGet(req) {
             crawlUrl: portalLib.serviceUrl({service: 'crawl'}),
             checkStatusUrl: portalLib.serviceUrl({service: 'checkstatus'}),
             checkUrl: portalLib.serviceUrl({service: 'check'}),
-            linksUrl: portalLib.serviceUrl({service: 'links'})
+            checkByUrlUrl: portalLib.serviceUrl({service: 'checkbyurl'}),
+            linksUrl: portalLib.serviceUrl({service: 'links'}),
+            checkUrlExistsUrl: portalLib.serviceUrl({service: 'checkurlexists'})
         }
     };
 
