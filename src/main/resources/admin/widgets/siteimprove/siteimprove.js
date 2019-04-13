@@ -1,14 +1,21 @@
 var contentLib = require('/lib/xp/content');
 var portalLib = require('/lib/xp/portal');
-var thymeleaf = require('/lib/xp/thymeleaf');
+var thymeleaf = require('/lib/thymeleaf');
 var validator = require('./util/validator');
 
 function handleGet(req) {
-    var uid = req.params.uid;
 
     var contentId = req.params.contentId;
-    if (!contentId) {
+
+    if (!contentId && portalLib.getContent()) {
         contentId = portalLib.getContent()._id;
+    }
+
+    if (!contentId) {
+        return {
+            contentType: 'text/html',
+            body: '<widget class="error">No content selected</widget>'
+        };
     }
 
     var content = contentLib.get({key: contentId});
@@ -19,7 +26,7 @@ function handleGet(req) {
 
     var view = resolve('siteimprove.html');
     var params = {
-        uid: uid,
+        widgetId: app.name,
         contentId: contentId,
         contentPath: content._path,
         errorMessage: errorMessage,

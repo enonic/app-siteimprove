@@ -1,19 +1,26 @@
-import {getDocumentData} from './util/DocumentHelper';
 import {SiteimproveWidget} from './widget/SiteimproveWidget';
 import Path = api.rest.Path;
 
-const {uid} = getDocumentData();
-const id = `siteimproveid_${uid}`;
+type ConfigType = {
+    widgetId: string;
+    errorMessage: string;
+    vhost: string;
+    contentPath: string
+};
 
-// Wait until the widget container is copied from the `<link/> to the actual document
-const intervalId = setInterval(() => {
-    const container = document.getElementById(id);
-    if (container) {
-        clearInterval(intervalId);
+declare const CONFIG: ConfigType;
+
+window['HTMLImports'].whenReady(function() {
+
+    const widgetId = CONFIG.widgetId;
+    const widgetContainer = document.getElementById(`widget-${widgetId}`);
+
+    if (widgetContainer) {
+        const container = widgetContainer.getElementsByClassName('siteimprove').item(0);
         while (container.firstChild) {
             container.removeChild(container.firstChild);
         }
-        const containerEl = api.dom.Element.fromHtmlElement(container, true);
+        const containerEl = api.dom.Element.fromHtmlElement((container as HTMLElement), true);
 
         const widget = new SiteimproveWidget({
             contentPath: Path.fromString(CONFIG.contentPath),
@@ -23,4 +30,5 @@ const intervalId = setInterval(() => {
         containerEl.appendChild(widget);
         containerEl.render();
     }
-}, 100);
+
+});
