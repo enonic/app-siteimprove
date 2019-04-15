@@ -25,6 +25,10 @@ export class PageTitle
             });
         }
 
-        this.addDataLine('Last checked', checkStatus.getLastSeen().toLocaleString());
+        const lastSeen = checkStatus.getLastSeen();
+        const validDate = lastSeen != null && !isNaN(lastSeen.getDate());
+        if (validDate) {
+            this.addDataLine('Last checked', checkStatus.getLastSeen().toLocaleString());
+        }
     }
 }

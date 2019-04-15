@@ -118,7 +118,7 @@ export class SiteimproveSummaryBuilder {
     }
 
     fromJson(json: SiteimproveSummaryJson): SiteimproveSummaryBuilder {
-        this.dci = json.dci.total || 0;
+        this.dci = json.dci ? (json.dci.total || 0) : 0;
         this.lastSeen = new Date(json.status.lastSeen);
         this.accessibility = AccessibilitySummary.fromJson(json.accessibility);
         this.qa = QASummary.fromJson(json.qa);

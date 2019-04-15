@@ -328,6 +328,17 @@ public class SiteimproveServiceImpl
         return httpPost;
     }
 
+    private HttpPost makePostRequest( final URI uri, final StringEntity input )
+    {
+        final HttpPost httpPost = new HttpPost( uri );
+
+        input.setContentType( "application/json" );
+        httpPost.setEntity( input );
+        httpPost.setHeader( "Accept", "application/json" );
+
+        return httpPost;
+    }
+
     private HttpHead makeHeadRequest( final URI uri )
     {
         return new HttpHead( uri );
@@ -472,8 +483,8 @@ public class SiteimproveServiceImpl
         return makePostRequest( path, input );
     }
 
-    private HttpGet makeCheckByUrlSiteimproveApiRequest( final SiteimprovePageByUrlRequestJson json )
-        throws URISyntaxException
+    private HttpPost makeCheckByUrlSiteimproveApiRequest( final SiteimprovePageByUrlRequestJson json )
+        throws URISyntaxException, UnsupportedEncodingException
     {
         final String siteId = json.getSiteId() != null ? json.getSiteId().toString() : "";
         final String url = json.getUrl() != null ? json.getUrl() : "";
@@ -482,7 +493,9 @@ public class SiteimproveServiceImpl
         final URIBuilder builder = new URIBuilder( uri );
         builder.setParameter( "url", url );
 
-        return makeGetRequest( builder.build() );
+        final StringEntity input = new UrlEncodedFormEntity( Collections.emptyList(), "UTF-8" );
+
+        return makePostRequest( builder.build(), input );
     }
 
     private String translateBadStatusCode( int code )
