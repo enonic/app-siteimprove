@@ -1,8 +1,12 @@
 {
   "name": "app-siteimprove",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Siteimprove for Enonic XP",
   "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/enonic/app-siteimprove"
+  },
   "scripts": {
     "build": "webpack --hide-modules",
     "lint": "tslint -p tsconfig.build.json -c tslint.json",
