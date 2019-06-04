@@ -1,7 +1,7 @@
 var contentLib = require('/lib/xp/content');
 var portalLib = require('/lib/xp/portal');
 
-exports.responseProcessor = function (req, res) {
+exports.responseFilter = function (req, res) {
 
     if (req.mode !== 'live') {
         return res;

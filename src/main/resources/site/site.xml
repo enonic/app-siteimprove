@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-  <form>
+  <config>
     <input type="TextLine" name="vhost">
       <label>Virtual Host</label>
       <help-text>i.e. mydomain.com/optional</help-text>
@@ -11,8 +11,8 @@
       <help-text>5-digit code from Siteimprove</help-text>
       <occurrences minimum="0" maximum="1"/>
     </input>
-  </form>
-  <processors>
-    <response-processor name="cms-plugin" order="10"/>
-  </processors>
+  </config>
+  <filters>
+    <response-filter name="cms-plugin" order="10"/>
+  </filters>
 </site>

@@ -3,6 +3,6 @@
   <display-name>Siteimprove</display-name>
   <description>Fix errors and optimize your site</description>
   <interfaces>
-    <interface>contentstudio.contextpanel</interface>
+    <interface>com.enonic.xp.content-manager.context-widget</interface>
   </interfaces>
 </widget>
