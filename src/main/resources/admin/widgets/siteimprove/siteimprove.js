@@ -16,12 +16,13 @@ function handleGet(req) {
     var siteConfig = contentLib.getSiteConfig({key: contentId, applicationKey: app.name});
     var pageId = (content.type.indexOf(':site') === -1 && site) ? content._path.replace(site._path, '') : '';
     var errorMessage = validator.validate(contentId);
+    var contentPath = site ? content._path.slice(content._path.indexOf(site._name) - 1) : content._path;
 
     var view = resolve('siteimprove.html');
     var params = {
         uid: uid,
         contentId: contentId,
-        contentPath: content._path,
+        contentPath: contentPath,
         errorMessage: errorMessage,
         pageId: siteConfig ? pageId : -1,
         vhost: siteConfig ? siteConfig.vhost : '',
