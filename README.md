@@ -12,6 +12,7 @@ Here's the installation guide for this application:
 
 | App version | Required XP version | Download |
 | ----------- | ------------------- | -------- |
+| 1.4.2 | 7.0.0 | [Download](http://repo.enonic.com/public/com/enonic/app/siteimprove/1.4.2/siteimprove-1.4.2.jar) |
 | 1.4.1 | 7.0.0 | [Download](http://repo.enonic.com/public/com/enonic/app/siteimprove/1.4.1/siteimprove-1.4.1.jar) |
 | 1.4.0 | 7.0.0 | [Download](http://repo.enonic.com/public/com/enonic/app/siteimprove/1.4.0/siteimprove-1.4.0.jar) |
 | 1.3.0 | 6.14.3 | [Download](http://repo.enonic.com/public/com/enonic/app/siteimprove/1.3.0/siteimprove-1.3.0.jar) |
