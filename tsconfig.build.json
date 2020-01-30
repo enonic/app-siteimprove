@@ -3,6 +3,7 @@
         "module": "commonjs",
         "sourceMap": true,
         "types": [
+            "normalize-url",
             "q"
         ]
     },
