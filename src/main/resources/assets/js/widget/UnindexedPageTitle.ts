@@ -1,8 +1,8 @@
+import {DefaultErrorHandler} from 'lib-admin-ui/DefaultErrorHandler';
+import {Exception} from 'lib-admin-ui/Exception';
 import {Title} from './Title';
 import {Job} from '../data/Job';
 import {CheckByUrlRequest} from '../resource/CheckByUrlRequest';
-import DefaultErrorHandler = api.DefaultErrorHandler;
-import Exception = api.Exception;
 
 export class UnindexedPageTitle
     extends Title {

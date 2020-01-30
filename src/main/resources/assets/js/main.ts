@@ -1,5 +1,6 @@
+import {Element} from 'lib-admin-ui/dom/Element';
+import {Path} from 'lib-admin-ui/rest/Path';
 import {SiteimproveWidget} from './widget/SiteimproveWidget';
-import Path = api.rest.Path;
 
 type ConfigType = {
     widgetId: string;
@@ -20,7 +21,7 @@ window['HTMLImports'].whenReady(function() {
         while (container.firstChild) {
             container.removeChild(container.firstChild);
         }
-        const containerEl = api.dom.Element.fromHtmlElement((container as HTMLElement), true);
+        const containerEl = Element.fromHtmlElement((container as HTMLElement), true);
 
         const widget = new SiteimproveWidget({
             contentPath: Path.fromString(CONFIG.contentPath),

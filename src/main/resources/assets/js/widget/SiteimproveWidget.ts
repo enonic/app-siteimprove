@@ -1,7 +1,9 @@
-import DivEl = api.dom.DivEl;
-import LoadMask = api.ui.mask.LoadMask;
-import DefaultErrorHandler = api.DefaultErrorHandler;
-import Path = api.rest.Path;
+import * as Q from 'q';
+import {StringHelper} from 'lib-admin-ui/util/StringHelper';
+import {DefaultErrorHandler} from 'lib-admin-ui/DefaultErrorHandler';
+import {Path} from 'lib-admin-ui/rest/Path';
+import {DivEl} from 'lib-admin-ui/dom/DivEl';
+import {LoadMask} from 'lib-admin-ui/ui/mask/LoadMask';
 import {WidgetError} from './WidgetError';
 import {DciOverviewRequest} from '../resource/DciOverviewRequest';
 import {DciOverallScore} from '../data/DciOverallScore';
@@ -50,13 +52,13 @@ export class SiteimproveWidget
         SiteimproveValidator.validate(errorMessage, vhost, contentPath).then((result: ValidationResult) => {
             const {url, error, siteId, pageId, type} = result;
 
-            if (type === ValidationType.ERROR || !api.util.StringHelper.isBlank(error)) {
+            if (type === ValidationType.ERROR || !StringHelper.isBlank(error)) {
                 this.appendChild(new WidgetError(error));
                 return null;
             }
 
             if (type === ValidationType.SITE) {
-                return wemQ.all([
+                return Q.all([
                     new DciOverviewRequest(siteId).sendAndParse(),
                     new CrawlStatusRequest(siteId).sendAndParse(),
                     new PageReportLinksRequest(siteId).sendAndParse()
@@ -65,7 +67,7 @@ export class SiteimproveWidget
                     this.createSiteCards(dci, siteId, links);
                 });
             } else if (type === ValidationType.PAGE && pageId !== undefined) {
-                return wemQ.all([
+                return Q.all([
                     new CheckStatusRequest(siteId, pageId).sendAndParse(),
                     new PageSummaryRequest(siteId, pageId).sendAndParse()
                 ]).spread((checkStatus: CheckStatus, summary: PageSummary) => {

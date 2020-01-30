@@ -1,7 +1,8 @@
+import * as Q from 'q';
+import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {CheckStatusJson} from './json/CheckStatusJson';
 import {CheckStatus} from '../data/CheckStatus';
-import JsonResponse = api.rest.JsonResponse;
 
 export class CheckStatusRequest
     extends SiteimproveRequest<CheckStatusJson, CheckStatus> {
@@ -23,7 +24,7 @@ export class CheckStatusRequest
         };
     }
 
-    sendAndParse(): wemQ.Promise<CheckStatus> {
+    sendAndParse(): Q.Promise<CheckStatus> {
         return this.send().then((response: JsonResponse<CheckStatusJson>) => {
             const result = response.getResult();
             return CheckStatus.fromJson(result);

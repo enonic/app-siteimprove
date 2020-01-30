@@ -1,8 +1,10 @@
+import * as Q from 'q';
+import {StringHelper} from 'lib-admin-ui/util/StringHelper';
+import {Path} from 'lib-admin-ui/rest/Path';
 import {SiteimproveFetcher} from '../resource/SiteimproveFetcher';
 import {UrlHelper} from './UrlHelper';
 import {CheckUrlExistsRequest} from '../resource/CheckUrlExistsRequest';
 import {CheckUrlExists} from '../data/CheckUrlExists';
-import Path = api.rest.Path;
 
 export enum ValidationType {
     SITE,
@@ -18,20 +20,20 @@ export interface ValidationResult {
     type: ValidationType;
 }
 
-type AsyncVR = wemQ.Promise<ValidationResult>;
-type GenericAsyncVR<T> = wemQ.Promise<ValidationResult | T>;
+type AsyncVR = Q.Promise<ValidationResult>;
+type GenericAsyncVR<T> = Q.Promise<ValidationResult | T>;
 
 export class SiteimproveValidator {
 
     static validate(serverError: string, url: string, path: Path): GenericAsyncVR<GenericAsyncVR<AsyncVR>> {
-        if (!api.util.StringHelper.isEmpty(serverError)) {
-            return wemQ({error: serverError, type: ValidationType.ERROR});
+        if (!StringHelper.isEmpty(serverError)) {
+            return Q({error: serverError, type: ValidationType.ERROR});
         }
 
         return SiteimproveFetcher.fetchSiteIdByUrl(url).then((siteId: number) => {
             if (!siteId) {
                 const error = `"${url}" is not enabled for your Siteimprove account.`;
-                return {error, type: ValidationType.ERROR};
+                return <any>{error, type: ValidationType.ERROR};
             }
 
             if (path.hasParent()) {

@@ -1,3 +1,4 @@
+import * as Q from 'q';
 import {ListSitesRequest} from './ListSitesRequest';
 import {Site} from '../data/Site';
 import {ListPagesRequest} from './ListPagesRequest';
@@ -8,13 +9,13 @@ type SiteOrPageApi = Site | PageApi;
 
 export class SiteimproveFetcher {
 
-    static fetchSiteIdByUrl(url: string): wemQ.Promise<number | null> {
+    static fetchSiteIdByUrl(url: string): Q.Promise<number> {
         return new ListSitesRequest().sendAndParse().then((sites: Site[]) => {
             return SiteimproveFetcher.findIdForUrl(url, sites);
         });
     }
 
-    static fetchPageIdByUrl(url: string, siteId: number): wemQ.Promise<number> {
+    static fetchPageIdByUrl(url: string, siteId: number): Q.Promise<number> {
         return new ListPagesRequest(siteId).sendAndParse().then((pages: PageApi[]) => {
             return SiteimproveFetcher.findIdForUrl(url, pages);
         });

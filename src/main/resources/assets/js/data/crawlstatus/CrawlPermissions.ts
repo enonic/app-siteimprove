@@ -1,3 +1,5 @@
+import {StringHelper} from 'lib-admin-ui/util/StringHelper';
+
 export enum CrawlPermissionsEnum {
     ALLOWED,
     INCORRECT_SUBSCRIPTION,
@@ -21,7 +23,7 @@ export class CrawlPermissions {
     }
 
     static fromString(value: string): CrawlPermissions {
-        if (api.util.StringHelper.isBlank(value)) {
+        if (StringHelper.isBlank(value)) {
             return null;
         }
         const permission = value.toUpperCase();

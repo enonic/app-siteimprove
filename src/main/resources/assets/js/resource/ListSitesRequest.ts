@@ -1,7 +1,8 @@
+import * as Q from 'q';
+import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {ListSitesJson} from './json/ListSitesJson';
 import {Site} from '../data/Site';
-import JsonResponse = api.rest.JsonResponse;
 
 export class ListSitesRequest
     extends SiteimproveRequest<ListSitesJson, Site[]> {
@@ -17,7 +18,7 @@ export class ListSitesRequest
         };
     }
 
-    sendAndParse(): wemQ.Promise<Site[]> {
+    sendAndParse(): Q.Promise<Site[]> {
         return this.send().then((response: JsonResponse<ListSitesJson>) => {
             const sites = response.getResult();
             const hasSites = !!sites.items && sites.items.length > 0;

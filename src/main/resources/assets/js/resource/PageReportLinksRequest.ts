@@ -1,7 +1,8 @@
+import * as Q from 'q';
+import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {PageReportLinksJson} from './json/PageReportLinksJson';
 import {PageReportLinks} from '../data/PageReportLinks';
-import JsonResponse = api.rest.JsonResponse;
 
 export class PageReportLinksRequest
     extends SiteimproveRequest<PageReportLinksJson, PageReportLinks> {
@@ -19,7 +20,7 @@ export class PageReportLinksRequest
         };
     }
 
-    sendAndParse(): wemQ.Promise<PageReportLinks> {
+    sendAndParse(): Q.Promise<PageReportLinks> {
         return this.send().then((response: JsonResponse<PageReportLinksJson>) => {
             const result = response.getResult();
             return PageReportLinks.fromJson(result);

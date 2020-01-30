@@ -1,7 +1,7 @@
-import NewElementBuilder = api.dom.NewElementBuilder;
+import {Element, NewElementBuilder} from 'lib-admin-ui/dom/Element';
 
 export class TdEl
-    extends api.dom.Element {
+    extends Element {
 
     constructor(className?: string, prefix?: string) {
         super(new NewElementBuilder().setTagName('td').setClassName(className, prefix));

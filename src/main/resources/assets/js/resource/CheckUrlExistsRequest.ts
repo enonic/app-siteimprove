@@ -1,7 +1,8 @@
+import * as Q from 'q';
+import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {CheckUrlExistsJson} from './json/CheckUrlExistsJson';
 import {CheckUrlExists} from '../data/CheckUrlExists';
-import JsonResponse = api.rest.JsonResponse;
 
 export class CheckUrlExistsRequest
     extends SiteimproveRequest<CheckUrlExistsJson, CheckUrlExists> {
@@ -19,7 +20,7 @@ export class CheckUrlExistsRequest
         };
     }
 
-    sendAndParse(): wemQ.Promise<CheckUrlExists> {
+    sendAndParse(): Q.Promise<CheckUrlExists> {
         return this.send().then((response: JsonResponse<CheckUrlExistsJson>) => {
             const result = response.getResult();
             return CheckUrlExists.fromJson(result);

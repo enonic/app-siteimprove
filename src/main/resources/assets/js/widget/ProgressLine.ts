@@ -1,5 +1,5 @@
-import DivEl = api.dom.DivEl;
-import SpanEl = api.dom.SpanEl;
+import {DivEl} from 'lib-admin-ui/dom/DivEl';
+import {SpanEl} from 'lib-admin-ui/dom/SpanEl';
 import {AppStyleHelper} from '../util/AppStyleHelper';
 
 export class ProgressLine

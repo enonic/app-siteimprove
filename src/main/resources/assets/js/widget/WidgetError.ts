@@ -1,4 +1,4 @@
-import DivEl = api.dom.DivEl;
+import {DivEl} from 'lib-admin-ui/dom/DivEl';
 
 export class WidgetError
     extends DivEl {
