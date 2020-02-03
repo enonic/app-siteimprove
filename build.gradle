@@ -80,6 +80,12 @@ jar {
     dependsOn += webpack
 }
 
+project.afterEvaluate {
+    jar {
+        bnd ('Private-Package': '!dev.*, *;-split-package:=merge-first')
+    }
+}
+
 processResources.dependsOn += unpackDevResources
 
 if ( hasProperty( 'env' ) )
