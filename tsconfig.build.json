@@ -1,18 +1,15 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "sourceMap": true
-  },
-  "include": [
-    ".xp/dev/d.ts/*",
-    "src/main/resources/assets/js/types.ts"
-  ],
-  "exclude": [
-    "build/**/*",
-    "out/**/*",
-    "node_modules/*"
-  ],
-  "types": [
-    "types"
-  ]
+    "compilerOptions": {
+        "module": "commonjs",
+        "sourceMap": true,
+        "types": [
+            "normalize-url",
+            "q"
+        ]
+    },
+    "exclude": [
+        "build/**/*",
+        "out/**/*",
+        "node_modules/*"
+    ]
 }

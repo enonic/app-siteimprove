@@ -1,8 +1,8 @@
-import DivEl = api.dom.DivEl;
-import Button = api.ui.button.Button;
-import DefaultErrorHandler = api.DefaultErrorHandler;
-import StringHelper = api.util.StringHelper;
-import AEl = api.dom.AEl;
+import {StringHelper} from 'lib-admin-ui/util/StringHelper';
+import {DefaultErrorHandler} from 'lib-admin-ui/DefaultErrorHandler';
+import {DivEl} from 'lib-admin-ui/dom/DivEl';
+import {AEl} from 'lib-admin-ui/dom/AEl';
+import {Button} from 'lib-admin-ui/ui/button/Button';
 import {AppStyleHelper} from '../util/AppStyleHelper';
 import {DataLine} from './DataLine';
 

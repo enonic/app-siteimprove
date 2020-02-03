@@ -1,4 +1,4 @@
-import DivEl = api.dom.DivEl;
+import {DivEl} from 'lib-admin-ui/dom/DivEl';
 import {Data} from '../data/Data';
 import {Details} from './Details';
 import {ScoreCard, ScoreCardSettings} from './ScoreCard';

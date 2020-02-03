@@ -1,5 +1,5 @@
-import ResourceRequest = api.rest.ResourceRequest;
-import Path = api.rest.Path;
+import {Path} from 'lib-admin-ui/rest/Path';
+import {ResourceRequest} from 'lib-admin-ui/rest/ResourceRequest';
 
 export abstract class SiteimproveRequest<RAW_JSON_TYPE, PARSED_TYPE>
     extends ResourceRequest<RAW_JSON_TYPE, PARSED_TYPE> {

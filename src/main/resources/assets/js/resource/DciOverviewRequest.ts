@@ -1,7 +1,8 @@
+import * as Q from 'q';
+import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {DciOverallScoreJson} from './json/DciOverallScoreJson';
 import {DciOverallScore} from '../data/DciOverallScore';
-import JsonResponse = api.rest.JsonResponse;
 
 export class DciOverviewRequest
     extends SiteimproveRequest<DciOverallScoreJson, DciOverallScore> {
@@ -19,7 +20,7 @@ export class DciOverviewRequest
         };
     }
 
-    sendAndParse(): wemQ.Promise<DciOverallScore> {
+    sendAndParse(): Q.Promise<DciOverallScore> {
         return this.send().then((response: JsonResponse<DciOverallScoreJson>) => {
             const result = response.getResult();
             return DciOverallScore.fromJson(result);

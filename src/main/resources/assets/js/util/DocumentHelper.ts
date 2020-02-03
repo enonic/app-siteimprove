@@ -1,5 +1,5 @@
-declare type HTMLImports = { currentScript: { ownerDocument?: Document } };
-declare type WindowWithImports = Window & { HTMLImports: HTMLImports };
+declare type HTMLImportsType = { currentScript: { ownerDocument?: Document } };
+declare type WindowWithImports = Window & { HTMLImports: HTMLImportsType };
 declare type CurrentScript = HTMLScriptElement | SVGScriptElement | null;
 declare type ScriptWithImport = CurrentScript & { __importElement?: CurrentScript };
 
@@ -9,7 +9,7 @@ export type DocumentData = {
 };
 
 function getDocument(): Document {
-    const win: WindowWithImports = <WindowWithImports>window;
+    const win: WindowWithImports = <any>window;
     let script = win.HTMLImports ? win.HTMLImports.currentScript : undefined;
 
     if (!script && document.currentScript) {

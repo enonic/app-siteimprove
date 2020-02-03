@@ -1,9 +1,9 @@
+import {DefaultErrorHandler} from 'lib-admin-ui/DefaultErrorHandler';
+import {Exception} from 'lib-admin-ui/Exception';
 import {Title} from './Title';
 import {Job} from '../data/Job';
 import {CheckStatus} from '../data/CheckStatus';
 import {CheckRequest} from '../resource/CheckRequest';
-import DefaultErrorHandler = api.DefaultErrorHandler;
-import Exception = api.Exception;
 
 export class PageTitle
     extends Title {

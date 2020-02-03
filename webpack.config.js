@@ -1,7 +1,8 @@
 const ErrorLoggerPlugin = require('error-logger-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ProvidePlugin = require('webpack/lib/ProvidePlugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const path = require('path');
 
@@ -47,8 +48,27 @@ module.exports = {
             }
         ]
     },
+    optimization: {
+        minimizer: [
+            new TerserPlugin({
+                sourceMap: true,
+                terserOptions: {
+                    compress: {
+                        drop_console: false
+                    },
+                    mangle: false,
+                    keep_classnames: true,
+                    keep_fnames: true
+                }
+            })
+        ]
+    },
     plugins: [
-        new ErrorLoggerPlugin(),
+        new ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            'window.jQuery': 'jquery'
+        }),
         new MiniCssExtractPlugin({
             filename: '[name].css',
             chunkFilename: './styles/[id].css'
@@ -57,17 +77,7 @@ module.exports = {
             exclude: /a\.js|node_modules/,
             failOnError: true
         }),
-        ...(isProd ? [
-            new UglifyJsPlugin({
-                cache: true,
-                parallel: true,
-                uglifyOptions: {
-                    mangle: false,
-                    keep_classnames: true,
-                    keep_fnames: true
-                }
-            })
-        ] : [])
+        new ErrorLoggerPlugin({showColumn: false}),
     ],
     mode: isProd ? 'production' : 'development',
     devtool: isProd ? false : 'source-map'

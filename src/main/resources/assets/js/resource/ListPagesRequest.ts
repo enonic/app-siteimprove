@@ -1,7 +1,8 @@
+import * as Q from 'q';
+import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {ListPagesJson} from './json/ListPagesJson';
 import {PageApi} from '../data/PageApi';
-import JsonResponse = api.rest.JsonResponse;
 
 export class ListPagesRequest
     extends SiteimproveRequest<ListPagesJson, PageApi[]> {
@@ -21,7 +22,7 @@ export class ListPagesRequest
         };
     }
 
-    sendAndParse(): wemQ.Promise<PageApi[]> {
+    sendAndParse(): Q.Promise<PageApi[]> {
         return this.send().then((response: JsonResponse<ListPagesJson>) => {
             const pages = response.getResult();
             const hasPages = !!pages.items && pages.items.length > 0;

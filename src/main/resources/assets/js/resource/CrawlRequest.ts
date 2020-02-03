@@ -1,7 +1,8 @@
+import * as Q from 'q';
+import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {JobJson} from './json/JobJson';
 import {Job} from '../data/Job';
-import JsonResponse = api.rest.JsonResponse;
 
 export class CrawlRequest
     extends SiteimproveRequest<JobJson, Job> {
@@ -19,7 +20,7 @@ export class CrawlRequest
         };
     }
 
-    sendAndParse(): wemQ.Promise<Job> {
+    sendAndParse(): Q.Promise<Job> {
         return this.send().then((response: JsonResponse<JobJson>) => {
             const result = response.getResult();
             return Job.fromJson(result);

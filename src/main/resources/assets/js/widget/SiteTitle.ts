@@ -1,9 +1,9 @@
+import {DefaultErrorHandler} from 'lib-admin-ui/DefaultErrorHandler';
+import {Exception} from 'lib-admin-ui/Exception';
 import {Title} from './Title';
 import {CrawlStatus} from '../data/CrawlStatus';
 import {CrawlRequest} from '../resource/CrawlRequest';
 import {Job} from '../data/Job';
-import DefaultErrorHandler = api.DefaultErrorHandler;
-import Exception = api.Exception;
 
 export class SiteTitle
     extends Title {

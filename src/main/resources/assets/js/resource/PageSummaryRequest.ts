@@ -1,7 +1,8 @@
+import * as Q from 'q';
+import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {PageSummaryJson} from './json/PageSummaryJson';
 import {PageSummary} from '../data/PageSummary';
-import JsonResponse = api.rest.JsonResponse;
 
 export class PageSummaryRequest
     extends SiteimproveRequest<PageSummaryJson, PageSummary> {
@@ -23,7 +24,7 @@ export class PageSummaryRequest
         };
     }
 
-    sendAndParse(): wemQ.Promise<PageSummary> {
+    sendAndParse(): Q.Promise<PageSummary> {
         return this.send().then((response: JsonResponse<PageSummaryJson>) => {
             const result = response.getResult();
             return PageSummary.fromJson(result);
