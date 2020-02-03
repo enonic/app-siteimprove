@@ -6,7 +6,7 @@ import {Card, CardSettings} from './Card';
 type Progress = {
     color: string;
     value: number;
-}
+};
 
 export interface ScoreCardSettings<T>
     extends CardSettings {

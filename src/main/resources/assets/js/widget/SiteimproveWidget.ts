@@ -29,7 +29,7 @@ export type SiteimproveWidgetConfig = {
     contentPath: Path,
     vhost: string,
     errorMessage: string,
-}
+};
 
 export class SiteimproveWidget
     extends DivEl {
