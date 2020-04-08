@@ -1,11 +1,10 @@
-import * as Q from 'q';
 import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {CheckUrlExistsJson} from './json/CheckUrlExistsJson';
 import {CheckUrlExists} from '../data/CheckUrlExists';
 
 export class CheckUrlExistsRequest
-    extends SiteimproveRequest<CheckUrlExistsJson, CheckUrlExists> {
+    extends SiteimproveRequest<CheckUrlExists> {
 
     private url: string;
 
@@ -20,11 +19,7 @@ export class CheckUrlExistsRequest
         };
     }
 
-    sendAndParse(): Q.Promise<CheckUrlExists> {
-        return this.send().then((response: JsonResponse<CheckUrlExistsJson>) => {
-            const result = response.getResult();
-            return CheckUrlExists.fromJson(result);
-        });
+    protected parseResponse(response: JsonResponse<CheckUrlExistsJson>): CheckUrlExists {
+        return CheckUrlExists.fromJson(response.getResult());
     }
-
 }

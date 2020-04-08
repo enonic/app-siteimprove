@@ -1,11 +1,10 @@
-import * as Q from 'q';
 import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {DciOverallScoreJson} from './json/DciOverallScoreJson';
 import {DciOverallScore} from '../data/DciOverallScore';
 
 export class DciOverviewRequest
-    extends SiteimproveRequest<DciOverallScoreJson, DciOverallScore> {
+    extends SiteimproveRequest<DciOverallScore> {
 
     private siteId: number;
 
@@ -20,11 +19,8 @@ export class DciOverviewRequest
         };
     }
 
-    sendAndParse(): Q.Promise<DciOverallScore> {
-        return this.send().then((response: JsonResponse<DciOverallScoreJson>) => {
-            const result = response.getResult();
-            return DciOverallScore.fromJson(result);
-        });
+    protected parseResponse(response: JsonResponse<DciOverallScoreJson>): DciOverallScore {
+        return DciOverallScore.fromJson(response.getResult());
     }
 
 }

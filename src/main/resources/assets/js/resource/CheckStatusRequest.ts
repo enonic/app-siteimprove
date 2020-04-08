@@ -1,11 +1,10 @@
-import * as Q from 'q';
 import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {CheckStatusJson} from './json/CheckStatusJson';
 import {CheckStatus} from '../data/CheckStatus';
 
 export class CheckStatusRequest
-    extends SiteimproveRequest<CheckStatusJson, CheckStatus> {
+    extends SiteimproveRequest<CheckStatus> {
 
     private siteId: number;
 
@@ -24,11 +23,8 @@ export class CheckStatusRequest
         };
     }
 
-    sendAndParse(): Q.Promise<CheckStatus> {
-        return this.send().then((response: JsonResponse<CheckStatusJson>) => {
-            const result = response.getResult();
-            return CheckStatus.fromJson(result);
-        });
+    protected parseResponse(response: JsonResponse<CheckStatusJson>): CheckStatus {
+        return CheckStatus.fromJson(response.getResult());
     }
 
 }
