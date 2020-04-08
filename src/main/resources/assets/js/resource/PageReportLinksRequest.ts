@@ -1,11 +1,10 @@
-import * as Q from 'q';
 import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {PageReportLinksJson} from './json/PageReportLinksJson';
 import {PageReportLinks} from '../data/PageReportLinks';
 
 export class PageReportLinksRequest
-    extends SiteimproveRequest<PageReportLinksJson, PageReportLinks> {
+    extends SiteimproveRequest<PageReportLinks> {
 
     private siteId: number;
 
@@ -20,11 +19,8 @@ export class PageReportLinksRequest
         };
     }
 
-    sendAndParse(): Q.Promise<PageReportLinks> {
-        return this.send().then((response: JsonResponse<PageReportLinksJson>) => {
-            const result = response.getResult();
-            return PageReportLinks.fromJson(result);
-        });
+    protected parseResponse(response: JsonResponse<PageReportLinksJson>): PageReportLinks {
+        return PageReportLinks.fromJson(response.getResult());
     }
 
 }

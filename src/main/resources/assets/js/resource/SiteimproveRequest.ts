@@ -1,8 +1,8 @@
 import {Path} from 'lib-admin-ui/rest/Path';
 import {ResourceRequest} from 'lib-admin-ui/rest/ResourceRequest';
 
-export abstract class SiteimproveRequest<RAW_JSON_TYPE, PARSED_TYPE>
-    extends ResourceRequest<RAW_JSON_TYPE, PARSED_TYPE> {
+export abstract class SiteimproveRequest<PARSED_TYPE>
+    extends ResourceRequest<PARSED_TYPE> {
 
     private apiPath: string;
 

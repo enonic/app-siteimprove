@@ -4,7 +4,7 @@ import {CrawlStatus} from '../data/CrawlStatus';
 import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 
 export class CrawlStatusRequest
-    extends SiteimproveRequest<CrawlStatusJson, CrawlStatus> {
+    extends SiteimproveRequest<CrawlStatus> {
 
     private siteId: number;
 
@@ -19,11 +19,8 @@ export class CrawlStatusRequest
         };
     }
 
-    sendAndParse(): Q.Promise<CrawlStatus> {
-        return this.send().then((response: JsonResponse<CrawlStatusJson>) => {
-            const result = response.getResult();
-            return CrawlStatus.fromJson(result);
-        });
+    protected parseResponse(response: JsonResponse<CrawlStatusJson>): CrawlStatus {
+        return CrawlStatus.fromJson(response.getResult());
     }
 
 }

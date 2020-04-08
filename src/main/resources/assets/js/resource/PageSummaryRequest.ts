@@ -1,11 +1,10 @@
-import * as Q from 'q';
 import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {PageSummaryJson} from './json/PageSummaryJson';
 import {PageSummary} from '../data/PageSummary';
 
 export class PageSummaryRequest
-    extends SiteimproveRequest<PageSummaryJson, PageSummary> {
+    extends SiteimproveRequest<PageSummary> {
 
     private siteId: number;
 
@@ -24,11 +23,7 @@ export class PageSummaryRequest
         };
     }
 
-    sendAndParse(): Q.Promise<PageSummary> {
-        return this.send().then((response: JsonResponse<PageSummaryJson>) => {
-            const result = response.getResult();
-            return PageSummary.fromJson(result);
-        });
+    protected parseResponse(response: JsonResponse<PageSummaryJson>): PageSummary {
+        return PageSummary.fromJson(response.getResult());
     }
-
 }

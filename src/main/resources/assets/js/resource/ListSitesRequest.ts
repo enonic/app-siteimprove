@@ -1,11 +1,10 @@
-import * as Q from 'q';
 import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {ListSitesJson} from './json/ListSitesJson';
 import {Site} from '../data/Site';
 
 export class ListSitesRequest
-    extends SiteimproveRequest<ListSitesJson, Site[]> {
+    extends SiteimproveRequest<Site[]> {
 
     constructor() {
         super(CONFIG.services.sitesUrl);
@@ -18,12 +17,9 @@ export class ListSitesRequest
         };
     }
 
-    sendAndParse(): Q.Promise<Site[]> {
-        return this.send().then((response: JsonResponse<ListSitesJson>) => {
-            const sites = response.getResult();
-            const hasSites = !!sites.items && sites.items.length > 0;
-            return hasSites ? sites.items.map(site => Site.fromJson(site)) : [];
-        });
+    protected parseResponse(response: JsonResponse<ListSitesJson>): Site[] {
+        const sites: ListSitesJson = response.getResult();
+        const hasSites: boolean = !!sites.items && sites.items.length > 0;
+        return hasSites ? sites.items.map(site => Site.fromJson(site)) : [];
     }
-
 }
