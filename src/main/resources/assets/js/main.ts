@@ -1,6 +1,7 @@
 import {Element} from 'lib-admin-ui/dom/Element';
 import {Path} from 'lib-admin-ui/rest/Path';
 import {SiteimproveWidget} from './widget/SiteimproveWidget';
+import {WidgetError} from './widget/WidgetError';
 
 type ConfigType = {
     widgetId: string;
@@ -10,10 +11,10 @@ type ConfigType = {
 };
 
 declare const CONFIG: ConfigType;
+const widgetId = CONFIG.widgetId;
 
-window['HTMLImports'].whenReady(function() {
+(() => {
 
-    const widgetId = CONFIG.widgetId;
     const widgetContainer = document.getElementById(`widget-${widgetId}`);
 
     if (widgetContainer) {
@@ -23,13 +24,17 @@ window['HTMLImports'].whenReady(function() {
         }
         const containerEl = Element.fromHtmlElement((container as HTMLElement), true);
 
-        const widget = new SiteimproveWidget({
-            contentPath: Path.fromString(CONFIG.contentPath),
-            vhost: CONFIG.vhost,
-            errorMessage: CONFIG.errorMessage
-        });
-        containerEl.appendChild(widget);
-        containerEl.render();
+        if (CONFIG.errorMessage) {
+            const errorEl = new WidgetError(CONFIG.errorMessage);
+            containerEl.appendChild(errorEl);
+        } else {
+            const widget = new SiteimproveWidget();
+            containerEl.appendChild(widget);
+            widget.initialize({
+                contentPath: Path.fromString(CONFIG.contentPath),
+                vhost: CONFIG.vhost,
+                errorMessage: CONFIG.errorMessage
+            });
+        }
     }
-
-});
+})();

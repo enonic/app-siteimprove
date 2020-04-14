@@ -28,7 +28,7 @@ import {UnindexedPageTitle} from './UnindexedPageTitle';
 export type SiteimproveWidgetConfig = {
     contentPath: Path,
     vhost: string,
-    errorMessage: string,
+    errorMessage: string
 };
 
 export class SiteimproveWidget
@@ -36,15 +36,13 @@ export class SiteimproveWidget
 
     private loadMask: LoadMask;
 
-    constructor(config: SiteimproveWidgetConfig) {
+    constructor() {
         super('widget', AppStyleHelper.SITEIMPROVE_PREFIX);
 
         this.loadMask = new LoadMask(this);
-
-        this.initialize(config);
     }
 
-    private initialize(config: SiteimproveWidgetConfig) {
+    initialize(config: SiteimproveWidgetConfig) {
         this.loadMask.show();
 
         const {errorMessage, vhost, contentPath} = config;
@@ -62,7 +60,7 @@ export class SiteimproveWidget
                     new DciOverviewRequest(siteId).sendAndParse(),
                     new CrawlStatusRequest(siteId).sendAndParse(),
                     new PageReportLinksRequest(siteId).sendAndParse()
-                ]).spread((dci: DciOverallScore, crawlStatus: CrawlStatus, links: PageReportLinks) => {
+            ]).spread((dci: DciOverallScore, crawlStatus: CrawlStatus, links: PageReportLinks) => {
                     this.createSiteTitle(url, siteId, crawlStatus);
                     this.createSiteCards(dci, siteId, links);
                 });
@@ -78,11 +76,16 @@ export class SiteimproveWidget
                 this.createUnindexedPageTitle(url, siteId);
             }
         }).then(() => {
-            this.loadMask.hide();
+            this.unmask();
         }).catch(error => {
             DefaultErrorHandler.handle(error);
-            this.loadMask.hide();
+            this.unmask();
         });
+    }
+
+    private unmask() {
+        this.loadMask.hide();
+        this.loadMask.remove();
     }
 
     private createSiteTitle(url: string, siteId: number, crawlStatus: CrawlStatus) {
