@@ -35,6 +35,8 @@ const widgetId = CONFIG.widgetId;
                 vhost: CONFIG.vhost,
                 errorMessage: CONFIG.errorMessage
             });
+
+            widget.render();
         }
     }
 })();
