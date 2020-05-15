@@ -6,10 +6,8 @@ import {PageReportLinks} from '../data/PageReportLinks';
 export class PageReportLinksRequest
     extends SiteimproveRequest<PageReportLinks> {
 
-    private siteId: number;
-
     constructor(siteId: number) {
-        super(CONFIG.services.linksUrl);
+        super('linksUrl');
         this.siteId = siteId;
     }
 

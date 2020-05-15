@@ -20,7 +20,7 @@ export class Card
 
     private static createTitle(title: string, url: string): DivEl {
         const titleEl = new DivEl('title');
-        const linkEl = new AEl('link icon icon-new-tab');
+        const linkEl = new AEl('link icon-new-tab');
         linkEl.setHtml(title);
         linkEl.setUrl(url, '_blank');
         titleEl.appendChild(linkEl);

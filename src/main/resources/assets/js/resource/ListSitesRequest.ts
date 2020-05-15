@@ -7,7 +7,7 @@ export class ListSitesRequest
     extends SiteimproveRequest<Site[]> {
 
     constructor() {
-        super(CONFIG.services.sitesUrl);
+        super('sitesUrl');
     }
 
     getParams(): Object {

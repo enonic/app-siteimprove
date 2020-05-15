@@ -6,10 +6,8 @@ import {PageApi} from '../data/PageApi';
 export class ListPagesRequest
     extends SiteimproveRequest<PageApi[]> {
 
-    private siteId: number;
-
     constructor(siteId: number) {
-        super(CONFIG.services.pagesUrl);
+        super('pagesUrl');
         this.siteId = siteId;
     }
 

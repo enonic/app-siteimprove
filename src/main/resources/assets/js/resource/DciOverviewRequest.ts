@@ -6,10 +6,8 @@ import {DciOverallScore} from '../data/DciOverallScore';
 export class DciOverviewRequest
     extends SiteimproveRequest<DciOverallScore> {
 
-    private siteId: number;
-
     constructor(siteId: number) {
-        super(CONFIG.services.dciOverviewUrl);
+        super('dciOverviewUrl');
         this.siteId = siteId;
     }
 

@@ -6,10 +6,8 @@ import {Job} from '../data/Job';
 export class CrawlRequest
     extends SiteimproveRequest<Job> {
 
-    private siteId: number;
-
     constructor(siteId: number) {
-        super(CONFIG.services.crawlUrl);
+        super('crawlUrl');
         this.siteId = siteId;
     }
 
