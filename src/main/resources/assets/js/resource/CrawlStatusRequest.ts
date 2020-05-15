@@ -6,10 +6,8 @@ import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
 export class CrawlStatusRequest
     extends SiteimproveRequest<CrawlStatus> {
 
-    private siteId: number;
-
     constructor(siteId: number) {
-        super(CONFIG.services.crawlStatusUrl);
+        super('crawlStatusUrl');
         this.siteId = siteId;
     }
 

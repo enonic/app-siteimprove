@@ -6,12 +6,8 @@ import {PageSummary} from '../data/PageSummary';
 export class PageSummaryRequest
     extends SiteimproveRequest<PageSummary> {
 
-    private siteId: number;
-
-    private pageId: number;
-
     constructor(siteId: number, pageId: number) {
-        super(CONFIG.services.pageSummaryUrl);
+        super('pageSummaryUrl');
         this.siteId = siteId;
         this.pageId = pageId;
     }

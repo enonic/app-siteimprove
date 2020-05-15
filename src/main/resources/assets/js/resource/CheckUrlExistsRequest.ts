@@ -9,7 +9,7 @@ export class CheckUrlExistsRequest
     private url: string;
 
     constructor(url: string) {
-        super(CONFIG.services.checkUrlExistsUrl);
+        super('checkUrlExistsUrl');
         this.url = url;
     }
 

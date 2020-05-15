@@ -2,16 +2,14 @@ import {Element} from 'lib-admin-ui/dom/Element';
 import {Path} from 'lib-admin-ui/rest/Path';
 import {SiteimproveWidget} from './widget/SiteimproveWidget';
 import {WidgetError} from './widget/WidgetError';
+import {SiteimproveWidgetConfig} from './widget/SiteimproveWidgetConfig';
 
-type ConfigType = {
-    widgetId: string;
-    errorMessage: string;
-    vhost: string;
-    contentPath: string
+type AppConfigType = {
+    config: SiteimproveWidgetConfig
 };
 
-declare const CONFIG: ConfigType;
-const widgetId = CONFIG.widgetId;
+declare const SITEIMPROVE: AppConfigType;
+const widgetId = SITEIMPROVE.config.widgetId;
 
 (() => {
 
@@ -24,17 +22,13 @@ const widgetId = CONFIG.widgetId;
         }
         const containerEl = Element.fromHtmlElement((container as HTMLElement), true);
 
-        if (CONFIG.errorMessage) {
-            const errorEl = new WidgetError(CONFIG.errorMessage);
+        if (SITEIMPROVE.config.errorMessage) {
+            const errorEl = new WidgetError(SITEIMPROVE.config.errorMessage);
             containerEl.appendChild(errorEl);
         } else {
             const widget = new SiteimproveWidget();
             containerEl.appendChild(widget);
-            widget.initialize({
-                contentPath: Path.fromString(CONFIG.contentPath),
-                vhost: CONFIG.vhost,
-                errorMessage: CONFIG.errorMessage
-            });
+            widget.initialize(SITEIMPROVE.config);
 
             widget.render();
         }

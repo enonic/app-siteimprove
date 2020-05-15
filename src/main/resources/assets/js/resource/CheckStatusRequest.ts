@@ -6,12 +6,8 @@ import {CheckStatus} from '../data/CheckStatus';
 export class CheckStatusRequest
     extends SiteimproveRequest<CheckStatus> {
 
-    private siteId: number;
-
-    private pageId: number;
-
     constructor(siteId: number, pageId: number) {
-        super(CONFIG.services.checkStatusUrl);
+        super('checkStatusUrl');
         this.siteId = siteId;
         this.pageId = pageId;
     }

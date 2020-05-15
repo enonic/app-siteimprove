@@ -5,31 +5,27 @@ import {Path} from 'lib-admin-ui/rest/Path';
 import {DivEl} from 'lib-admin-ui/dom/DivEl';
 import {LoadMask} from 'lib-admin-ui/ui/mask/LoadMask';
 import {WidgetError} from './WidgetError';
-import {DciOverviewRequest} from '../resource/DciOverviewRequest';
 import {DciOverallScore} from '../data/DciOverallScore';
 import {AppStyleHelper} from '../util/AppStyleHelper';
 import {SiteimproveValidator, ValidationResult, ValidationType} from '../util/SiteimproveValidator';
 import {UrlHelper} from '../util/UrlHelper';
-import {PageSummaryRequest} from '../resource/PageSummaryRequest';
 import {PageSummary} from '../data/PageSummary';
 import {Data} from '../data/Data';
 import {SiteScoreCard} from './SiteScoreCard';
 import {PageScoreCard} from './PageScoreCard';
-import {CrawlStatusRequest} from '../resource/CrawlStatusRequest';
 import {CrawlStatus} from '../data/CrawlStatus';
 import {SiteTitle} from './SiteTitle';
 import {PageTitle} from './PageTitle';
 import {CheckStatus} from '../data/CheckStatus';
-import {CheckStatusRequest} from '../resource/CheckStatusRequest';
-import {PageReportLinksRequest} from '../resource/PageReportLinksRequest';
 import {PageReportLinks} from '../data/PageReportLinks';
 import {UnindexedPageTitle} from './UnindexedPageTitle';
-
-export type SiteimproveWidgetConfig = {
-    contentPath: Path,
-    vhost: string,
-    errorMessage: string
-};
+import {SiteimproveRequest} from '../resource/SiteimproveRequest';
+import {DciOverviewRequest} from '../resource/DciOverviewRequest';
+import {PageSummaryRequest} from '../resource/PageSummaryRequest';
+import {CrawlStatusRequest} from '../resource/CrawlStatusRequest';
+import {CheckStatusRequest} from '../resource/CheckStatusRequest';
+import {PageReportLinksRequest} from '../resource/PageReportLinksRequest';
+import {SiteimproveWidgetConfig} from './SiteimproveWidgetConfig';
 
 export class SiteimproveWidget
     extends DivEl {
@@ -38,14 +34,16 @@ export class SiteimproveWidget
 
     constructor() {
         super('widget', AppStyleHelper.SITEIMPROVE_PREFIX);
-
         this.loadMask = new LoadMask(this);
     }
 
     initialize(config: SiteimproveWidgetConfig) {
+        SiteimproveRequest.setConfig(config);
+
         this.loadMask.show();
 
-        const {errorMessage, vhost, contentPath} = config;
+        const {errorMessage, vhost} = config;
+        const contentPath = Path.fromString(config.contentPath);
 
         SiteimproveValidator.validate(errorMessage, vhost, contentPath).then((result: ValidationResult) => {
             const {url, error, siteId, pageId, type} = result;

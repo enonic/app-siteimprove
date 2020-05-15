@@ -19,7 +19,7 @@ export class Title
     constructor(url: string) {
         super('title', AppStyleHelper.SITEIMPROVE_PREFIX);
 
-        const link = new AEl('link icon icon-new-tab');
+        const link = new AEl('link icon-new-tab');
 
         link.setUrl(url, '_blank');
         link.setHtml(url);

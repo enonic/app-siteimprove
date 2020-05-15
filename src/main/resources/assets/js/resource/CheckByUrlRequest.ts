@@ -6,12 +6,10 @@ import {Job} from '../data/Job';
 export class CheckByUrlRequest
     extends SiteimproveRequest<Job> {
 
-    private siteId: number;
-
-    private url: string;
+    private readonly url: string;
 
     constructor(siteId: number, url: string) {
-        super(CONFIG.services.checkByUrlUrl);
+        super('checkByUrlUrl');
         this.url = url;
         this.siteId = siteId;
     }
