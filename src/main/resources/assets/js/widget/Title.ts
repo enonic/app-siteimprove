@@ -1,3 +1,4 @@
+import * as Q from 'q';
 import {StringHelper} from 'lib-admin-ui/util/StringHelper';
 import {DefaultErrorHandler} from 'lib-admin-ui/DefaultErrorHandler';
 import {DivEl} from 'lib-admin-ui/dom/DivEl';
@@ -10,7 +11,7 @@ export interface TitleButtonConfig {
     activeTitle: string;
     processingTitle: string;
     processing: boolean;
-    clickHandler: () => Promise<boolean>;
+    clickHandler: () => Q.Promise<boolean>;
 }
 
 export class Title
