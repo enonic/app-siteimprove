@@ -1,5 +1,6 @@
 var contentLib = require('/lib/xp/content');
 var url = require('./url');
+var siteImproveLib = require('/lib/siteimprove');
 
 function isAppConfigured() {
     var hasUsername = !!app.config['siteimprove.username'];
@@ -8,8 +9,11 @@ function isAppConfigured() {
 }
 
 function isAppHasAccess() {
-    var bean = __.newBean('com.enonic.app.siteimprove.resource.PingAccountHandler');
-    return __.toNativeObject(bean.execute());
+    try {
+        return siteImproveLib.pingAccount();
+    } catch (e) {
+        return false;
+    }
 }
 
 function isValidVirtualHost(vhost) {
@@ -38,7 +42,8 @@ exports.validate = function validate(contentId) {
             return 'Siteimprove app is not added to the site.';
         } else if (!content) {
             return 'Content is not published';
-        } if (!isAppConfigured()) {
+        }
+        if (!isAppConfigured()) {
             return 'API key and/or username are not found in the Siteimprove app config.';
         } else if (!isAppHasAccess()) {
             return 'App has no access to the Siteimprove API.';

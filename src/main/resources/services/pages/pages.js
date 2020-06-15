@@ -1,4 +1,4 @@
-var createResponse = require('../util/response').createResponse;
+var siteImproveLib = require('/lib/siteimprove');
 
 exports.post = function (req) {
     var params = JSON.parse(req.body) || {};
@@ -6,15 +6,5 @@ exports.post = function (req) {
     var page = params.page || 1;
     var pageSize = params.pageSize || 1000;
 
-    var sitesResult = fetchPages(siteId, page, pageSize);
-
-    return createResponse(sitesResult);
+    return siteImproveLib.listPages(siteId, page, pageSize);
 };
-
-function fetchPages(siteId, page, pageSize) {
-    var bean = __.newBean('com.enonic.app.siteimprove.resource.ListPagesHandler');
-    bean.page = __.nullOrValue(page);
-    bean.pageSize = __.nullOrValue(pageSize);
-    bean.siteId = __.nullOrValue(siteId);
-    return __.toNativeObject(bean.execute());
-}

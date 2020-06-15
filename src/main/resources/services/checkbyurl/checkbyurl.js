@@ -1,18 +1,9 @@
-var createResponse = require('../util/response').createResponse;
+var siteImproveLib = require('/lib/siteimprove');
 
 exports.post = function (req) {
     var params = JSON.parse(req.body) || {};
     var siteId = params.siteId;
     var url = params.url;
 
-    var sitesResult = fetchCheckByUrl(siteId, url);
-
-    return createResponse(sitesResult);
+    return siteImproveLib.checkByUrl(siteId, url);
 };
-
-function fetchCheckByUrl(siteId, url) {
-    var bean = __.newBean('com.enonic.app.siteimprove.resource.CheckByUrlHandler');
-    bean.siteId = __.nullOrValue(siteId);
-    bean.url = __.nullOrValue(url);
-    return __.toNativeObject(bean.execute());
-}
