@@ -1,16 +1,20 @@
-var createResponse = require('../util/response').createResponse;
+var httpClient = require('/lib/http-client');
 
 exports.post = function (req) {
     var params = JSON.parse(req.body) || {};
     var url = params.url;
 
-    var sitesResult = fetchCheckUrlExists(url);
+    var response = httpClient.request({
+        method: 'HEAD',
+        url: url
+    });
 
-    return createResponse(sitesResult);
+    var exists = response.status < 400 || response.status >= 500;
+
+    return {
+        status: 200,
+        body: JSON.stringify({
+            exist: exists
+        })
+    };
 };
-
-function fetchCheckUrlExists(url) {
-    var bean = __.newBean('com.enonic.app.siteimprove.resource.CheckUrlExistsHandler');
-    bean.url = __.nullOrValue(url);
-    return __.toNativeObject(bean.execute());
-}

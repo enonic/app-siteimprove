@@ -1,6 +1,7 @@
 var eventLib = require('/lib/xp/event');
 var contentLib = require('/lib/xp/content');
 var contextLib = require('/lib/xp/context');
+var crawlContext = require('/lib/crawl/crawl-context');
 
 exports.init = function () {
     try {
@@ -28,7 +29,8 @@ function publishContent(event) {
     }
 
     var result = processSiteAndPages(nodes);
-    postPublish(result.sites, result.pages);
+
+    crawlContext.setSitesAndPages(result);
 }
 
 function runInContext(event) {
@@ -101,11 +103,4 @@ function processSiteAndPages(nodes) {
         };
     }
     return null;
-}
-
-function postPublish(sites, pages) {
-    var bean = __.newBean('com.enonic.app.siteimprove.resource.PostPublishHandler');
-    bean.sites = sites || [];
-    bean.pages = pages || [];
-    return __.toNativeObject(bean.execute());
 }
