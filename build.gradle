@@ -10,7 +10,7 @@ app {
     name = project.appName
     displayName = 'Siteimprove'
     vendorName = 'Enonic AS'
-    vendorUrl = 'http://enonic.com'
+    vendorUrl = 'https://enonic.com'
     systemVersion = "${xpVersion}"
     devSourcePaths += file("$rootDir/../lib-admin-ui/src/main/resources")
 }
