@@ -129,9 +129,9 @@ export class SiteimproveWidget
         ];
 
         const total = new SiteScoreCard({
-            title: 'Total Score',
+            title: 'DCI',
             score: dci.getTotal(),
-            url: SiteimproveWidget.createScoreUrl(siteId, 'Dashboard'),
+            url: SiteimproveWidget.createScoreUrl(siteId, 'Dci'),
             data: totalData
         }).addClass('total-score');
         const qa = new SiteScoreCard({
@@ -184,7 +184,7 @@ export class SiteimproveWidget
     }
 
     private static createScoreUrl(siteId: number, dashboardPath: string) {
-        return `${UrlHelper.SITEIMPROVE_DASHBOARD}/${dashboardPath}/${siteId}/Dci/Index`;
+        return `${UrlHelper.SITEIMPROVE_DASHBOARD}/${dashboardPath}/${siteId}/Overview/Index`;
     }
 
     private static createPageUrl(siteId: number, pageId: number) {
