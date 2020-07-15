@@ -41,7 +41,7 @@
     "postcss-sort-media-queries": "^1.4.23",
     "prettier": "^2.0.3",
     "terser-webpack-plugin": "^2.3.5",
-    "ts-loader": "^6.2.2",
+    "ts-loader": "^8.0.1",
     "tslint": "^6.1.1",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
