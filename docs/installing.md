@@ -47,8 +47,8 @@ This is how the pageID looks:
 
 To configure Siteimprove you can click on the "CMS integrasjon" link in the middle of the header when you browse a page in Siteimprove. Then you fill in the form.
 
-## Error: "Site" is not eneabled for your Siteimprove account.
+## Error: "Site" is not enabled for your Siteimprove account.
 
-If this messages pops up in the UI then the Virtual Host is not the same in siteimprove:
+If this messages pops up in the UI then the Virtual Host is not the same in SiteImprove:
 ![](images/siteimprove-5.png)
 ![](images/siteimprove-6.png)
