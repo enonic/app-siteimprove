@@ -1,26 +1,17 @@
-var contentLib = require('/lib/xp/content');
 var portalLib = require('/lib/xp/portal');
 
 exports.responseProcessor = function (req, res) {
-
     if (req.mode !== 'live') {
         return res;
     }
 
-    var content = portalLib.getContent();
-    var contentId = req.params.contentId;
-    if (!contentId) {
-        contentId = content._id;
+    const siteConfig = portalLib.getSiteConfig();
+    if (!siteConfig) {
+        return res;
     }
-    var siteConfig = contentLib.getSiteConfig({
-        key: contentId,
-        applicationKey: app.name
-    });
 
-    var analyticsCode = siteConfig['analyticsCode'] ? siteConfig['analyticsCode'].trim() : '';
-
+    const analyticsCode = siteConfig['analyticsCode'] ? siteConfig['analyticsCode'].trim() : '';
     if (analyticsCode !== '') {
-
         var snippet = '<!-- Siteimprove -->';
         snippet += '<script type="text/javascript">';
         snippet += '(function() {';
@@ -30,7 +21,6 @@ exports.responseProcessor = function (req, res) {
         snippet += '})();';
         snippet += '</script>';
         snippet += '<!-- End Siteimprove -->';
-
 
         var bodyEnd = res.pageContributions.bodyEnd;
         if (!bodyEnd) {
@@ -42,9 +32,19 @@ exports.responseProcessor = function (req, res) {
         res.pageContributions.bodyEnd.push(snippet);
     }
 
-    var pageIdMetaTag = '<meta name="pageID" content="' + contentId + '">';
+    let contentId = req.params.contentId;
+    if (!contentId) {
+        const content = portalLib.getContent();
+        if (content) {
+            contentId = content._id;
+        }
+    }
+    if (!contentId) {
+        return res;
+    }
 
-    var headEnd = res.pageContributions.headEnd;
+    const pageIdMetaTag = '<meta name="pageID" content="' + contentId + '">';
+    const headEnd = res.pageContributions.headEnd;
     if (!headEnd) {
         res.pageContributions.headEnd = [];
     } else if (typeof (headEnd) == 'string') {
