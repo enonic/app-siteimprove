@@ -43,12 +43,12 @@ dependencies {
 repositories {
     mavenLocal()
     mavenCentral()
-    xp.enonicRepo('dev')
+    xp.enonicRepo()
 }
 
 node {
     download = true
-    version = '15.8.0'
+    version = '16.0.0'
 }
 
 jacocoTestReport {
