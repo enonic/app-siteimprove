@@ -1,4 +1,4 @@
-import * as normalizeUrl from 'normalize-url';
+import normalizeUrl from 'normalize-url';
 
 export class UrlHelper {
 
@@ -11,5 +11,4 @@ export class UrlHelper {
     static urlsAreEquals(urlA: string, urlB: string): boolean {
         return normalizeUrl(urlA) === normalizeUrl(urlB);
     }
-
 }
