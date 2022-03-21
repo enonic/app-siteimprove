@@ -1,11 +1,11 @@
 import {Path} from 'lib-admin-ui/rest/Path';
 import {ResourceRequest} from 'lib-admin-ui/rest/ResourceRequest';
-import {ServiceUrl, SiteimproveWidgetConfig} from '../widget/SiteimproveWidgetConfig';
+import {JSONObject, JSONValue} from 'lib-admin-ui/types';
 
 export abstract class SiteimproveRequest<PARSED_TYPE>
     extends ResourceRequest<PARSED_TYPE> {
 
-    static serviceUrls: ServiceUrl;
+    static serviceUrls: JSONValue;
 
     private readonly apiPath: string;
 
@@ -26,7 +26,7 @@ export abstract class SiteimproveRequest<PARSED_TYPE>
         return Path.fromString(this.apiPath);
     }
 
-    static setConfig(config: SiteimproveWidgetConfig) {
+    static setConfig(config: JSONObject) {
         this.serviceUrls = config.services;
     }
 }

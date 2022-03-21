@@ -43,7 +43,7 @@ dependencies {
 repositories {
     mavenLocal()
     mavenCentral()
-    xp.enonicRepo()
+    xp.enonicRepo('dev')
 }
 
 node {
