@@ -1,10 +1,10 @@
-var contentLib = require('/lib/xp/content');
-var url = require('./url');
-var siteImproveLib = require('/lib/siteimprove');
+const contentLib = require('/lib/xp/content');
+const url = require('./url');
+const siteImproveLib = require('/lib/siteimprove');
 
 function isAppConfigured() {
-    var hasUsername = !!app.config['siteimprove.username'];
-    var hasApiKey = !!app.config['siteimprove.apikey'];
+    const hasUsername = !!app.config['siteimprove.username'];
+    const hasApiKey = !!app.config['siteimprove.apikey'];
     return hasUsername && hasApiKey;
 }
 
@@ -22,21 +22,25 @@ function isValidVirtualHost(vhost) {
 
 exports.validate = function validate(contentId) {
     try {
-        var isSite = !!contentLib.getSite({key: contentId});
+        if (!contentId) {
+            return 'No content selected.'
+        }
+
+        const isSite = !!contentLib.getSite({key: contentId});
 
         if (!isSite) {
             return 'Content is not a site.'
         }
 
-        var siteConfig = contentLib.getSiteConfig({
+        const siteConfig = contentLib.getSiteConfig({
             key: contentId,
             applicationKey: app.name
         });
-        var content = contentLib.get({
+        const content = contentLib.get({
             key: contentId,
             branch: 'master'
         });
-        var vhost = siteConfig ? siteConfig.vhost : null;
+        const vhost = siteConfig ? siteConfig.vhost : null;
 
         if (!siteConfig) {
             return 'Siteimprove app is not added to the site.';
@@ -54,7 +58,7 @@ exports.validate = function validate(contentId) {
         }
         return '';
     } catch (error) {
-        var msg = (error && error.message) ? error.message : error;
+        const msg = (error && error.message) ? error.message : error;
         return 'Server error: ' + (msg || 'Something went wrong.');
     }
 };

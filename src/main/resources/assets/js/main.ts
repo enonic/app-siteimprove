@@ -1,19 +1,15 @@
 import {Element} from 'lib-admin-ui/dom/Element';
-import {Path} from 'lib-admin-ui/rest/Path';
 import {SiteimproveWidget} from './widget/SiteimproveWidget';
-import {WidgetError} from './widget/WidgetError';
-import {SiteimproveWidgetConfig} from './widget/SiteimproveWidgetConfig';
+import {CONFIG} from 'lib-admin-ui/util/Config';
 
-type AppConfigType = {
-    config: SiteimproveWidgetConfig
-};
+(async () => {
+    const configServiceUrl = document.currentScript.getAttribute('data-config-service-url');
+    if (!configServiceUrl) {
+        throw 'Unable to fetch widget config';
+    }
 
-declare const SITEIMPROVE: AppConfigType;
-const widgetId = SITEIMPROVE.config.widgetId;
-
-(() => {
-
-    const widgetContainer = document.getElementById(`widget-${widgetId}`);
+    await CONFIG.init(`${configServiceUrl}`);
+    const widgetContainer = document.getElementById(`widget-${CONFIG.getString('widgetId')}`);
 
     if (widgetContainer) {
         const container = widgetContainer.getElementsByClassName('siteimprove').item(0);
@@ -22,15 +18,9 @@ const widgetId = SITEIMPROVE.config.widgetId;
         }
         const containerEl = Element.fromHtmlElement((container as HTMLElement), true);
 
-        if (SITEIMPROVE.config.errorMessage) {
-            const errorEl = new WidgetError(SITEIMPROVE.config.errorMessage);
-            containerEl.appendChild(errorEl);
-        } else {
-            const widget = new SiteimproveWidget();
-            containerEl.appendChild(widget);
-            widget.initialize(SITEIMPROVE.config);
-
-            widget.render();
-        }
+        const widget = new SiteimproveWidget();
+        containerEl.appendChild(widget);
+        widget.initialize(CONFIG.getConfig());
+        widget.render();
     }
 })();

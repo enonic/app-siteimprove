@@ -1,5 +1,4 @@
 import * as Q from 'q';
-import {StringHelper} from 'lib-admin-ui/util/StringHelper';
 import {Path} from 'lib-admin-ui/rest/Path';
 import {SiteimproveFetcher} from '../resource/SiteimproveFetcher';
 import {UrlHelper} from './UrlHelper';
@@ -25,11 +24,7 @@ type GenericAsyncVR<T> = Q.Promise<ValidationResult | T>;
 
 export class SiteimproveValidator {
 
-    static validate(serverError: string, url: string, path: Path): GenericAsyncVR<GenericAsyncVR<AsyncVR>> {
-        if (!StringHelper.isEmpty(serverError)) {
-            return Q({error: serverError, type: ValidationType.ERROR});
-        }
-
+    static validate(url: string, path: Path): GenericAsyncVR<GenericAsyncVR<AsyncVR>> {
         return SiteimproveFetcher.fetchSiteIdByUrl(url).then((siteId: number) => {
             if (!siteId) {
                 const error = `"${url}" is not enabled for your Siteimprove account.`;

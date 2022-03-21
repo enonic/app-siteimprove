@@ -25,7 +25,8 @@ import {PageSummaryRequest} from '../resource/PageSummaryRequest';
 import {CrawlStatusRequest} from '../resource/CrawlStatusRequest';
 import {CheckStatusRequest} from '../resource/CheckStatusRequest';
 import {PageReportLinksRequest} from '../resource/PageReportLinksRequest';
-import {SiteimproveWidgetConfig} from './SiteimproveWidgetConfig';
+import {JSONObject} from 'lib-admin-ui/types';
+import {CONFIG} from 'lib-admin-ui/util/Config';
 
 export class SiteimproveWidget
     extends DivEl {
@@ -37,15 +38,14 @@ export class SiteimproveWidget
         this.loadMask = new LoadMask(this);
     }
 
-    initialize(config: SiteimproveWidgetConfig) {
+    initialize(config: JSONObject) {
         SiteimproveRequest.setConfig(config);
 
         this.loadMask.show();
 
-        const {errorMessage, vhost} = config;
-        const contentPath = Path.fromString(config.contentPath);
+        const contentPath = Path.fromString(CONFIG.getString('contentPath'));
 
-        SiteimproveValidator.validate(errorMessage, vhost, contentPath).then((result: ValidationResult) => {
+        SiteimproveValidator.validate(CONFIG.getString('vhost'), contentPath).then((result: ValidationResult) => {
             const {url, error, siteId, pageId, type} = result;
 
             if (type === ValidationType.ERROR || !StringHelper.isBlank(error)) {
