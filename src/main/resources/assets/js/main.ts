@@ -3,7 +3,7 @@ import {SiteimproveWidget} from './widget/SiteimproveWidget';
 import {CONFIG} from 'lib-admin-ui/util/Config';
 
 (async () => {
-    const configServiceUrl = document.currentScript.getAttribute('data-config-service-url');
+    const configServiceUrl = document.currentScript?.getAttribute('data-config-service-url');
     if (!configServiceUrl) {
         throw 'Unable to fetch widget config';
     }
