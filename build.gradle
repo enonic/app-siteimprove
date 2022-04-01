@@ -30,7 +30,7 @@ dependencies {
     include "com.enonic.xp:lib-portal:${xpVersion}"
     include "com.enonic.xp:lib-event:${xpVersion}"
     include "com.enonic.lib:lib-thymeleaf:2.0.1"
-    include "com.enonic.lib:lib-http-client:2.2.1"
+    include "com.enonic.lib:lib-http-client:2.4.1"
     include "com.enonic.lib:lib-cron:1.1.1"
     include "com.enonic.lib:lib-admin-ui:${libAdminUiVersion}"
     devResources "com.enonic.lib:lib-admin-ui:${libAdminUiVersion}"
@@ -43,7 +43,7 @@ dependencies {
 repositories {
     mavenLocal()
     mavenCentral()
-    xp.enonicRepo('dev')
+    xp.enonicRepo()
 }
 
 node {
