@@ -1,4 +1,4 @@
-import {DivEl} from 'lib-admin-ui/dom/DivEl';
+import {DivEl} from '@enonic/lib-admin-ui/dom/DivEl';
 import {AppStyleHelper} from '../util/AppStyleHelper';
 import {Data} from '../data/Data';
 import {ProgressLine} from './ProgressLine';

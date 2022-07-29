@@ -1,7 +1,7 @@
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {CrawlStatusJson} from './json/CrawlStatusJson';
 import {CrawlStatus} from '../data/CrawlStatus';
-import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
+import {JsonResponse} from '@enonic/lib-admin-ui/rest/JsonResponse';
 
 export class CrawlStatusRequest
     extends SiteimproveRequest<CrawlStatus> {

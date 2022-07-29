@@ -1,6 +1,6 @@
-import {DivEl} from 'lib-admin-ui/dom/DivEl';
-import {SpanEl} from 'lib-admin-ui/dom/SpanEl';
-import {StringHelper} from 'lib-admin-ui/util/StringHelper';
+import {DivEl} from '@enonic/lib-admin-ui/dom/DivEl';
+import {SpanEl} from '@enonic/lib-admin-ui/dom/SpanEl';
+import {StringHelper} from '@enonic/lib-admin-ui/util/StringHelper';
 import {AppStyleHelper} from '../util/AppStyleHelper';
 
 export class DataLine

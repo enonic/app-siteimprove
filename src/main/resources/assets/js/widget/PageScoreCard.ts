@@ -1,4 +1,4 @@
-import {DivEl} from 'lib-admin-ui/dom/DivEl';
+import {DivEl} from '@enonic/lib-admin-ui/dom/DivEl';
 import {ScoreCard, ScoreCardSettings} from './ScoreCard';
 import {DataCard, DataCardSettings} from './DataCard';
 

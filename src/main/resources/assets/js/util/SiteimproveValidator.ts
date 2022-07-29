@@ -1,5 +1,5 @@
 import * as Q from 'q';
-import {Path} from 'lib-admin-ui/rest/Path';
+import {Path} from '@enonic/lib-admin-ui/rest/Path';
 import {SiteimproveFetcher} from '../resource/SiteimproveFetcher';
 import {UrlHelper} from './UrlHelper';
 import {CheckUrlExistsRequest} from '../resource/CheckUrlExistsRequest';

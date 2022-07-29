@@ -1,4 +1,4 @@
-import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
+import {JsonResponse} from '@enonic/lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {PageReportLinksJson} from './json/PageReportLinksJson';
 import {PageReportLinks} from '../data/PageReportLinks';

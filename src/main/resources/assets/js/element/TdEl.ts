@@ -1,4 +1,4 @@
-import {Element, NewElementBuilder} from 'lib-admin-ui/dom/Element';
+import {Element, NewElementBuilder} from '@enonic/lib-admin-ui/dom/Element';
 
 export class TdEl
     extends Element {

@@ -1,6 +1,6 @@
-import {DivEl} from 'lib-admin-ui/dom/DivEl';
-import {Button} from 'lib-admin-ui/ui/button/Button';
-import {SpanEl} from 'lib-admin-ui/dom/SpanEl';
+import {DivEl} from '@enonic/lib-admin-ui/dom/DivEl';
+import {Button} from '@enonic/lib-admin-ui/ui/button/Button';
+import {SpanEl} from '@enonic/lib-admin-ui/dom/SpanEl';
 import {Card, CardSettings} from './Card';
 
 type Progress = {

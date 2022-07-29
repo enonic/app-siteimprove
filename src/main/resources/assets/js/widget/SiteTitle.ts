@@ -1,5 +1,5 @@
-import {DefaultErrorHandler} from 'lib-admin-ui/DefaultErrorHandler';
-import {Exception} from 'lib-admin-ui/Exception';
+import {DefaultErrorHandler} from '@enonic/lib-admin-ui/DefaultErrorHandler';
+import {Exception} from '@enonic/lib-admin-ui/Exception';
 import {Title} from './Title';
 import {CrawlStatus} from '../data/CrawlStatus';
 import {CrawlRequest} from '../resource/CrawlRequest';

@@ -1,4 +1,4 @@
-import {JsonResponse} from 'lib-admin-ui/rest/JsonResponse';
+import {JsonResponse} from '@enonic/lib-admin-ui/rest/JsonResponse';
 import {SiteimproveRequest} from './SiteimproveRequest';
 import {CheckUrlExistsJson} from './json/CheckUrlExistsJson';
 import {CheckUrlExists} from '../data/CheckUrlExists';

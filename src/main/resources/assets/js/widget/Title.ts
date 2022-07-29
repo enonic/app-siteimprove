@@ -1,9 +1,9 @@
 import * as Q from 'q';
-import {StringHelper} from 'lib-admin-ui/util/StringHelper';
-import {DefaultErrorHandler} from 'lib-admin-ui/DefaultErrorHandler';
-import {DivEl} from 'lib-admin-ui/dom/DivEl';
-import {AEl} from 'lib-admin-ui/dom/AEl';
-import {Button} from 'lib-admin-ui/ui/button/Button';
+import {StringHelper} from '@enonic/lib-admin-ui/util/StringHelper';
+import {DefaultErrorHandler} from '@enonic/lib-admin-ui/DefaultErrorHandler';
+import {DivEl} from '@enonic/lib-admin-ui/dom/DivEl';
+import {AEl} from '@enonic/lib-admin-ui/dom/AEl';
+import {Button} from '@enonic/lib-admin-ui/ui/button/Button';
 import {AppStyleHelper} from '../util/AppStyleHelper';
 import {DataLine} from './DataLine';
 

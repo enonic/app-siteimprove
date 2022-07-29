@@ -1,9 +1,9 @@
 import * as Q from 'q';
-import {StringHelper} from 'lib-admin-ui/util/StringHelper';
-import {DefaultErrorHandler} from 'lib-admin-ui/DefaultErrorHandler';
-import {Path} from 'lib-admin-ui/rest/Path';
-import {DivEl} from 'lib-admin-ui/dom/DivEl';
-import {LoadMask} from 'lib-admin-ui/ui/mask/LoadMask';
+import {StringHelper} from '@enonic/lib-admin-ui/util/StringHelper';
+import {DefaultErrorHandler} from '@enonic/lib-admin-ui/DefaultErrorHandler';
+import {Path} from '@enonic/lib-admin-ui/rest/Path';
+import {DivEl} from '@enonic/lib-admin-ui/dom/DivEl';
+import {LoadMask} from '@enonic/lib-admin-ui/ui/mask/LoadMask';
 import {WidgetError} from './WidgetError';
 import {DciOverallScore} from '../data/DciOverallScore';
 import {AppStyleHelper} from '../util/AppStyleHelper';
@@ -25,8 +25,8 @@ import {PageSummaryRequest} from '../resource/PageSummaryRequest';
 import {CrawlStatusRequest} from '../resource/CrawlStatusRequest';
 import {CheckStatusRequest} from '../resource/CheckStatusRequest';
 import {PageReportLinksRequest} from '../resource/PageReportLinksRequest';
-import {JSONObject} from 'lib-admin-ui/types';
-import {CONFIG} from 'lib-admin-ui/util/Config';
+import {JSONObject} from '@enonic/lib-admin-ui/types';
+import {CONFIG} from '@enonic/lib-admin-ui/util/Config';
 
 export class SiteimproveWidget
     extends DivEl {

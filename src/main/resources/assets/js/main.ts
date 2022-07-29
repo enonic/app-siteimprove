@@ -1,6 +1,6 @@
-import {Element} from 'lib-admin-ui/dom/Element';
+import {Element} from '@enonic/lib-admin-ui/dom/Element';
 import {SiteimproveWidget} from './widget/SiteimproveWidget';
-import {CONFIG} from 'lib-admin-ui/util/Config';
+import {CONFIG} from '@enonic/lib-admin-ui/util/Config';
 
 (async () => {
     const configServiceUrl = document.currentScript?.getAttribute('data-config-service-url');

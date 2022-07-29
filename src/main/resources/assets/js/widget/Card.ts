@@ -1,5 +1,5 @@
-import {DivEl} from 'lib-admin-ui/dom/DivEl';
-import {AEl} from 'lib-admin-ui/dom/AEl';
+import {DivEl} from '@enonic/lib-admin-ui/dom/DivEl';
+import {AEl} from '@enonic/lib-admin-ui/dom/AEl';
 import {AppStyleHelper} from '../util/AppStyleHelper';
 
 export interface CardSettings {
