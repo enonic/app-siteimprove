@@ -13,7 +13,7 @@
     "fix": "tslint -p tsconfig.build.json -c tslint.json --fix"
   },
   "dependencies": {
-    "jquery": "^3.6.1",
+    "jquery": "^3.6.2",
     "jquery-ui": "^1.13.2",
     "@enonic/lib-admin-ui": "file:./.xp/dev/lib-admin-ui",
     "normalize-url": "^8.0.0",
