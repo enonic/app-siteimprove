@@ -24,7 +24,7 @@
     "@types/jqueryui": "^1.12.17",
     "@types/normalize-url": "^4.2.0",
     "@types/q": "^1.5.5",
-    "autoprefixer": "^10.4.14",
+    "autoprefixer": "^10.4.15",
     "browserslist": "^4.21.10",
     "browserslist-config-enonic": "^1.0.8",
     "circular-dependency-plugin": "^5.2.2",
