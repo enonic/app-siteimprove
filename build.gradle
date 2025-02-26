@@ -31,7 +31,7 @@ dependencies {
     include "com.enonic.xp:lib-event:${xpVersion}"
     include "com.enonic.lib:lib-thymeleaf:2.0.1"
     include "com.enonic.lib:lib-http-client:3.2.2"
-    include "com.enonic.lib:lib-cron:1.1.1"
+    include "com.enonic.lib:lib-cron:1.1.4"
     include "com.enonic.lib:lib-admin-ui:${libAdminUiVersion}"
     devResources "com.enonic.lib:lib-admin-ui:${libAdminUiVersion}"
     testImplementation 'org.mockito:mockito-core:4.8.0'
