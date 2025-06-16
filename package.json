@@ -16,7 +16,7 @@
     "jquery": "^3.7.1",
     "jquery-ui": "^1.13.2",
     "@enonic/lib-admin-ui": "file:./.xp/dev/lib-admin-ui",
-    "normalize-url": "^8.0.1",
+    "normalize-url": "^8.0.2",
     "q": "^1.5.1"
   },
   "devDependencies": {
