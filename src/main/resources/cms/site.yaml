@@ -1,0 +1,4 @@
+kind: "Site"
+processors:
+  - name: "cms-plugin"
+    order: 10
