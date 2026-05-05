@@ -25,7 +25,7 @@ import {PageSummaryRequest} from '../resource/PageSummaryRequest';
 import {CrawlStatusRequest} from '../resource/CrawlStatusRequest';
 import {CheckStatusRequest} from '../resource/CheckStatusRequest';
 import {PageReportLinksRequest} from '../resource/PageReportLinksRequest';
-import {JSONObject} from '@enonic/lib-admin-ui/types';
+import {JSONObject} from '../types';
 import {CONFIG} from '@enonic/lib-admin-ui/util/Config';
 
 export class SiteimproveWidget

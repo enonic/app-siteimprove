@@ -1,0 +1,5 @@
+kind: "AdminExtension"
+title: "Siteimprove"
+description: "Fix errors and optimize your site"
+interfaces:
+  - "contentstudio.contextpanel"

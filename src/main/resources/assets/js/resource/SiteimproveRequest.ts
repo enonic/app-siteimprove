@@ -1,6 +1,6 @@
 import {Path} from '@enonic/lib-admin-ui/rest/Path';
 import {ResourceRequest} from '@enonic/lib-admin-ui/rest/ResourceRequest';
-import {JSONObject, JSONValue} from '@enonic/lib-admin-ui/types';
+import {JSONObject, JSONValue} from '../types';
 
 export abstract class SiteimproveRequest<PARSED_TYPE>
     extends ResourceRequest<PARSED_TYPE> {
