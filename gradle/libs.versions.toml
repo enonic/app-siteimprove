@@ -1,6 +1,6 @@
 [versions]
 thymeleaf = "3.0.0-SNAPSHOT"
-http-client = "3.2.2"
+http-client = "4.0.0-SNAPSHOT"
 cron = "1.1.4"
 admin-ui = "6.0.0-A5"
 
