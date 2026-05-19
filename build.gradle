@@ -45,23 +45,25 @@ repositories {
 
 node {
     download = true
-    version = '16.16.0'
+    version = '24.15.0'
 }
 
-jacocoTestReport {
+tasks.named('jacocoTestReport') {
     reports {
         xml.required = true
         html.required = true
     }
 }
 
-check.dependsOn jacocoTestReport
+tasks.named('check') {
+    dependsOn 'jacocoTestReport'
+}
 
-test {
+tasks.named('test') {
     useJUnitPlatform()
 }
 
-task copyDevResources {
+def copyDevResourcesTask = tasks.register('copyDevResources') {
     doLast {
         copy {
             from configurations.devResources.files.collect { zipTree( it ) }
@@ -71,30 +73,35 @@ task copyDevResources {
     }
 }
 
-npmInstall.dependsOn copyDevResources
+tasks.named('npmInstall') {
+    dependsOn copyDevResourcesTask
+}
 
-task flush( type: org.gradle.api.tasks.Delete, dependsOn: clean ) {
+def flushTask = tasks.register('flush', org.gradle.api.tasks.Delete) {
     description = 'Clean the project from built sources and dependencies'
+    dependsOn 'clean'
     delete '.xp'
 }
 
-task npmInstallForce( type: NpmTask ) {
+tasks.register('npmInstallForce', NpmTask) {
     description = 'Update all project node dependencies'
     args = ['install', '--force']
 }
 
-task cleanNode( type: org.gradle.api.tasks.Delete ) {
+tasks.register('cleanNode', org.gradle.api.tasks.Delete) {
     delete 'node_modules'
 }
 
-task lint( type: NpmTask, dependsOn: npmInstall ) {
+def lintTask = tasks.register('lint', NpmTask) {
+    dependsOn 'npmInstall'
     args = [ 'run', 'lint' ]
     inputs.files fileTree( dir: 'modules', include: '**/src/main/**.*' )
     outputs.dir file('gradle')
     outputs.upToDateWhen { false }
 }
 
-task webpack( type: NpmTask, dependsOn: lint ) {
+def webpackTask = tasks.register('webpack', NpmTask) {
+    dependsOn lintTask
     environment = [ 'NODE_ENV': nodeEnvironment() ]
     description = 'Build UI resources (ts, css, etc).'
     args = [ 'run', 'build' ]
@@ -104,35 +111,32 @@ task webpack( type: NpmTask, dependsOn: lint ) {
     outputs.dir layout.buildDirectory.dir("resources/main")
 }
 
-jar {
+tasks.named('jar') {
     exclude 'assets/**/*.ts'
     exclude 'assets/**/*.less'
 
-    dependsOn += webpack
+    dependsOn webpackTask
 }
 
-compileTestJava.dependsOn webpack
-processTestResources.dependsOn webpack
+tasks.named('compileTestJava') {
+    dependsOn webpackTask
+}
+
+tasks.named('processTestResources') {
+    dependsOn webpackTask
+}
 
 if ( hasProperty( 'env' ) && isLibAdminUiIncluded())
 {
     addBuildDependency()
-    applyExcludedTasks()
-}
-
-def applyExcludedTasks() {
-    def libAdminUi = gradle.includedBuild('lib-admin-ui')
-    Closure permittedTasks = { it == 'lint' || it == 'test' }
-    def excludedTasks = gradle.startParameter.getExcludedTaskNames().findAll(permittedTasks)
-    libAdminUi.getLoadedSettings().getStartParameter().setExcludedTaskNames(excludedTasks)
 }
 
 def addBuildDependency() {
     def libAdminBuildTask = gradle.includedBuild('lib-admin-ui').task(':build')
-    copyDevResources.dependsOn += libAdminBuildTask
-    build.dependsOn += libAdminBuildTask
-    clean.dependsOn += gradle.includedBuild('lib-admin-ui').task(':clean')
-    flush.dependsOn += gradle.includedBuild('lib-admin-ui').task(':flush')
+    tasks.named('copyDevResources') { dependsOn libAdminBuildTask }
+    tasks.named('build') { dependsOn libAdminBuildTask }
+    tasks.named('clean') { dependsOn gradle.includedBuild('lib-admin-ui').task(':clean') }
+    tasks.named('flush') { dependsOn gradle.includedBuild('lib-admin-ui').task(':flush') }
 }
 
 def nodeEnvironment() {

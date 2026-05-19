@@ -9,7 +9,7 @@ function handleGet(req) {
         contentId = portalLib.getContent()._id;
     }
 
-    const errorMessage = validator.validate(contentId);
+    const errorMessage = validator.validate(contentId, req.params.repository);
 
     const view = resolve('siteimprove.html');
     const params = {

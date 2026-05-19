@@ -1,8 +1,7 @@
-<widget data-th-id="${'widget-' + widgetId}">
+<div data-th-id="${'widget-' + widgetId}">
     <link rel="stylesheet" data-th-href="${portal.assetUrl({'_path=styles/siteimprove.css'})}" type="text/css" media="all"/>
     <script data-th-if="${!hasError}" data-th-src="${portal.assetUrl({'_path=js/siteimprove.js'})}" data-th-attr="data-config-service-url=${configServiceUrl}"></script>
     <div class="siteimprove">
         <div data-th-if="${hasError}" class="error" data-th-text="${errorMessage}"></div>
     </div>
-
-</widget>
+</div>

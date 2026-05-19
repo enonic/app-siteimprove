@@ -1,4 +1,5 @@
 const contentLib = require('/lib/xp/content');
+const contextLib = require('/lib/xp/context');
 const url = require('./url');
 const siteImproveLib = require('/lib/siteimprove');
 
@@ -20,25 +21,35 @@ function isValidVirtualHost(vhost) {
     return url.isValidUrl(vhost);
 }
 
-exports.validate = function validate(contentId) {
+exports.validate = function validate(contentId, repository) {
     try {
         if (!contentId) {
             return 'No content selected.'
         }
 
-        const isSite = !!contentLib.getSite({key: contentId});
+        const inMaster = function (fn) {
+            return contextLib.run({
+                branch: 'master',
+                repository: repository,
+            }, fn);
+        };
+
+        const isSite = inMaster(function () {
+            return !!contentLib.getSite({ key: contentId });
+        });
 
         if (!isSite) {
             return 'Content is not a site.'
         }
 
-        const siteConfig = contentLib.getSiteConfig({
-            key: contentId,
-            applicationKey: app.name
+        const siteConfig = inMaster(function () {
+            return contentLib.getSiteConfig({
+                key: contentId,
+                applicationKey: app.name
+            });
         });
-        const content = contentLib.get({
-            key: contentId,
-            branch: 'master'
+        const content = inMaster(function () {
+            return contentLib.get({ key: contentId });
         });
         const vhost = siteConfig ? siteConfig.vhost : null;
 
