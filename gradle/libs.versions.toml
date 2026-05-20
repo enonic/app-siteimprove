@@ -1,7 +1,7 @@
 [versions]
-thymeleaf = "3.0.0-SNAPSHOT"
-http-client = "4.0.0-SNAPSHOT"
-cron = "2.0.0-SNAPSHOT"
+thymeleaf = "3.0.0-B1"
+http-client = "4.0.0-B1"
+cron = "2.0.0-B1"
 admin-ui = "6.0.0-A5"
 
 [libraries]
