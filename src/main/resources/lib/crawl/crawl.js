@@ -9,7 +9,7 @@ exports.init = function () {
             type: 'node.pushed',
             localOnly: true,
             callback: function (event) {
-                runInContext(event);
+                publishContent(event);
             }
         });
 
@@ -33,35 +33,37 @@ function publishContent(event) {
     crawlContext.setSitesAndPages(result);
 }
 
-function runInContext(event) {
-
-    var context = contextLib.get();
+function runInContext(node, callback) {
     return contextLib.run({
-        repository: context.repository,
+        repository: node.repo,
         branch: 'master',
         user: {
             login: 'su',
             userStore: 'system'
         },
         principals: ["role:system.admin"]
-    }, function () {
-        publishContent(event);
-    });
+    }, callback);
 }
 
 function getSiteConfig(node) {
-    return contentLib.getSiteConfig({
-        key: node.id,
-        applicationKey: app.name
+    return runInContext(node, function () {
+        return contentLib.getSiteConfig({
+            key: node.id,
+            applicationKey: app.name
+        });
     });
 }
 
 function getSite(node) {
-    return contentLib.getSite({key: node.id});
+    return runInContext(node, function () {
+        return contentLib.getSite({key: node.id});
+    });
 }
 
 function getContent(node) {
-    return contentLib.get({key: node.id});
+    return runInContext(node, function () {
+        return contentLib.get({key: node.id});
+    });
 }
 
 function hasConfig(siteConfig) {
