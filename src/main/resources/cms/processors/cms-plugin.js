@@ -12,15 +12,7 @@ exports.responseProcessor = function (req, res) {
 
     const analyticsCode = siteConfig['analyticsCode'] ? siteConfig['analyticsCode'].trim() : '';
     if (analyticsCode !== '') {
-        var snippet = '<!-- Siteimprove -->';
-        snippet += '<script type="text/javascript">';
-        snippet += '(function() {';
-        snippet += 'var sz = document.createElement("script"); sz.type = "text/javascript"; sz.async = true;';
-        snippet += 'sz.src = "//siteimproveanalytics.com/js/siteanalyze_' + analyticsCode + '.js";';
-        snippet += 'var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(sz, s);';
-        snippet += '})();';
-        snippet += '</script>';
-        snippet += '<!-- End Siteimprove -->';
+        var snippet = `<!-- Siteimprove --><script async src="https://siteimproveanalytics.com/js/siteanalyze_${analyticsCode}.js"></script><!-- End Siteimprove -->`;
 
         var bodyEnd = res.pageContributions.bodyEnd;
         if (!bodyEnd) {
