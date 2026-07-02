@@ -3,9 +3,7 @@
 This app extends the administration console by allowing to collect
 Siteimprove statistics and error reports for current page or site and use suggestions for improvement.
 
-Here's the installation guide for this application:
-
-* [Installing the App](docs/installing.md)
+See the [documentation](docs/index.adoc) for installation and configuration instructions.
 
 
 ## Building and deploying
