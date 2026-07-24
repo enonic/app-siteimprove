@@ -2,7 +2,7 @@
 thymeleaf = "3.0.0"
 http-client = "4.0.0"
 cron = "2.0.0"
-admin-ui = "6.0.0"
+admin-ui = "4.3.0"
 
 [libraries]
 lib-thymeleaf = { module = "com.enonic.lib:lib-thymeleaf", version.ref = "thymeleaf" }
