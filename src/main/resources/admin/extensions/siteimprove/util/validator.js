@@ -54,7 +54,7 @@ exports.validate = function validate(contentId, repository) {
         const vhost = siteConfig ? siteConfig.vhost : null;
 
         if (!siteConfig) {
-            return 'Siteimprove app is not added to the site.';
+            return 'Siteimprove app is not added to the site or not published.';
         } else if (!content) {
             return 'Content is not published';
         }
