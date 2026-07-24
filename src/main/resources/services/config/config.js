@@ -1,4 +1,5 @@
 const contentLib = require('/lib/xp/content');
+const contextLib = require('/lib/xp/context');
 const portalLib = require('/lib/xp/portal');
 
 function handleGet(req) {
@@ -17,13 +18,18 @@ function handleGet(req) {
     }
 
     if (contentId) {
-        content = contentLib.get({key: contentId});
-        site = contentLib.getSite({key: contentId});
-        contentPath = site ? content._path.slice(content._path.indexOf(site._name) - 1) : content._path;
-        siteConfig = contentLib.getSiteConfig({key: contentId, applicationKey: app.name});
-        if (siteConfig) {
-            pageId = (content.type.indexOf(':site') === -1 && site) ? content._path.replace(site._path, '') : '';
-        }
+        contextLib.run({
+            repository: req.params.repository,
+            branch: 'master'
+        }, function () {
+            content = contentLib.get({key: contentId});
+            site = contentLib.getSite({key: contentId});
+            contentPath = site ? content._path.slice(content._path.indexOf(site._name) - 1) : content._path;
+            siteConfig = contentLib.getSiteConfig({key: contentId, applicationKey: app.name});
+            if (siteConfig) {
+                pageId = (content.type.indexOf(':site') === -1 && site) ? content._path.replace(site._path, '') : '';
+            }
+        });
     }
 
     return {

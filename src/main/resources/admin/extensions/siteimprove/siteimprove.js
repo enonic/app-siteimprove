@@ -11,14 +11,20 @@ function handleGet(req) {
 
     const errorMessage = validator.validate(contentId, req.params.repository);
 
+    const serviceParams = {};
+    if (contentId) {
+        serviceParams.contentId = contentId;
+    }
+    if (req.params.repository) {
+        serviceParams.repository = req.params.repository;
+    }
+
     const view = resolve('siteimprove.html');
     const params = {
         widgetId: app.name,
         configServiceUrl: portalLib.serviceUrl({
             service: 'config',
-            params: {
-                contentId
-            }
+            params: serviceParams
         }),
         hasError: errorMessage.length > 0,
         errorMessage
