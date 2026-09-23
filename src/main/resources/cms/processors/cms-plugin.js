@@ -24,18 +24,12 @@ exports.responseProcessor = function (req, res) {
         res.pageContributions.bodyEnd.push(snippet);
     }
 
-    let contentId = req.params.contentId;
-    if (!contentId) {
-        const content = portalLib.getContent();
-        if (content) {
-            contentId = content._id;
-        }
-    }
-    if (!contentId) {
+    const content = portalLib.getContent();
+    if (!content) {
         return res;
     }
 
-    const pageIdMetaTag = '<meta name="pageID" content="' + contentId + '">';
+    const pageIdMetaTag = '<meta name="pageID" content="' + content._id + '">';
     const headEnd = res.pageContributions.headEnd;
     if (!headEnd) {
         res.pageContributions.headEnd = [];
