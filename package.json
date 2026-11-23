@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/jquery": "^3.5.24",
-    "@types/jqueryui": "^1.12.19",
+    "@types/jqueryui": "^1.12.25",
     "@types/normalize-url": "^4.2.0",
     "@types/q": "^1.5.7",
     "autoprefixer": "^10.4.16",
