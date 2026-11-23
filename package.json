@@ -30,7 +30,7 @@
     "circular-dependency-plugin": "^5.2.2",
     "css-loader": "^7.1.4",
     "cssnano": "^6.0.1",
-    "enonic-admin-artifacts": "^1.8.5",
+    "enonic-admin-artifacts": "^2.5.0",
     "error-logger-webpack-plugin": "^1.1.1",
     "less": "^4.2.0",
     "less-loader": "^13.0.0",
