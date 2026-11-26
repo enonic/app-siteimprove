@@ -45,7 +45,7 @@ repositories {
 
 node {
     download = true
-    version = '24.15.0'
+    version = '24.22.3'
 }
 
 tasks.named('jacocoTestReport') {
